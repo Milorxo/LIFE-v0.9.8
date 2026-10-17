@@ -1907,7 +1907,8 @@ function clampXp(v) { v = Math.round((+v || XP_MIN) / XP_STEP) * XP_STEP; return
 function clampMoney(v) { v = Math.round(+v || 0); return clamp(v, MONEY_MIN, MONEY_MAX); }
 function clampPrice(v) { v = Math.round(+v || PRICE_MIN); return Math.max(PRICE_MIN, v); }
 function uid(p) { return p + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
-function fmt(n) { return Number(n || 0).toLocaleString(); }
+const _nf = new Intl.NumberFormat();   // one formatter: building a new one on every call was a measurable cost
+function fmt(n) { return _nf.format(Number(n || 0)); }
 
 /* ══════════════════════════════════════════════════════
    DATA & CONSTANTS
@@ -2006,7 +2007,7 @@ function achStat(areaId, fam) {
   const a = G.areas[areaId] || {};
   if (fam === 'missions') return a.history_missions || 0;
   if (fam === 'hours') return a.totalHours || 0;
-  return Math.max(G.player.bestStreak || 0, computeStreak());
+  return Math.max(G.player.bestStreak || 0, streakHold != null ? streakHold : computeStreak());
 }
 /* XP earned from missions in one area (derived from history, so it is always consistent) */
 function areaXp(areaId) {
@@ -2262,9 +2263,11 @@ let notice = '';
 function dayHist(key) { return G.history[key] || (G.history[key] = newDay()); }
 
 /* Runs once for every day that has fully passed since the last run. */
+let settleFirst = true;
 function settle() {
   const today = dk();
   const yesterday = addDays(today, -1);
+  const settledBefore = G.settled;
   let d = addDays(G.settled, 1), missed = 0, lost = 0, guard = 0;
   while (d <= yesterday && guard++ < 4000) {
     const plan = dayPlan(d);
@@ -2285,8 +2288,10 @@ function settle() {
     G.settled = d;
     d = addDays(d, 1);
   }
-  applyStoreEdits();
-  saveState();
+  const storeChanged = applyStoreEdits();
+  /* Opening a page calls this too. Rewrite the whole save only when something actually changed (and always on the first run at start-up). */
+  if (settleFirst || storeChanged || G.settled !== settledBefore) saveState();
+  settleFirst = false;
   if (missed) notice = `${missed} MISSED DAY${missed > 1 ? 'S' : ''}${lost ? '   −' + fmt(lost) + ' XP' : '   PROTECTED BY YOUR TIER'}`;
 }
 
@@ -2295,7 +2300,8 @@ function dayCount(k) { const h = G.history[k]; return h && h.completed ? h.compl
 function computeStreak() {
   const today = dk();
   let streak = dayCount(today) > 0 ? 1 : 0;
-  let k = addDays(today, -1), guard = 0;
+  const dt = parseKey(today); dt.setDate(dt.getDate() - 1);
+  let k = dk(dt), guard = 0;
   const start = G.player.startDate || today;
   while (k >= start && guard++ < 3000) {
     if (dayCount(k) > 0) streak++;
@@ -2305,10 +2311,13 @@ function computeStreak() {
       const planned = h && h.planned != null ? h.planned : dayPlan(k).length;
       if (cal.level === 'rest' || planned === 0) { /* neutral */ } else break;
     }
-    k = addDays(k, -1);
+    dt.setDate(dt.getDate() - 1); k = dk(dt);
   }
   return streak;
 }
+/* While a loop reads the streak many times and nothing changes in between, work it out once. */
+let streakHold = null;
+function withStreak(fn) { streakHold = computeStreak(); try { return fn(); } finally { streakHold = null; } }
 
 function findTask(areaId, id, key) {
   const m = (G.missions[areaId] || []).find(x => x.id === id);
@@ -3324,17 +3333,19 @@ function devCalChange(act, t) {
    Edits made in Developer mode apply from tomorrow.
    ══════════════════════════════════════════════════════ */
 function applyStoreEdits() {
-  const today = dk(), S = G.store;
+  const today = dk(), S = G.store; let changed = false;
   S.rewards = S.rewards.filter(r => {
     if (r.pending && r.pending.from <= today) {
+      changed = true;
       if (r.pending.remove) return false;
       ['name', 'price', 'tag', 'note'].forEach(f => { if (r.pending[f] !== undefined) r[f] = r.pending[f]; });
       r.pending = null;
     }
-    if (r.from && r.from <= today) r.from = null;
+    if (r.from && r.from <= today) { r.from = null; changed = true; }
     return true;
   });
-  if (S.goal && !S.rewards.some(r => r.id === S.goal)) S.goal = null;
+  if (S.goal && !S.rewards.some(r => r.id === S.goal)) { S.goal = null; changed = true; }
+  return changed;
 }
 function liveRewards() { const t = dk(); return G.store.rewards.filter(r => !r.from || r.from <= t); }
 function avgDaily() { let s = 0; for (let i = 1; i <= 7; i++) { const h = G.history[addDays(dk(), -i)]; s += h ? h.coinsEarned : 0; } return s / 7; }
@@ -4041,7 +4052,7 @@ const _um = undoMission; undoMission = function () { const r = _um.apply(this, a
 /* ── achievements: notice a newly unlocked one ── */
 function achSnap() {
   const s = new Set();
-  Object.keys(G.areas).forEach(a => achList(a).forEach(it => { if (achStat(a, it.fam) >= Math.max(1, +it.q || 1)) s.add(it.id); }));
+  withStreak(() => Object.keys(G.areas).forEach(a => achList(a).forEach(it => { if (achStat(a, it.fam) >= Math.max(1, +it.q || 1)) s.add(it.id); })));
   return s;
 }
 let ACH_SEEN = null;
