@@ -1617,6 +1617,20 @@ body.dragging-now { user-select:none; cursor:grabbing; }
 .dev-tabs.fade-l, #dev-tabs.fade-l { -webkit-mask-image:linear-gradient(270deg,#000 calc(100% - 34px),transparent); mask-image:linear-gradient(270deg,#000 calc(100% - 34px),transparent); }
 .dev-tabs.fade-l.fade-r, #dev-tabs.fade-l.fade-r { -webkit-mask-image:linear-gradient(90deg,transparent,#000 34px,#000 calc(100% - 34px),transparent); mask-image:linear-gradient(90deg,transparent,#000 34px,#000 calc(100% - 34px),transparent); }
 
+
+/* ── performance check (Developer mode → Look): switches that turn one kind of effect off, to find what is slow on a device ── */
+.pf-nofog .fog, .pf-nofog .fw { display:none !important; }
+.pf-nomouse #mlight { display:none !important; }
+.pf-noanim *, .pf-noanim *::before, .pf-noanim *::after { animation:none !important; }
+.pf-notrans *, .pf-notrans *::before, .pf-notrans *::after { transition:none !important; }
+.pf-nofx *, .pf-nofx *::before, .pf-nofx *::after { backdrop-filter:none !important; -webkit-backdrop-filter:none !important; mix-blend-mode:normal !important; filter:none !important; box-shadow:none !important; }
+.pf-noart .ar-img, .pf-noart .la-fig img, .pf-noart #la-img { visibility:hidden !important; }
+#pf-meter { position:fixed; left:10px; bottom:10px; z-index:99999; padding:.5rem .7rem; border-radius:10px; background:rgba(0,0,0,.82); border:1px solid rgba(255,255,255,.25); color:#fff; font:11px/1.5 ui-monospace,Menlo,monospace; letter-spacing:.04em; pointer-events:none; white-space:pre; display:none; }
+#pf-meter.on { display:block; }
+.pf-grid { display:grid; grid-template-columns:1fr 1fr; gap:.5rem; margin-top:.6rem; }
+.pf-b { padding:.7rem .8rem; border-radius:12px; border:1px solid var(--line); background:#13171b; color:var(--muted); cursor:pointer; text-align:left; font-size:.68rem; letter-spacing:.1em; }
+.pf-b.off { border-color:#fff; color:#fff; background:#1e2328; }
+.pf-b small { display:block; margin-top:.25rem; letter-spacing:.04em; opacity:.7; }
 </style>
 </head>
 <body>
@@ -2645,6 +2659,7 @@ function initLook() {
   $('play-date').textContent = prettyDate(dk());
   const ml = $('mlight'); let mx = 0, my = 0, raf = 0;
   addEventListener('mousemove', e => {
+    if (document.documentElement.classList.contains('pf-nomouse')) return;
     mx = e.clientX; my = e.clientY;
     if (raf) return;
     raf = requestAnimationFrame(() => {
@@ -7569,6 +7584,60 @@ document.addEventListener('click', e => {
   if (k) k.click();
 });
 
+
+
+/* ══════════════════════════════════════════════════════
+   PERFORMANCE CHECK
+   A live frame meter, and switches that turn one kind of effect off. Nothing here is saved; reloading puts everything back.
+   ══════════════════════════════════════════════════════ */
+const PF_FX = [
+  ['nofog', 'FOG & MIST', 'drifting background images'],
+  ['nomouse', 'MOUSE GLOW', 'light that follows the cursor, parallax'],
+  ['noanim', 'ALL MOTION', 'every CSS animation'],
+  ['notrans', 'FADES', 'every CSS transition'],
+  ['nofx', 'BLUR, BLEND, SHADOWS', 'blur, blending and shadow effects'],
+  ['noart', 'PICTURES', 'card and figure artwork'],
+];
+const pfRoot = document.documentElement;
+let pfRun = false, pfFr = [], pfLong = 0, pfLast = 0, pfT = 0, pfObs = null;
+function pfLoop(t) {
+  if (!pfRun) return;
+  if (pfLast) pfFr.push(t - pfLast); pfLast = t;
+  window.__natRaf(pfLoop);
+}
+function pfShow() {
+  const el = $('pf-meter'); if (!el) return;
+  const f = pfFr; pfFr = [];
+  if (f.length) {
+    const sum = f.reduce((a, b) => a + b, 0), fps = f.length / (sum / 1000), worst = Math.max.apply(null, f), bad = f.filter(x => x > 33).length;
+    const heap = performance.memory ? (performance.memory.usedJSHeapSize / 1048576).toFixed(0) + ' MB' : 'n/a';
+    el.textContent = `FPS      ${fps.toFixed(0)}\nWORST    ${worst.toFixed(0)} ms\nSLOW     ${bad} frames over 33 ms\nFREEZES  ${pfLong} over 50 ms\nPAGE     ${curPage.replace('pg-', '')}   MEMORY ${heap}`;
+  }
+  pfLong = 0;
+}
+function pfMeter(on) {
+  const el = $('pf-meter'); if (!el) return;
+  pfRun = on; el.classList.toggle('on', on); clearInterval(pfT);
+  if (pfObs) { try { pfObs.disconnect(); } catch (e) {} pfObs = null; }
+  if (on) {
+    pfFr = []; pfLast = 0; pfLong = 0; window.__natRaf(pfLoop); pfT = setInterval(pfShow, 1000);
+    try { pfObs = new PerformanceObserver(l => { pfLong += l.getEntries().length; }); pfObs.observe({ entryTypes: ['longtask'] }); } catch (e) {}
+  }
+}
+const _lookPF = lookPanelHTML;
+lookPanelHTML = function () {
+  return _lookPF.apply(this, arguments) + `<div class="dev-section"><label class="dl">PERFORMANCE CHECK</label>
+    <div class="dim sm">Is the game laggy on your device? Turn the meter on, then switch effects off one at a time. When the FPS jumps up or the lag goes away, that is the effect causing it. Nothing is saved, and reloading puts everything back.</div>
+    <div class="pf-grid"><button class="pf-b ${pfRun ? 'off' : ''}" data-pf-meter>${pfRun ? 'METER ON' : 'SHOW FRAME METER'}<small>FPS, slow frames, freezes (bottom left)</small></button>${PF_FX.map(f => `<button class="pf-b ${pfRoot.classList.contains('pf-' + f[0]) ? 'off' : ''}" data-pf="${f[0]}">${pfRoot.classList.contains('pf-' + f[0]) ? 'OFF · ' : ''}${f[1]}<small>${f[2]}</small></button>`).join('')}</div></div>`;
+};
+document.addEventListener('click', e => {
+  const m = e.target.closest && e.target.closest('[data-pf-meter]');
+  if (m) { pfMeter(!pfRun); m.classList.toggle('off', pfRun); m.firstChild.textContent = pfRun ? 'METER ON' : 'SHOW FRAME METER'; return; }
+  const b = e.target.closest && e.target.closest('[data-pf]'); if (!b) return;
+  const k = 'pf-' + b.dataset.pf, off = !pfRoot.classList.contains(k); pfRoot.classList.toggle(k, off);
+  b.classList.toggle('off', off); b.firstChild.textContent = (off ? 'OFF · ' : '') + PF_FX.find(f => f[0] === b.dataset.pf)[1];
+});
+{ const m = document.createElement('div'); m.id = 'pf-meter'; m.setAttribute('aria-hidden', 'true'); document.body.appendChild(m); }
 
 /* ══════════════════════════════════════════════════════
    INIT
