@@ -1700,6 +1700,19 @@ body.dragging-now { user-select:none; cursor:grabbing; }
 .tc-full .tc-ring .tc-big { font-size:clamp(4rem, 19vw, 16rem); }
 .tc-full .tc-sub { font-size:clamp(.8rem, 1.6vw, 1.2rem); letter-spacing:.32em; color:var(--muted); }
 .tc-full .tc-laps { max-height:22vh; }
+/* every digit sits in a box as wide as the font's widest digit, so fonts without even-width digits stop jumping as the numbers change */
+.tcd { display:inline-block; width:var(--tcdw, auto); text-align:center; font-style:normal; }
+/* full screen: date on the clock when chosen, and a zoom slider that shows while the mouse moves and fades away */
+#tc-overlay.tc-full.tc-date .tc-sub[data-tc=date] { display:block !important; }
+.tc-full #tc-body { transform:scale(var(--tcz, 1)); transition:transform .15s var(--ease); }
+.tc-full .overlay-content.tc-wrap { overflow:hidden; }
+.tc-zoom { display:none; }
+.tc-sw label.tc-bgb { border:1px dashed rgba(255,255,255,.4); }
+.tc-sw label.on { outline:2px solid #fff; outline-offset:3px; }
+.tc-full .tc-zoom { display:flex; position:absolute; left:50%; bottom:calc(env(safe-area-inset-bottom,0px) + 2rem); transform:translateX(-50%); z-index:5; align-items:center; gap:.7rem; width:min(360px, calc(100vw - 32px)); padding:.6rem 1rem; border-radius:999px; background:rgba(14,16,20,.82); border:1px solid var(--line2); color:var(--muted); cursor:default; opacity:0; pointer-events:none; transition:opacity .45s var(--ease); }
+.tc-full .tc-zoom.show, .tc-full .tc-zoom:hover { opacity:1; pointer-events:auto; }
+.tc-zoom input { flex:1; accent-color:var(--tcc, #fff); height:28px; cursor:pointer; }
+.tc-zoom b { font:500 .6rem var(--mono); letter-spacing:.12em; min-width:2.8rem; text-align:right; color:#fff; }
 @media (max-width:600px) { #tc-overlay .overlay-content.tc-wrap { padding-top:calc(env(safe-area-inset-top,0px) + 4.6rem) !important; } #tc-overlay.tc-full .overlay-content.tc-wrap { padding-top:calc(env(safe-area-inset-top,0px) + 1rem) !important; } .tc-tools { top:1rem; left:1rem; } .tc-style { top:4.2rem; left:16px; } }
 @media (max-width:600px) { .tc-wrap { gap:1rem; padding:3.6rem .4rem 2rem; } .tc-tabs { flex-wrap:nowrap; gap:.3rem; } .tc-tabs .tab { padding:.55rem .7rem; font-size:.56rem; letter-spacing:.1em; } .tc-ctl .btn { min-width:96px; } }
 /* ── performance check (Developer mode → Look): switches that turn one kind of effect off, to find what is slow on a device ── */
@@ -1960,6 +1973,7 @@ body.dragging-now { user-select:none; cursor:grabbing; }
     <div class="icon-btn" data-tcx="style" role="button" tabindex="0" title="Number style" aria-label="Number style"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="9" cy="9.5" r="1.2"/><circle cx="14.5" cy="8.5" r="1.2"/><circle cx="16" cy="13.5" r="1.2"/><path d="M11 17.5a2 2 0 0 0-2-3"/></svg></div>
   </div>
   <div class="tc-style" id="tc-style" hidden></div>
+  <div class="tc-zoom" id="tc-zoom"><span>−</span><input type="range" min="40" max="200" step="1" value="100" data-tcl-zoom aria-label="Zoom"><span>+</span><b data-tcz-v>100%</b></div>
   <div class="overlay-close"><div class="icon-btn" onclick="closeOverlay('tc-overlay')" role="button" tabindex="0" aria-label="Close"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div></div>
   <div class="overlay-content tc-wrap">
     <div class="ov-head"><div class="mono">TIME CENTER</div></div>
@@ -7905,6 +7919,7 @@ function tcRender() {
     }
     h += `<div class="tc-cap">${tcTodayLine()}</div>`;
   }
+  if (TC.tab === 'clock') h += `<div class="tc-tog"><button type="button" class="tab ${TC.fsDate ? 'on' : ''}" data-tca="x:date" aria-pressed="${!!TC.fsDate}">DATE IN FULL SCREEN ${TC.fsDate ? 'ON' : 'OFF'}</button></div>`;
   if (TC.tab === 'sw') h += `<div class="tc-tog"><button type="button" class="tab ${TC.swMs ? 'on' : ''}" data-tca="x:ms" aria-pressed="${TC.swMs}">MILLISECONDS ${TC.swMs ? 'ON' : 'OFF'}</button></div>`;
   if (TC.tab !== 'clock') h += `<div class="tc-tog"><button type="button" class="tab ${TC.snd ? 'on' : ''}" data-tca="x:snd" aria-pressed="${TC.snd}">SOUND ${TC.snd ? 'ON' : 'OFF'}</button><button type="button" class="tab ${TC.notif ? 'on' : ''}" data-tca="x:notif" aria-pressed="${TC.notif}">NOTIFICATIONS ${TC.notif ? 'ON' : 'OFF'}</button></div>`;
   $('tc-body').innerHTML = h;
@@ -7919,19 +7934,29 @@ const tcDateF = new Intl.DateTimeFormat(undefined, { weekday: 'long', day: 'nume
 function tcFit() {
   const e = document.querySelector('#tc-body .tc-big'); if (!e) return;
   e.style.fontSize = '';
-  const max = innerWidth * .94, w = e.getBoundingClientRect().width;
+  const z = tcIsFull() ? clamp(+TC.look.zoom || 100, 40, 200) / 100 : 1;
+  const max = innerWidth * .94, w = e.getBoundingClientRect().width / z;
   if (w > max) e.style.fontSize = (parseFloat(getComputedStyle(e).fontSize) * max / w).toFixed(1) + 'px';
 }
 addEventListener('resize', () => { if (tcOpen()) tcFit(); });
-if (document.fonts && document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', () => { if (tcOpen()) tcFit(); });
+if (document.fonts && document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', () => { tcDigW(); if (tcOpen()) tcFit(); });
+/* Wrap each digit (not inside tags) so it gets a fixed-width box. */
+const tcDig = v => String(v).replace(/(<[^>]*>)|(\d)/g, (m, tag, d) => tag || `<i class="tcd">${d}</i>`);
+const tcSetN = (k, v) => tcSet(k, tcDig(v), true);
+function tcDigW() {
+  const f = TC_FONTS.find(x => x[0] === TC.look.font) || TC_FONTS[0], x = (tcDigW.c = tcDigW.c || document.createElement('canvas')).getContext('2d');
+  x.font = `${f[3]} 100px ${f[2]}, ${tcFb(f)}`;
+  let w = 0; for (let i = 0; i < 10; i++) w = Math.max(w, x.measureText(String(i)).width);
+  $('tc-overlay').style.setProperty('--tcdw', w ? (w / 100).toFixed(3) + 'em' : 'auto');
+}
 function tcLive(force) {
   if (!force) tcRaf = 0;
   if (!tcOpen() || document.hidden) return;
   const now = new Date();
-  if (TC.tab === 'clock') { tcSet('clk', tcTimeF.format(now)); tcSet('date', tcDateF.format(now).toUpperCase()); tcSet('left', typeof msLeftToday === 'function' ? `${hm(msLeftToday())} LEFT IN TODAY'S TRACKED HOURS` : ''); }
-  else if (TC.tab === 'sw') tcSet('sw', tcSwFmt(swMs()), true);
-  else if (TC.tab === 'tm' && TC.tm.st !== 'idle') { const l = tmLeft(); tcSet('tm', tcCd(l)); tcArc('tmr', TC.tm.dur ? l / TC.tm.dur : 0); }
-  else if (TC.tab === 'fc' && TC.fc.st !== 'idle') { const l = fcLeft(); tcSet('fc', tcCd(l)); tcArc('fcr', TC.fc.len ? l / TC.fc.len : 0); }
+  if (TC.tab === 'clock') { tcSetN('clk', tcTimeF.format(now)); tcSet('date', tcDateF.format(now).toUpperCase()); tcSet('left', typeof msLeftToday === 'function' ? `${hm(msLeftToday())} LEFT IN TODAY'S TRACKED HOURS` : ''); }
+  else if (TC.tab === 'sw') tcSetN('sw', tcSwFmt(swMs()));
+  else if (TC.tab === 'tm' && TC.tm.st !== 'idle') { const l = tmLeft(); tcSetN('tm', tcCd(l)); tcArc('tmr', TC.tm.dur ? l / TC.tm.dur : 0); }
+  else if (TC.tab === 'fc' && TC.fc.st !== 'idle') { const l = fcLeft(); tcSetN('fc', tcCd(l)); tcArc('fcr', TC.fc.len ? l / TC.fc.len : 0); }
   if (!tcRaf) tcRaf = requestAnimationFrame(() => tcLive(false));
 }
 function openTimeCenter(tab) {
@@ -7949,6 +7974,7 @@ $('tc-overlay').addEventListener('click', e => {
   if (k === 'sw') swAct(a); else if (k === 'tm') tmAct(a); else if (k === 'fc') fcAct(a);
   else if (a === 'snd') { TC.snd = !TC.snd; tcSave(); tcRender(); }
   else if (a === 'ms') { TC.swMs = !TC.swMs; tcSave(); tcRender(); }
+  else if (a === 'date') { TC.fsDate = !TC.fsDate; tcSave(); tcLookApply(); tcRender(); }
   else if (a === 'notif') {
     if (!TC.notif && 'Notification' in window && Notification.permission === 'default') Notification.requestPermission().then(() => tcRender()).catch(() => {});
     if (!TC.notif && 'Notification' in window && Notification.permission === 'denied') showToast('NOTIFICATIONS ARE BLOCKED IN THIS BROWSER');
@@ -7988,25 +8014,37 @@ const TC_BGS = [
   ['slate', 'Slate', 'linear-gradient(180deg, #1c1f26 0%, #0a0b0e 100%)'],
 ];
 const TC_COLORS = [['#ffffff', 'White'], ['#cfe3ff', 'Ice'], ['#9fd8ff', 'Sky'], ['#8ff0c8', 'Mint'], ['#f2d28b', 'Gold'], ['#ffb38a', 'Ember'], ['#ff8fae', 'Rose'], ['#c7a8ff', 'Violet']];
-const TC_GLOWS = [['off', 'None'], ['soft', 'Soft'], ['bright', 'Bright']];
-TC.look = Object.assign({ font: 'thin', color: '#ffffff', glow: 'soft', bg: 'night', bright: 100 }, TC.look || {});
+/* Fallback fonts shown until a web font has loaded (or if it never does), so the numbers never flash in a serif. */
+const TC_MONO = ['mono', 'plex', 'digital', 'major'], TC_SERIF = ['cinzel', 'playfair'];
+const tcFb = f => TC_MONO.includes(f[0]) ? "'JetBrains Mono', ui-monospace, Menlo, monospace" : TC_SERIF.includes(f[0]) ? "Georgia, 'Times New Roman', serif" : "'Outfit', system-ui, -apple-system, 'Segoe UI', sans-serif";
+TC.look = Object.assign({ font: 'thin', color: '#ffffff', glow: 'soft', bg: 'night', bright: 100, bgc: '#101418', zoom: 100 }, TC.look || {});
+/* glow used to be None / Soft / Bright; it is now 0 to 100 */
+if (TC.look.glowN == null) TC.look.glowN = { off: 0, soft: 35, bright: 75 }[TC.look.glow] ?? 35;
+const tcHex = (v, d) => /^#[0-9a-f]{6}$/i.test(v) ? v : d;
+const tcA = a => Math.round(clamp(a, 0, 1) * 255).toString(16).padStart(2, '0');
 if (TC.swMs == null) TC.swMs = true;
 function tcLookApply() {
   const L = TC.look, ov = $('tc-overlay'), f = TC_FONTS.find(x => x[0] === L.font) || TC_FONTS[0];
-  const c = /^#[0-9a-f]{6}$/i.test(L.color) ? L.color : '#ffffff';
-  ov.style.setProperty('--tcc', c); ov.style.setProperty('--tcf', f[2]); ov.style.setProperty('--tcw', f[3]); ov.style.setProperty('--tcls', f[4]);
-  const bg = TC_BGS.find(x => x[0] === L.bg) || TC_BGS[0]; ov.style.setProperty('--tcbg', bg[2]);
+  const c = tcHex(L.color, '#ffffff');
+  ov.style.setProperty('--tcc', c); ov.style.setProperty('--tcf', `${f[2]}, ${tcFb(f)}`); ov.style.setProperty('--tcw', f[3]); ov.style.setProperty('--tcls', f[4]);
+  const bg = TC_BGS.find(x => x[0] === L.bg) || TC_BGS[0]; ov.style.setProperty('--tcbg', L.bg === 'custom' ? tcHex(L.bgc, '#101418') : bg[2]);
   ov.style.setProperty('--tcb', (clamp(+L.bright || 100, 15, 100) / 100).toFixed(2));
-  ov.style.setProperty('--tcg', L.glow === 'off' ? 'none' : L.glow === 'bright' ? `0 0 18px ${c}99, 0 0 50px ${c}55` : `0 0 30px ${c}40`);
+  const g = clamp(+L.glowN || 0, 0, 100) / 100;
+  ov.style.setProperty('--tcg', g ? `0 0 ${(6 + 16 * g).toFixed(1)}px ${c}${tcA(.15 + .55 * g)}, 0 0 ${(20 + 40 * g).toFixed(1)}px ${c}${tcA(.08 + .3 * g)}` : 'none');
+  const z = clamp(+L.zoom || 100, 40, 200); ov.style.setProperty('--tcz', (z / 100).toFixed(2));
+  const zi = ov.querySelector('[data-tcl-zoom]'); if (zi) { zi.value = z; ov.querySelector('[data-tcz-v]').textContent = z + '%'; }
+  ov.classList.toggle('tc-date', !!TC.fsDate);
+  tcDigW();
+  if (document.fonts && document.fonts.load) document.fonts.load(`${f[3]} 100px ${f[2]}`, '0123456789').then(() => tcDigW()).catch(() => {});
 }
 function tcStyleHTML() {
   const L = TC.look;
   return `<div class="tc-prev">12:34</div>
     <h5>BRIGHTNESS</h5><div class="tc-rng"><span>☾</span><input type="range" min="15" max="100" step="1" value="${clamp(+L.bright || 100, 15, 100)}" data-tcl-bright aria-label="Number brightness"><span>☀</span></div>
-    <h5>NUMBER STYLE</h5><div class="tc-fonts">${TC_FONTS.map(f => `<button type="button" data-tcl="font:${f[0]}" class="${L.font === f[0] ? 'on' : ''}"><b style="font-family:${f[2]};font-weight:${f[3]}">12:34</b><small>${f[1]}</small></button>`).join('')}</div>
+    <h5>NUMBER STYLE</h5><div class="tc-fonts">${TC_FONTS.map(f => `<button type="button" data-tcl="font:${f[0]}" class="${L.font === f[0] ? 'on' : ''}"><b style="font-family:${f[2]}, ${tcFb(f)};font-weight:${f[3]}">12:34</b><small>${f[1]}</small></button>`).join('')}</div>
     <h5>COLOR</h5><div class="tc-sw">${TC_COLORS.map(c => `<button type="button" data-tcl="color:${c[0]}" class="${L.color.toLowerCase() === c[0] ? 'on' : ''}" style="--c:${c[0]}" title="${c[1]}" aria-label="${c[1]}"></button>`).join('')}<label title="Any color" aria-label="Pick any color">+<input type="color" value="${esc(L.color)}" data-tcl-pick></label></div>
-    <h5>BACKGROUND</h5><div class="tc-sw">${TC_BGS.map(b => `<button type="button" data-tcl="bg:${b[0]}" class="tc-bgb ${L.bg === b[0] ? 'on' : ''}" style="--c:${b[2]}" title="${b[1]}" aria-label="${b[1]} background"></button>`).join('')}</div>
-    <h5>GLOW</h5><div class="tc-chips">${TC_GLOWS.map(g => `<button type="button" data-tcl="glow:${g[0]}" class="${L.glow === g[0] ? 'on' : ''}" style="font:500 .62rem var(--mono);letter-spacing:.16em">${g[1].toUpperCase()}</button>`).join('')}</div>`;
+    <h5>BACKGROUND</h5><div class="tc-sw">${TC_BGS.map(b => `<button type="button" data-tcl="bg:${b[0]}" class="tc-bgb ${L.bg === b[0] ? 'on' : ''}" style="--c:${b[2]}" title="${b[1]}" aria-label="${b[1]} background"></button>`).join('')}<label class="tc-bgb ${L.bg === 'custom' ? 'on' : ''}" style="${L.bg === 'custom' ? `background:${tcHex(L.bgc, '#101418')};border-style:solid` : ''}" title="Any color" aria-label="Pick any background color">+<input type="color" value="${esc(tcHex(L.bgc, '#101418'))}" data-tcl-bgpick></label></div>
+    <h5>GLOW</h5><div class="tc-rng"><span>○</span><input type="range" min="0" max="100" step="1" value="${clamp(+L.glowN || 0, 0, 100)}" data-tcl-glow aria-label="Glow strength"><span>✺</span></div>`;
 }
 function tcStyleToggle(force) {
   const p = $('tc-style'), open = force != null ? force : p.hidden;
@@ -8016,10 +8054,10 @@ function tcStyleToggle(force) {
 const tcIsFull = () => $('tc-overlay').classList.contains('tc-full');
 function tcFull(on) {
   const ov = $('tc-overlay'); on = on == null ? !tcIsFull() : on;
-  ov.classList.toggle('tc-full', on); tcStyleToggle(false); tcFit();
+  ov.classList.toggle('tc-full', on); tcStyleToggle(false); $('tc-zoom').classList.remove('show'); tcFit();
 }
 /* While full screen, a click or tap anywhere only leaves full screen (it never reaches the buttons underneath). */
-document.addEventListener('click', e => { if (tcOpen() && tcIsFull()) { e.stopPropagation(); e.preventDefault(); tcFull(false); } }, true);
+document.addEventListener('click', e => { if (tcOpen() && tcIsFull() && !(e.target.closest && e.target.closest('#tc-zoom'))) { e.stopPropagation(); e.preventDefault(); tcFull(false); } }, true);
 $('tc-overlay').addEventListener('click', e => {
   const x = e.target.closest('[data-tcx]');
   if (x) { if (x.dataset.tcx === 'full') tcFull(); else tcStyleToggle(); sfx('tick'); return; }
@@ -8030,8 +8068,24 @@ $('tc-overlay').addEventListener('click', e => {
 $('tc-overlay').addEventListener('input', e => {
   if (e.target.matches('[data-tcl-pick]')) { TC.look.color = e.target.value; tcLookApply(); }
   if (e.target.matches('[data-tcl-bright]')) { TC.look.bright = +e.target.value; tcLookApply(); }
+  if (e.target.matches('[data-tcl-glow]')) { TC.look.glowN = +e.target.value; tcLookApply(); }
+  if (e.target.matches('[data-tcl-zoom]')) { TC.look.zoom = +e.target.value; tcLookApply(); }
+  if (e.target.matches('[data-tcl-bgpick]')) { TC.look.bg = 'custom'; TC.look.bgc = e.target.value; tcLookApply(); }
 });
-$('tc-overlay').addEventListener('change', e => { if (e.target.matches('[data-tcl-bright]')) tcSave(); });
+$('tc-overlay').addEventListener('change', e => { if (e.target.matches('[data-tcl-bright], [data-tcl-glow], [data-tcl-zoom]')) tcSave(); });
+$('tc-overlay').addEventListener('change', e => { if (e.target.matches('[data-tcl-bgpick]')) { TC.look.bg = 'custom'; TC.look.bgc = e.target.value; tcSave(); $('tc-style').innerHTML = tcStyleHTML(); } });
+/* Full screen zoom: shows while the mouse moves, fades after a short rest or when the mouse leaves the window; stays while the mouse is on it. */
+{
+  const zb = $('tc-zoom'); let zt = 0;
+  const hide = () => { clearTimeout(zt); zb.classList.remove('show'); };
+  $('tc-overlay').addEventListener('pointermove', e => {
+    if (e.pointerType !== 'mouse' || !tcIsFull()) return;
+    zb.classList.add('show'); clearTimeout(zt);
+    if (!zb.contains(e.target)) zt = setTimeout(hide, 1800);
+  });
+  $('tc-overlay').addEventListener('mouseleave', hide);
+  zb.addEventListener('mouseleave', () => { clearTimeout(zt); zt = setTimeout(hide, 900); });
+}
 $('tc-overlay').addEventListener('change', e => { if (e.target.matches('[data-tcl-pick]')) { TC.look.color = e.target.value; tcSave(); $('tc-style').innerHTML = tcStyleHTML(); } });
 $('tc-overlay').addEventListener('keydown', e => { const x = e.target.closest && e.target.closest('[data-tcx]'); if (x && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); x.click(); } });
 addEventListener('keydown', e => {
