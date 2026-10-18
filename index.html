@@ -1628,7 +1628,7 @@ body.dragging-now { user-select:none; cursor:grabbing; }
 .tc-tabs .tab.on { color:#fff; border-color:rgba(255,255,255,.7); }
 #tc-body { width:100%; display:grid; gap:1.1rem; justify-items:center; animation:tcIn .35s var(--ease); }
 @keyframes tcIn { from { opacity:0; transform:translateY(6px); } }
-.tc-big { font-family:var(--sans); font-weight:200; font-size:clamp(2.6rem,12vw,5.2rem); line-height:1; letter-spacing:.03em; color:#fff; font-variant-numeric:tabular-nums; text-shadow:0 0 30px rgba(255,255,255,.22); }
+.tc-big { font-family:var(--tcf, var(--sans)); font-weight:var(--tcw, 200); font-size:clamp(2.6rem,12vw,5.2rem); line-height:1; letter-spacing:var(--tcls, .03em); color:var(--tcc, #fff); font-variant-numeric:tabular-nums; text-shadow:var(--tcg, 0 0 30px color-mix(in srgb, var(--tcc, #fff) 28%, transparent)); transition:color .4s var(--ease), text-shadow .4s var(--ease); }
 .tc-big small { font-size:.42em; color:var(--muted); margin-left:.12em; }
 .tc-cap { font-family:var(--mono); font-size:.6rem; letter-spacing:.3em; color:var(--dim); text-transform:uppercase; }
 .tc-sub { font-family:var(--mono); font-size:.72rem; letter-spacing:.2em; color:#fff; }
@@ -1653,6 +1653,42 @@ body.dragging-now { user-select:none; cursor:grabbing; }
 .tc-note { max-width:440px; font-size:.72rem; line-height:1.6; color:var(--dim); }
 .tc-ph { font-family:var(--mono); font-size:.7rem; letter-spacing:.34em; color:#fff; padding:.4rem .9rem; border:1px solid rgba(255,255,255,.35); border-radius:999px; }
 .tc-ph.brk { color:var(--muted); border-color:var(--line2); }
+
+.tc-ring .ck-fg { stroke:var(--tcc, #fff); filter:drop-shadow(0 0 5px color-mix(in srgb, var(--tcc, #fff) 55%, transparent)); }
+.tc-tools { position:absolute; top:1.6rem; left:1.8rem; z-index:3; display:flex; gap:.5rem; }
+.tc-tools .icon-btn { position:relative; }
+.tc-tools .icon-btn svg { fill:none; }
+.tc-full .tc-ring .ck-bg, .tc-full .tc-ring .ck-fg { stroke-width:1.2; }
+.tc-tools .icon-btn.on { border-color:rgba(255,255,255,.7); color:#fff; }
+.tc-i-out { display:none; } .tc-full .tc-i-in { display:none; } .tc-full .tc-i-out { display:block; }
+.tc-style { position:absolute; top:5rem; left:1.8rem; z-index:4; width:min(330px, calc(100vw - 32px)); padding:1.1rem; border-radius:18px; background:rgba(14,16,20,.96); border:1px solid var(--line2); box-shadow:0 30px 60px -20px #000; display:grid; gap:.9rem; text-align:left; animation:tcIn .25s var(--ease); }
+.tc-style[hidden] { display:none; }
+.tc-style h5 { margin:0; font:500 .56rem var(--mono); letter-spacing:.28em; color:var(--dim); }
+.tc-prev { font-family:var(--tcf, var(--sans)); font-weight:var(--tcw, 200); letter-spacing:var(--tcls, .03em); color:var(--tcc, #fff); text-shadow:var(--tcg); font-size:2.4rem; line-height:1; text-align:center; font-variant-numeric:tabular-nums; padding:.4rem 0 .2rem; }
+.tc-chips { display:flex; flex-wrap:wrap; gap:.4rem; }
+.tc-chips button { min-height:36px; padding:0 .8rem; border-radius:999px; border:1px solid var(--line); background:transparent; color:var(--muted); cursor:pointer; font-size:.95rem; }
+.tc-chips button.on { color:#fff; border-color:rgba(255,255,255,.75); background:rgba(255,255,255,.06); }
+.tc-sw { display:flex; flex-wrap:wrap; gap:.5rem; align-items:center; }
+.tc-sw button { width:30px; height:30px; border-radius:50%; border:1px solid rgba(255,255,255,.18); background:var(--c); cursor:pointer; box-shadow:0 0 12px -3px var(--c); transition:transform .2s var(--ease); }
+.tc-sw button:hover { transform:scale(1.1); }
+.tc-sw button.on { outline:2px solid #fff; outline-offset:3px; }
+.tc-sw label { position:relative; width:30px; height:30px; border-radius:50%; border:1px dashed rgba(255,255,255,.4); display:grid; place-items:center; cursor:pointer; color:var(--muted); font-size:1rem; overflow:hidden; }
+.tc-sw label input { position:absolute; inset:0; opacity:0; cursor:pointer; }
+/* full screen: only the time, large and calm */
+.tc-full .tc-wrap { max-width:none; width:100%; height:100%; max-height:none; align-content:center; }
+.tc-full .ov-head, .tc-full .tc-tabs, .tc-full .tc-cap, .tc-full .tc-note, .tc-full .tc-tog, .tc-full .tc-set, .tc-full .tc-f { display:none !important; }
+.tc-full .tc-big { font-size:clamp(4rem, 17vw, 15rem); }
+.tc-big[data-tc=clk] { font-size:clamp(2rem, 9.5vw, 5.2rem); white-space:nowrap; }
+.tc-full .tc-big[data-tc=clk] { font-size:clamp(3rem, 11.5vw, 14rem); }
+.tc-full .tc-ring { width:min(82vmin, 760px); }
+.tc-full .tc-ring .tc-big { font-size:clamp(3rem, 12vmin, 9rem); }
+.tc-full .tc-sub { font-size:clamp(.8rem, 1.6vw, 1.2rem); letter-spacing:.32em; color:var(--muted); }
+.tc-full .tc-laps { max-height:22vh; }
+.tc-full .tc-ctl { opacity:.25; transition:opacity .4s var(--ease); }
+.tc-full .tc-ctl:hover, .tc-full .tc-ctl:focus-within, .tc-full.tc-awake .tc-ctl { opacity:1; }
+.tc-full .tc-tools, .tc-full .overlay-close { opacity:.3; transition:opacity .4s var(--ease); }
+.tc-full .tc-tools:hover, .tc-full .overlay-close:hover, .tc-full.tc-awake .tc-tools, .tc-full.tc-awake .overlay-close { opacity:1; }
+@media (max-width:600px) { #tc-overlay .overlay-content.tc-wrap { padding-top:calc(env(safe-area-inset-top,0px) + 4.6rem) !important; } #tc-overlay.tc-full .overlay-content.tc-wrap { padding-top:calc(env(safe-area-inset-top,0px) + 1rem) !important; } .tc-tools { top:1rem; left:1rem; } .tc-style { top:4.2rem; left:16px; } }
 @media (max-width:600px) { .tc-wrap { gap:1rem; padding:3.6rem .4rem 2rem; } .tc-tabs { flex-wrap:nowrap; gap:.3rem; } .tc-tabs .tab { padding:.55rem .7rem; font-size:.56rem; letter-spacing:.1em; } .tc-ctl .btn { min-width:96px; } }
 /* ── performance check (Developer mode → Look): switches that turn one kind of effect off, to find what is slow on a device ── */
 .pf-nofog .fog, .pf-nofog .fw { display:none !important; }
@@ -1907,6 +1943,11 @@ body.dragging-now { user-select:none; cursor:grabbing; }
     <div class="ck-l">LEFT TODAY</div><div class="ck-s" id="ck-sub"></div><div class="ck-h">CLICK ANYWHERE OR PRESS ESC TO LEAVE</div></div>
 </div>
 <div class="overlay tc-ov" id="tc-overlay" aria-label="Time Center">
+  <div class="tc-tools">
+    <div class="icon-btn" data-tcx="full" role="button" tabindex="0" title="Full screen" aria-label="Full screen"><svg viewBox="0 0 24 24" class="tc-i-in"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><svg viewBox="0 0 24 24" class="tc-i-out"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg></div>
+    <div class="icon-btn" data-tcx="style" role="button" tabindex="0" title="Number style" aria-label="Number style"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="9" cy="9.5" r="1.2"/><circle cx="14.5" cy="8.5" r="1.2"/><circle cx="16" cy="13.5" r="1.2"/><path d="M11 17.5a2 2 0 0 0-2-3"/></svg></div>
+  </div>
+  <div class="tc-style" id="tc-style" hidden></div>
   <div class="overlay-close"><div class="icon-btn" onclick="closeOverlay('tc-overlay')" role="button" tabindex="0" aria-label="Close"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div></div>
   <div class="overlay-content tc-wrap">
     <div class="ov-head"><div class="mono">TIME CENTER</div></div>
@@ -7896,6 +7937,62 @@ $('tc-overlay').addEventListener('change', e => {
   else if (path.startsWith('fc.cfg.')) { const k = path.slice(7), lim = { focus: [1, 180], short: [1, 60], long: [1, 90], every: [1, 12] }[k]; TC.fc.cfg[k] = tcNum(v, lim[0], lim[1]); el.value = TC.fc.cfg[k]; }
   tcSave();
 });
+
+/* ── Time Center look: number font, color and glow (saved), and a full-screen view ── */
+const TC_FONTS = [['thin', 'Thin', 'var(--sans)', 200, '.03em'], ['light', 'Light', 'var(--sans)', 300, '.02em'], ['bold', 'Bold', 'var(--sans)', 600, '0em'], ['mono', 'Mono', 'var(--mono)', 300, '-.02em']];
+const TC_COLORS = [['#ffffff', 'White'], ['#cfe3ff', 'Ice'], ['#9fd8ff', 'Sky'], ['#8ff0c8', 'Mint'], ['#f2d28b', 'Gold'], ['#ffb38a', 'Ember'], ['#ff8fae', 'Rose'], ['#c7a8ff', 'Violet']];
+const TC_GLOWS = [['off', 'None'], ['soft', 'Soft'], ['bright', 'Bright']];
+TC.look = Object.assign({ font: 'thin', color: '#ffffff', glow: 'soft' }, TC.look || {});
+function tcLookApply() {
+  const L = TC.look, ov = $('tc-overlay'), f = TC_FONTS.find(x => x[0] === L.font) || TC_FONTS[0];
+  const c = /^#[0-9a-f]{6}$/i.test(L.color) ? L.color : '#ffffff';
+  ov.style.setProperty('--tcc', c); ov.style.setProperty('--tcf', f[2]); ov.style.setProperty('--tcw', f[3]); ov.style.setProperty('--tcls', f[4]);
+  ov.style.setProperty('--tcg', L.glow === 'off' ? 'none' : L.glow === 'bright' ? `0 0 18px ${c}99, 0 0 50px ${c}55` : `0 0 30px ${c}40`);
+}
+function tcStyleHTML() {
+  const L = TC.look;
+  return `<div class="tc-prev">12:34</div>
+    <h5>NUMBER STYLE</h5><div class="tc-chips">${TC_FONTS.map(f => `<button type="button" data-tcl="font:${f[0]}" class="${L.font === f[0] ? 'on' : ''}" style="font-family:${f[2]};font-weight:${f[3]}">${f[1]}</button>`).join('')}</div>
+    <h5>COLOR</h5><div class="tc-sw">${TC_COLORS.map(c => `<button type="button" data-tcl="color:${c[0]}" class="${L.color.toLowerCase() === c[0] ? 'on' : ''}" style="--c:${c[0]}" title="${c[1]}" aria-label="${c[1]}"></button>`).join('')}<label title="Any color" aria-label="Pick any color">+<input type="color" value="${esc(L.color)}" data-tcl-pick></label></div>
+    <h5>GLOW</h5><div class="tc-chips">${TC_GLOWS.map(g => `<button type="button" data-tcl="glow:${g[0]}" class="${L.glow === g[0] ? 'on' : ''}" style="font:500 .62rem var(--mono);letter-spacing:.16em">${g[1].toUpperCase()}</button>`).join('')}</div>`;
+}
+function tcStyleToggle(force) {
+  const p = $('tc-style'), open = force != null ? force : p.hidden;
+  p.hidden = !open; document.querySelector('[data-tcx=style]').classList.toggle('on', open);
+  if (open) p.innerHTML = tcStyleHTML();
+}
+const tcIsFull = () => $('tc-overlay').classList.contains('tc-full');
+function tcFull(on) {
+  const ov = $('tc-overlay'); on = on == null ? !tcIsFull() : on;
+  ov.classList.toggle('tc-full', on); tcStyleToggle(false);
+  try {
+    if (on && !document.fullscreenElement && ov.requestFullscreen) ov.requestFullscreen().catch(() => {});
+    if (!on && document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(() => {});
+  } catch (e) {}
+  tcWake();
+}
+let tcWakeT = 0;
+function tcWake() { const ov = $('tc-overlay'); ov.classList.add('tc-awake'); clearTimeout(tcWakeT); tcWakeT = setTimeout(() => ov.classList.remove('tc-awake'), 2500); }
+document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement && tcIsFull()) $('tc-overlay').classList.remove('tc-full'); });
+$('tc-overlay').addEventListener('pointermove', () => { if (tcIsFull()) tcWake(); }, { passive: true });
+$('tc-overlay').addEventListener('click', e => {
+  const x = e.target.closest('[data-tcx]');
+  if (x) { if (x.dataset.tcx === 'full') tcFull(); else tcStyleToggle(); sfx('tick'); return; }
+  const l = e.target.closest('[data-tcl]');
+  if (l) { const [k, v] = l.dataset.tcl.split(':'); TC.look[k] = v; tcLookApply(); tcSave(); $('tc-style').innerHTML = tcStyleHTML(); sfx('tick'); return; }
+  if (!$('tc-style').hidden && !e.target.closest('#tc-style')) tcStyleToggle(false);
+});
+$('tc-overlay').addEventListener('input', e => { if (e.target.matches('[data-tcl-pick]')) { TC.look.color = e.target.value; tcLookApply(); } });
+$('tc-overlay').addEventListener('change', e => { if (e.target.matches('[data-tcl-pick]')) { TC.look.color = e.target.value; tcSave(); $('tc-style').innerHTML = tcStyleHTML(); } });
+$('tc-overlay').addEventListener('keydown', e => { const x = e.target.closest && e.target.closest('[data-tcx]'); if (x && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); x.click(); } });
+addEventListener('keydown', e => {
+  if (!tcOpen() || e.target.matches('input, select, textarea')) return;
+  if (e.key === 'f' || e.key === 'F') { tcFull(); e.preventDefault(); }
+  if (e.key === 'Escape' && tcIsFull()) { tcFull(false); e.stopImmediatePropagation(); e.preventDefault(); }
+}, true);
+const _coTC2 = closeOverlay;
+closeOverlay = function (id) { if (id === 'tc-overlay') { tcStyleToggle(false); if (tcIsFull()) tcFull(false); } return _coTC2.apply(this, arguments); };
+tcLookApply();
 /* ══════════════════════════════════════════════════════
    PERFORMANCE CHECK
    A live frame meter, and switches that turn one kind of effect off. Nothing here is saved; reloading puts everything back.
