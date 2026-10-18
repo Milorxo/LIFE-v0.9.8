@@ -1617,6 +1617,56 @@ body.dragging-now { user-select:none; cursor:grabbing; }
 .dev-tabs.fade-l, #dev-tabs.fade-l { -webkit-mask-image:linear-gradient(270deg,#000 calc(100% - 34px),transparent); mask-image:linear-gradient(270deg,#000 calc(100% - 34px),transparent); }
 .dev-tabs.fade-l.fade-r, #dev-tabs.fade-l.fade-r { -webkit-mask-image:linear-gradient(90deg,transparent,#000 34px,#000 calc(100% - 34px),transparent); mask-image:linear-gradient(90deg,transparent,#000 34px,#000 calc(100% - 34px),transparent); }
 
+
+
+/* ── Time Center: clock, stopwatch, timer, focus sessions ── */
+.tc-ov { background:radial-gradient(circle at 50% 30%, #12161e 0%, #06070a 80%); }
+.tc-wrap { max-width:620px; display:grid; gap:1.3rem; justify-items:center; align-content:start; text-align:center; }
+.tc-tabs { align-items:center; }
+.tc-wrap .ov-head { margin:0; }
+.tc-tabs .tab { min-height:40px; }
+.tc-tabs .tab.on { color:#fff; border-color:rgba(255,255,255,.7); }
+#tc-body { width:100%; display:grid; gap:1.1rem; justify-items:center; animation:tcIn .35s var(--ease); }
+@keyframes tcIn { from { opacity:0; transform:translateY(6px); } }
+.tc-big { font-family:var(--sans); font-weight:200; font-size:clamp(2.6rem,12vw,5.2rem); line-height:1; letter-spacing:.03em; color:#fff; font-variant-numeric:tabular-nums; text-shadow:0 0 30px rgba(255,255,255,.22); }
+.tc-big small { font-size:.42em; color:var(--muted); margin-left:.12em; }
+.tc-cap { font-family:var(--mono); font-size:.6rem; letter-spacing:.3em; color:var(--dim); text-transform:uppercase; }
+.tc-sub { font-family:var(--mono); font-size:.72rem; letter-spacing:.2em; color:#fff; }
+.tc-ring { position:relative; width:min(70vw,44vh,300px); aspect-ratio:1; }
+.tc-ring svg { width:100%; height:100%; transform:rotate(-90deg); overflow:visible; }
+.tc-ring .ck-fg { transition:stroke-dashoffset .3s linear; }
+.tc-ring .tc-in { position:absolute; inset:0; display:grid; place-content:center; gap:.55rem; }
+.tc-ring .tc-big { font-size:clamp(2rem,10vw,3.4rem); }
+.tc-ctl { display:flex; gap:.6rem; flex-wrap:wrap; justify-content:center; }
+.tc-ctl .btn { min-width:112px; min-height:46px; padding:.7rem 1.2rem; }
+.tc-ctl .btn:disabled { opacity:.35; cursor:default; }
+.tc-laps { width:100%; max-width:420px; max-height:min(34vh,260px); overflow-y:auto; display:grid; border-top:1px solid var(--line); }
+.tc-lap { display:grid; grid-template-columns:3.2rem 1fr 1fr; gap:.6rem; padding:.62rem .3rem; border-bottom:1px solid var(--line); font-family:var(--mono); font-size:.72rem; letter-spacing:.08em; font-variant-numeric:tabular-nums; color:var(--muted); }
+.tc-lap b { color:#fff; font-weight:500; text-align:right; } .tc-lap span:last-child { text-align:right; }
+.tc-set { display:flex; gap:.7rem; justify-content:center; flex-wrap:wrap; }
+.tc-f { display:grid; gap:.35rem; justify-items:center; font-family:var(--mono); font-size:.55rem; letter-spacing:.24em; color:var(--dim); }
+.tc-f input, .tc-f select { width:5.4rem; min-height:46px; text-align:center; font:300 1.5rem var(--sans); color:#fff; background:#13171b; border:1px solid var(--line2); border-radius:12px; font-variant-numeric:tabular-nums; }
+.tc-f select { width:min(78vw,300px); font:500 .72rem var(--mono); letter-spacing:.12em; padding:0 .6rem; }
+.tc-f.sm input { width:4.6rem; font-size:1.1rem; min-height:42px; }
+.tc-tog { display:flex; gap:.5rem; flex-wrap:wrap; justify-content:center; }
+.tc-tog .tab.on { color:#fff; border-color:rgba(255,255,255,.7); }
+.tc-note { max-width:440px; font-size:.72rem; line-height:1.6; color:var(--dim); }
+.tc-ph { font-family:var(--mono); font-size:.7rem; letter-spacing:.34em; color:#fff; padding:.4rem .9rem; border:1px solid rgba(255,255,255,.35); border-radius:999px; }
+.tc-ph.brk { color:var(--muted); border-color:var(--line2); }
+@media (max-width:600px) { .tc-wrap { gap:1rem; padding:3.6rem .4rem 2rem; } .tc-tabs { flex-wrap:nowrap; gap:.3rem; } .tc-tabs .tab { padding:.55rem .7rem; font-size:.56rem; letter-spacing:.1em; } .tc-ctl .btn { min-width:96px; } }
+/* ── performance check (Developer mode → Look): switches that turn one kind of effect off, to find what is slow on a device ── */
+.pf-nofog .fog, .pf-nofog .fw { display:none !important; }
+.pf-nomouse #mlight { display:none !important; }
+.pf-noanim *, .pf-noanim *::before, .pf-noanim *::after { animation:none !important; }
+.pf-notrans *, .pf-notrans *::before, .pf-notrans *::after { transition:none !important; }
+.pf-nofx *, .pf-nofx *::before, .pf-nofx *::after { backdrop-filter:none !important; -webkit-backdrop-filter:none !important; mix-blend-mode:normal !important; filter:none !important; box-shadow:none !important; }
+.pf-noart .ar-img, .pf-noart .la-fig img, .pf-noart #la-img { visibility:hidden !important; }
+#pf-meter { position:fixed; left:10px; bottom:10px; z-index:99999; padding:.5rem .7rem; border-radius:10px; background:rgba(0,0,0,.82); border:1px solid rgba(255,255,255,.25); color:#fff; font:11px/1.5 ui-monospace,Menlo,monospace; letter-spacing:.04em; pointer-events:none; white-space:pre; display:none; }
+#pf-meter.on { display:block; }
+.pf-grid { display:grid; grid-template-columns:1fr 1fr; gap:.5rem; margin-top:.6rem; }
+.pf-b { padding:.7rem .8rem; border-radius:12px; border:1px solid var(--line); background:#13171b; color:var(--muted); cursor:pointer; text-align:left; font-size:.68rem; letter-spacing:.1em; }
+.pf-b.off { border-color:#fff; color:#fff; background:#1e2328; }
+.pf-b small { display:block; margin-top:.25rem; letter-spacing:.04em; opacity:.7; }
 </style>
 </head>
 <body>
@@ -1681,6 +1731,9 @@ body.dragging-now { user-select:none; cursor:grabbing; }
     <div class="icon-btn amb-btn" data-amb-icon onclick="ambToggle()" title="Ambient music" role="button" tabindex="0" aria-label="Ambient music" aria-pressed="false">
       <svg viewBox="0 0 24 24"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>
     </div>
+    <div class="icon-btn" onclick="openTimeCenter()" title="Time Center" role="button" tabindex="0" aria-label="Time Center">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9.5 2.5h5M12 2.5V5"/></svg>
+    </div>
     <div class="icon-btn" onclick="openSettings()" title="Settings" role="button" tabindex="0" aria-label="Settings">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg>
     </div>
@@ -1697,7 +1750,7 @@ body.dragging-now { user-select:none; cursor:grabbing; }
     <div class="logo sm"><img class="mark" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiI+PGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0iYmdpIiBjeD0iNTAlIiBjeT0iNTAlIiByPSI3MiUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzE0MTIxYyIvPjxzdG9wIG9mZnNldD0iLjU1IiBzdG9wLWNvbG9yPSIjMDgwODBjIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMDIwMjAzIi8+PC9yYWRpYWxHcmFkaWVudD4KPHJhZGlhbEdyYWRpZW50IGlkPSJoaSIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNTAlIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM5ZmI0ZmYiIHN0b3Atb3BhY2l0eT0iLjU1Ii8+PHN0b3Agb2Zmc2V0PSIuNDUiIHN0b3AtY29sb3I9IiM3YThjZmYiIHN0b3Atb3BhY2l0eT0iLjE4Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjM2IyYjljIiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9ImRpIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMCI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjM2IyYjljIiBzdG9wLW9wYWNpdHk9IjAiLz48c3RvcCBvZmZzZXQ9Ii4yIiBzdG9wLWNvbG9yPSIjN2E4Y2ZmIi8+PHN0b3Agb2Zmc2V0PSIuNSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIvPjxzdG9wIG9mZnNldD0iLjgiIHN0b3AtY29sb3I9IiNiZmU2ZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMzYjJiOWMiIHN0b3Atb3BhY2l0eT0iMCIvPjwvbGluZWFyR3JhZGllbnQ+CjxsaW5lYXJHcmFkaWVudCBpZD0icmkiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNmZmZmZmYiLz48c3RvcCBvZmZzZXQ9Ii41NSIgc3RvcC1jb2xvcj0iI2JmZTZmZiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzdhOGNmZiIvPjwvbGluZWFyR3JhZGllbnQ+CjxmaWx0ZXIgaWQ9ImJsaSIgeD0iLTMwJSIgeT0iLTgwJSIgd2lkdGg9IjE2MCUiIGhlaWdodD0iMjYwJSI+PGZlR2F1c3NpYW5CbHVyIHN0ZERldmlhdGlvbj0iOSIvPjwvZmlsdGVyPgo8ZmlsdGVyIGlkPSJzbWkiIHg9Ii0zMCUiIHk9Ii04MCUiIHdpZHRoPSIxNjAlIiBoZWlnaHQ9IjI2MCUiPjxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjIuMiIvPjwvZmlsdGVyPgo8Y2xpcFBhdGggaWQ9ImZyaSI+PHJlY3QgeD0iMCIgeT0iMjYyIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjI1MCIvPjwvY2xpcFBhdGg+PC9kZWZzPgo8cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjExMiIgZmlsbD0idXJsKCNiZ2kpIi8+CjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI1NiAyNTYpIHNjYWxlKDEuMykgdHJhbnNsYXRlKC0yNTYgLTI1NikiPgo8Y2lyY2xlIGN4PSIyNTYiIGN5PSIyNjIiIHI9IjIzMCIgZmlsbD0idXJsKCNoaSkiLz4KPGcgZmlsbD0iI2ZmZiI+PGNpcmNsZSBjeD0iODAiIGN5PSI5NiIgcj0iMS42IiBvcGFjaXR5PSIuNyIvPjxjaXJjbGUgY3g9IjQzMCIgY3k9IjEzMCIgcj0iMS4zIiBvcGFjaXR5PSIuNiIvPjxjaXJjbGUgY3g9IjExMCIgY3k9IjQyMCIgcj0iMS40IiBvcGFjaXR5PSIuNSIvPjxjaXJjbGUgY3g9IjQxMCIgY3k9IjQxMCIgcj0iMS44IiBvcGFjaXR5PSIuNiIvPjxjaXJjbGUgY3g9IjMwMCIgY3k9IjYyIiByPSIxLjIiIG9wYWNpdHk9Ii41Ii8+PGNpcmNsZSBjeD0iNjAiIGN5PSIyNTAiIHI9IjEuMiIgb3BhY2l0eT0iLjQiLz48L2c+CjxlbGxpcHNlIGN4PSIyNTYiIGN5PSIyNjIiIHJ4PSIxNzYiIHJ5PSI0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ1cmwoI2RpKSIgc3Ryb2tlLXdpZHRoPSIyMiIgZmlsdGVyPSJ1cmwoI2JsaSkiIG9wYWNpdHk9Ii45Ii8+CjxlbGxpcHNlIGN4PSIyNTYiIGN5PSIyNjIiIHJ4PSIxNzYiIHJ5PSI0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ1cmwoI2RpKSIgc3Ryb2tlLXdpZHRoPSI1Ii8+CjxjaXJjbGUgY3g9IjI1NiIgY3k9IjI2MiIgcj0iODYiIGZpbGw9Im5vbmUiIHN0cm9rZT0idXJsKCNyaSkiIHN0cm9rZS13aWR0aD0iMTYiIGZpbHRlcj0idXJsKCNibGkpIiBvcGFjaXR5PSIuODUiLz4KPGNpcmNsZSBjeD0iMjU2IiBjeT0iMjYyIiByPSI4NCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ1cmwoI3JpKSIgc3Ryb2tlLXdpZHRoPSI0LjUiLz4KPGNpcmNsZSBjeD0iMjU2IiBjeT0iMjYyIiByPSI3NiIgZmlsbD0iIzAyMDIwMyIvPgo8ZyBjbGlwLXBhdGg9InVybCgjZnJpKSI+PGVsbGlwc2UgY3g9IjI1NiIgY3k9IjI2MiIgcng9IjE3NiIgcnk9IjQwIiBmaWxsPSJub25lIiBzdHJva2U9InVybCgjZGkpIiBzdHJva2Utd2lkdGg9IjIyIiBmaWx0ZXI9InVybCgjYmxpKSIgb3BhY2l0eT0iLjkiLz48ZWxsaXBzZSBjeD0iMjU2IiBjeT0iMjYyIiByeD0iMTc2IiByeT0iNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0idXJsKCNkaSkiIHN0cm9rZS13aWR0aD0iNSIvPjwvZz4KPGcgZmlsdGVyPSJ1cmwoI3NtaSkiIG9wYWNpdHk9Ii45Ij48cGF0aCBkPSJNMTkwIDE1MCBRMTk0LjYgMTkxLjQgMjM2IDE5NiBRMTk0LjYgMjAwLjYgMTkwIDI0MiBRMTg1LjQgMjAwLjYgMTQ0IDE5NiBRMTg1LjQgMTkxLjQgMTkwIDE1MFoiIGZpbGw9IiM5ZmI0ZmYiLz48L2c+PHBhdGggZD0iTTE5MCAxNTYgUTE5NC4wIDE5Mi4wIDIzMCAxOTYgUTE5NC4wIDIwMC4wIDE5MCAyMzYgUTE4Ni4wIDIwMC4wIDE1MCAxOTYgUTE4Ni4wIDE5Mi4wIDE5MCAxNTZaIiBmaWxsPSIjZmZmZmZmIi8+PC9nPjwvc3ZnPg==" alt="" aria-hidden="true"><span class="word">LIFE</span></div>
     <div class="top-r" id="profile-status"></div>
     <button class="dots-b" id="dots-b" type="button" aria-label="Menu" aria-haspopup="true" onclick="toggleDots(event)"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></button>
-    <div class="dots-menu" id="dots-menu" role="menu"><button type="button" role="menuitem" onclick="openSettings()">SETTINGS</button><button type="button" role="menuitem" onclick="openOverlay('dev-overlay')">DEVELOPER</button></div>
+    <div class="dots-menu" id="dots-menu" role="menu"><button type="button" role="menuitem" onclick="openTimeCenter()">TIME CENTER</button><button type="button" role="menuitem" onclick="openSettings()">SETTINGS</button><button type="button" role="menuitem" onclick="openOverlay('dev-overlay')">DEVELOPER</button></div>
   </header>
   <div class="prof-grid">
     <section><div class="la-card" id="prof-fig" role="button" tabindex="0" aria-label="Open your life areas"><div class="la-fig"><img id="la-img" alt="" draggable="false"></div><div id="la-dyn"></div></div></section>
@@ -1719,6 +1772,7 @@ body.dragging-now { user-select:none; cursor:grabbing; }
           <div class="fb big sto" onclick="openStore('pg-profile')" role="button" tabindex="0" aria-label="Store"><i class="ic"><svg viewBox="0 0 24 24"><path d="M4.5 9h15l-1.3 11.2a1 1 0 0 1-1 .8H6.8a1 1 0 0 1-1-.8zM8.5 9V8a3.5 3.5 0 0 1 7 0v1"/><path d="M12 12.5v4M10.4 14h2.4a1 1 0 0 1 0 2h-1.6"/></svg></i><b>STORE</b><small>SPEND YOUR MONEY</small></div>
         </div>
         <div class="sd-row">
+          <button class="sdb" onclick="openTimeCenter()" aria-label="Time Center"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9.5 2.5h5M12 2.5V5"/></svg><span>TIME</span></button>
           <button class="sdb" onclick="openSettings()" aria-label="Settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg><span>SETTINGS</span></button>
           <button class="sdb dev" onclick="openOverlay('dev-overlay')" aria-label="Developer mode"><svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg><span>DEVELOPER</span></button>
         </div>
@@ -1852,6 +1906,14 @@ body.dragging-now { user-select:none; cursor:grabbing; }
     <div class="ck-t"><b id="ck-time">00:00:00</b><small>HOURS · MINUTES · SECONDS</small></div></div>
     <div class="ck-l">LEFT TODAY</div><div class="ck-s" id="ck-sub"></div><div class="ck-h">CLICK ANYWHERE OR PRESS ESC TO LEAVE</div></div>
 </div>
+<div class="overlay tc-ov" id="tc-overlay" aria-label="Time Center">
+  <div class="overlay-close"><div class="icon-btn" onclick="closeOverlay('tc-overlay')" role="button" tabindex="0" aria-label="Close"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div></div>
+  <div class="overlay-content tc-wrap">
+    <div class="ov-head"><div class="mono">TIME CENTER</div></div>
+    <div class="tabs tc-tabs" id="tc-tabs" role="tablist"></div>
+    <div id="tc-body"></div>
+  </div>
+</div>
 <div class="alert-bar" id="alert-bar" role="alert" aria-live="assertive"><i></i><div><b id="al-t"></b><span id="al-s"></span></div></div>
 
 <div class="overlay" id="dev-overlay">
@@ -1907,7 +1969,8 @@ function clampXp(v) { v = Math.round((+v || XP_MIN) / XP_STEP) * XP_STEP; return
 function clampMoney(v) { v = Math.round(+v || 0); return clamp(v, MONEY_MIN, MONEY_MAX); }
 function clampPrice(v) { v = Math.round(+v || PRICE_MIN); return Math.max(PRICE_MIN, v); }
 function uid(p) { return p + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
-function fmt(n) { return Number(n || 0).toLocaleString(); }
+const _nf = new Intl.NumberFormat();   // one formatter: building a new one on every call was a measurable cost
+function fmt(n) { return _nf.format(Number(n || 0)); }
 
 /* ══════════════════════════════════════════════════════
    DATA & CONSTANTS
@@ -2006,7 +2069,7 @@ function achStat(areaId, fam) {
   const a = G.areas[areaId] || {};
   if (fam === 'missions') return a.history_missions || 0;
   if (fam === 'hours') return a.totalHours || 0;
-  return Math.max(G.player.bestStreak || 0, computeStreak());
+  return Math.max(G.player.bestStreak || 0, streakHold != null ? streakHold : computeStreak());
 }
 /* XP earned from missions in one area (derived from history, so it is always consistent) */
 function areaXp(areaId) {
@@ -2262,9 +2325,11 @@ let notice = '';
 function dayHist(key) { return G.history[key] || (G.history[key] = newDay()); }
 
 /* Runs once for every day that has fully passed since the last run. */
+let settleFirst = true;
 function settle() {
   const today = dk();
   const yesterday = addDays(today, -1);
+  const settledBefore = G.settled;
   let d = addDays(G.settled, 1), missed = 0, lost = 0, guard = 0;
   while (d <= yesterday && guard++ < 4000) {
     const plan = dayPlan(d);
@@ -2285,8 +2350,10 @@ function settle() {
     G.settled = d;
     d = addDays(d, 1);
   }
-  applyStoreEdits();
-  saveState();
+  const storeChanged = applyStoreEdits();
+  /* Opening a page calls this too. Rewrite the whole save only when something actually changed (and always on the first run at start-up). */
+  if (settleFirst || storeChanged || G.settled !== settledBefore) saveState();
+  settleFirst = false;
   if (missed) notice = `${missed} MISSED DAY${missed > 1 ? 'S' : ''}${lost ? '   −' + fmt(lost) + ' XP' : '   PROTECTED BY YOUR TIER'}`;
 }
 
@@ -2295,7 +2362,8 @@ function dayCount(k) { const h = G.history[k]; return h && h.completed ? h.compl
 function computeStreak() {
   const today = dk();
   let streak = dayCount(today) > 0 ? 1 : 0;
-  let k = addDays(today, -1), guard = 0;
+  const dt = parseKey(today); dt.setDate(dt.getDate() - 1);
+  let k = dk(dt), guard = 0;
   const start = G.player.startDate || today;
   while (k >= start && guard++ < 3000) {
     if (dayCount(k) > 0) streak++;
@@ -2305,10 +2373,13 @@ function computeStreak() {
       const planned = h && h.planned != null ? h.planned : dayPlan(k).length;
       if (cal.level === 'rest' || planned === 0) { /* neutral */ } else break;
     }
-    k = addDays(k, -1);
+    dt.setDate(dt.getDate() - 1); k = dk(dt);
   }
   return streak;
 }
+/* While a loop reads the streak many times and nothing changes in between, work it out once. */
+let streakHold = null;
+function withStreak(fn) { streakHold = computeStreak(); try { return fn(); } finally { streakHold = null; } }
 
 function findTask(areaId, id, key) {
   const m = (G.missions[areaId] || []).find(x => x.id === id);
@@ -2636,6 +2707,7 @@ function initLook() {
   $('play-date').textContent = prettyDate(dk());
   const ml = $('mlight'); let mx = 0, my = 0, raf = 0;
   addEventListener('mousemove', e => {
+    if (document.documentElement.classList.contains('pf-nomouse')) return;
     mx = e.clientX; my = e.clientY;
     if (raf) return;
     raf = requestAnimationFrame(() => {
@@ -3324,17 +3396,19 @@ function devCalChange(act, t) {
    Edits made in Developer mode apply from tomorrow.
    ══════════════════════════════════════════════════════ */
 function applyStoreEdits() {
-  const today = dk(), S = G.store;
+  const today = dk(), S = G.store; let changed = false;
   S.rewards = S.rewards.filter(r => {
     if (r.pending && r.pending.from <= today) {
+      changed = true;
       if (r.pending.remove) return false;
       ['name', 'price', 'tag', 'note'].forEach(f => { if (r.pending[f] !== undefined) r[f] = r.pending[f]; });
       r.pending = null;
     }
-    if (r.from && r.from <= today) r.from = null;
+    if (r.from && r.from <= today) { r.from = null; changed = true; }
     return true;
   });
-  if (S.goal && !S.rewards.some(r => r.id === S.goal)) S.goal = null;
+  if (S.goal && !S.rewards.some(r => r.id === S.goal)) { S.goal = null; changed = true; }
+  return changed;
 }
 function liveRewards() { const t = dk(); return G.store.rewards.filter(r => !r.from || r.from <= t); }
 function avgDaily() { let s = 0; for (let i = 1; i <= 7; i++) { const h = G.history[addDays(dk(), -i)]; s += h ? h.coinsEarned : 0; } return s / 7; }
@@ -4041,7 +4115,7 @@ const _um = undoMission; undoMission = function () { const r = _um.apply(this, a
 /* ── achievements: notice a newly unlocked one ── */
 function achSnap() {
   const s = new Set();
-  Object.keys(G.areas).forEach(a => achList(a).forEach(it => { if (achStat(a, it.fam) >= Math.max(1, +it.q || 1)) s.add(it.id); }));
+  withStreak(() => Object.keys(G.areas).forEach(a => achList(a).forEach(it => { if (achStat(a, it.fam) >= Math.max(1, +it.q || 1)) s.add(it.id); })));
   return s;
 }
 let ACH_SEEN = null;
@@ -7558,6 +7632,322 @@ document.addEventListener('click', e => {
   if (k) k.click();
 });
 
+
+
+
+/* ══════════════════════════════════════════════════════
+   TIME CENTER: clock, stopwatch, timer and focus sessions
+   Every tool keeps timestamps, never a counter, so it stays right after the app sleeps or closes.
+   The clock, stopwatch and timer never touch tracked hours. A focus session counts only its focus
+   phases, and it does so by running the chosen Life Area's own session (and Time Mission), so the
+   time is booked by the existing system exactly once.
+   ══════════════════════════════════════════════════════ */
+const TC_KEY = 'life_tc';
+const TC_TABS = [['clock', 'CLOCK'], ['sw', 'STOPWATCH'], ['tm', 'TIMER'], ['fc', 'FOCUS']];
+const TC_DEF = () => ({
+  tab: 'clock', snd: true, notif: false,
+  sw: { run: false, t0: 0, acc: 0, laps: [] },
+  tm: { st: 'idle', h: 0, m: 5, s: 0, dur: 0, end: 0, left: 0 },
+  fc: { st: 'idle', cfg: { focus: 25, short: 5, long: 15, every: 4 }, area: null, mis: null, phase: 'focus', n: 0, cyc: 0, len: 0, end: 0, left: 0, own: false },
+  stats: {},
+});
+let TC = TC_DEF();
+try { const r = JSON.parse(localStorage.getItem(TC_KEY) || 'null'); if (r && typeof r === 'object') { const d = TC_DEF(); TC = { ...d, ...r, sw: { ...d.sw, ...r.sw }, tm: { ...d.tm, ...r.tm }, fc: { ...d.fc, ...r.fc, cfg: { ...d.fc.cfg, ...((r.fc || {}).cfg || {}) } }, stats: r.stats || {} }; } } catch (e) {}
+function tcSave() {
+  const lim = addDays(dk(), -60); Object.keys(TC.stats).forEach(k => { if (k < lim) delete TC.stats[k]; });
+  try { localStorage.setItem(TC_KEY, JSON.stringify(TC)); } catch (e) {}
+}
+const tcOpen = () => $('tc-overlay').classList.contains('open');
+const tcNum = (v, a, b) => clamp(Math.round(+v || 0), a, b);
+function tcFmt(ms, cs) {
+  ms = Math.max(0, ms); const t = Math.floor(ms / 1000), h = Math.floor(t / 3600), m = Math.floor(t % 3600 / 60), s = t % 60;
+  const main = (h ? h + ':' + pad(m) : pad(m)) + ':' + pad(s);
+  return cs ? main + '<small>.' + pad(Math.floor(ms % 1000 / 10)) + '</small>' : main;
+}
+const tcCd = ms => tcFmt(Math.ceil(Math.max(0, ms) / 1000) * 1000);
+function tcAlert(title, text) {
+  if (TC.snd) { try { sfx('dayDone'); } catch (e) {} }
+  if (typeof remShow === 'function') { try { remShow(title, text); } catch (e) { showToast(title); } } else showToast(title);
+  if (TC.notif && 'Notification' in window && Notification.permission === 'granted') {
+    const opt = { body: text, icon: 'icon-192.png', tag: 'life-tc' };
+    try { if (navigator.serviceWorker && navigator.serviceWorker.getRegistration) navigator.serviceWorker.getRegistration().then(r => { if (r && r.showNotification) r.showNotification(title, opt); else new Notification(title, opt); }).catch(() => {}); else new Notification(title, opt); } catch (e) {}
+  }
+}
+
+/* ── stopwatch ── */
+const swMs = () => TC.sw.acc + (TC.sw.run ? Date.now() - TC.sw.t0 : 0);
+function swAct(a) {
+  const W = TC.sw, n = Date.now();
+  if (a === 'start' && !W.run) { W.t0 = n; W.run = true; sfx('tStart'); }
+  else if (a === 'pause' && W.run) { W.acc += n - W.t0; W.run = false; sfx('tPause'); }
+  else if (a === 'lap' && W.run) { W.laps.push(swMs()); sfx('tick'); }
+  else if (a === 'reset' && !W.run) { W.acc = 0; W.laps = []; sfx('undo'); }
+  else return;
+  tcSave(); tcRender();
+}
+
+/* ── timer ── */
+const tmLeft = () => TC.tm.st === 'run' ? Math.max(0, TC.tm.end - Date.now()) : TC.tm.st === 'done' ? 0 : TC.tm.left;
+function tmAct(a) {
+  const M = TC.tm, n = Date.now();
+  if (a === 'start' && M.st === 'idle') {
+    const ms = ((M.h * 60 + M.m) * 60 + M.s) * 1000; if (ms <= 0) { showToast('SET A TIME FIRST'); return; }
+    M.dur = ms; M.end = n + ms; M.st = 'run'; sfx('tStart');
+  } else if (a === 'pause' && M.st === 'run') { M.left = Math.max(0, M.end - n); M.st = 'pause'; sfx('tPause'); }
+  else if (a === 'resume' && M.st === 'pause') { M.end = n + M.left; M.st = 'run'; sfx('tStart'); }
+  else if (a === 'reset' && M.st !== 'idle') { M.st = 'idle'; M.left = 0; M.end = 0; sfx('undo'); }
+  else return;
+  tcSave(); tcRender();
+}
+
+/* ── focus sessions ── */
+const FC_NAME = { focus: 'FOCUS', short: 'SHORT BREAK', long: 'LONG BREAK' };
+const fcLeft = () => TC.fc.st === 'run' ? Math.max(0, TC.fc.end - Date.now()) : TC.fc.left;
+function fcStat(t, ms, done) {
+  const k = dk(new Date(t)), o = TC.stats[k] || (TC.stats[k] = { n: 0, ms: 0 });
+  o.ms += Math.max(0, ms); if (done) o.n++;
+}
+function fcMissions(a) {
+  if (!a || !G.areas[a]) return [];
+  return dayPlan(dk()).filter(p => p.areaId === a && !p.dayOnly).map(p => findTask(a, p.id, dk())).filter(t => t && t.kind === 'timed');
+}
+/* Stop a running area session at a moment in the past (the exact end of a focus phase), split at midnight like the rest of the app. */
+function sessPauseAt(S, t) {
+  if (!S || !S.running) return;
+  t = Math.min(t, Date.now()); let st = S.startedAt, g = 0;
+  while (g++ < 400) {
+    const edge = dayStartMs(addDays(S.day, 1));
+    if (t <= edge) { S.acc += Math.max(0, t - st); break; }
+    S.acc += Math.max(0, edge - st); S.prior[S.day] = (S.prior[S.day] || 0) + S.acc; S.acc = 0; S.day = addDays(S.day, 1); st = edge;
+  }
+  S.running = false;
+}
+/* Focus phase begins at time t: run the area session (and the chosen Time Mission) from t. */
+function fcSessOn(t) {
+  const F = TC.fc, a = F.area; if (!a || !G.areas[a]) return;
+  const had = !!sessionFor(a);
+  if (F.mis && findTask(a, F.mis, dk()) && !winDone(a, F.mis) && !(MT && MT.missionId === F.mis && MT.day === dk())) { try { mtToggle(a, F.mis); } catch (e) {} }
+  let S = sessionFor(a);
+  if (!S) startTimer(a);
+  else if (!S.running) resumeTimer(a);
+  S = sessionFor(a); if (!had && S) F.own = true;
+  if (S && S.running && t < S.startedAt) { S.startedAt = Math.max(t, dayStartMs(S.day)); saveTimer(); }
+}
+/* Focus phase ends at time t: pause the area session at exactly t, so break time never counts. */
+function fcSessOff(t) {
+  const S = sessionFor(TC.fc.area); if (!S || !S.running) return;
+  sessPauseAt(S, t); saveTimer(); refreshTimerUI();
+}
+function fcBegin() {
+  const F = TC.fc;
+  if (!F.area || !G.areas[F.area]) { showToast('CHOOSE A LIFE AREA FIRST'); return; }
+  const n = Date.now(); F.phase = 'focus'; F.n = 1; F.cyc = 0; F.own = false; F.len = F.cfg.focus * 60000; F.end = n + F.len; F.left = F.len; F.st = 'run';
+  fcSessOn(n); sfx('tStart'); tcSave(); tcRender();
+}
+function fcNextPhase(t, completed) {
+  const F = TC.fc;
+  if (F.phase === 'focus') {
+    if (completed) { F.cyc++; }
+    const long = F.cyc >= F.cfg.every; if (long) F.cyc = 0;
+    F.phase = long ? 'long' : 'short'; F.len = (long ? F.cfg.long : F.cfg.short) * 60000;
+  } else { F.phase = 'focus'; F.n++; F.len = F.cfg.focus * 60000; }
+  F.end = t + F.len; F.left = F.len;
+}
+function fcAct(a) {
+  const F = TC.fc, n = Date.now();
+  if (a === 'start' && F.st === 'idle') { fcBegin(); return; }
+  if (F.st === 'idle') return;
+  if (a === 'pause' && F.st === 'run') { F.left = Math.max(0, F.end - n); F.st = 'pause'; if (F.phase === 'focus') fcSessOff(n); sfx('tPause'); }
+  else if (a === 'resume' && F.st === 'pause') { F.end = n + F.left; F.st = 'run'; if (F.phase === 'focus') fcSessOn(n); sfx('tStart'); }
+  else if (a === 'skip') {
+    const was = F.st, left = fcLeft();
+    if (F.phase === 'focus') { if (was === 'run') fcSessOff(n); fcStat(n, F.len - left, false); }
+    fcNextPhase(n, false);
+    if (was === 'run' && F.phase === 'focus') fcSessOn(n);
+    if (was === 'pause') { F.left = F.len; }
+    sfx('whoosh');
+  } else if (a === 'stop') {
+    if (F.phase === 'focus') { if (F.st === 'run') fcSessOff(n); fcStat(n, F.len - fcLeft(), false); }
+    const own = F.own, area = F.area; F.st = 'idle'; F.own = false; F.left = 0;
+    if (own && sessionFor(area)) { tcSave(); finishTimer(area); }
+    sfx('tFinish');
+  } else return;
+  tcSave(); tcRender();
+}
+
+/* Runs with the app's clock (and when the app comes back): ends timers and moves focus phases on, using the exact end time. */
+function tcCheck() {
+  const n = Date.now(); let dirty = false;
+  const M = TC.tm;
+  if (M.st === 'run' && n >= M.end) { M.st = 'done'; M.left = 0; dirty = true; tcAlert('TIMER DONE', `${tcCd(M.dur)} is up.`); }
+  const F = TC.fc; let g = 0, last = null;
+  while (F.st === 'run' && n >= F.end && g++ < 50) {
+    const t = F.end, from = F.phase;
+    if (from === 'focus') { fcSessOff(t); fcStat(t, F.len, true); }
+    fcNextPhase(t, from === 'focus');
+    last = from;
+    if (F.phase === 'focus') {
+      /* A break that ended while the app was away does not start a new focus by itself: nobody may be at the desk. */
+      if (n - t > 60000) { F.st = 'pause'; F.left = F.len; }
+      else fcSessOn(t);
+    }
+    dirty = true;
+  }
+  if (last) {
+    if (last === 'focus') tcAlert('FOCUS DONE', `${FC_NAME[F.phase]} · ${F.len / 60000} MIN`);
+    else tcAlert('BREAK OVER', F.st === 'pause' ? 'Press RESUME to start the next focus.' : `Focus session ${F.n} has started.`);
+  }
+  if (dirty) { tcSave(); if (tcOpen()) tcRender(); }
+}
+const _tickTC = tick;
+tick = function () { try { tcCheck(); } catch (e) {} return _tickTC.apply(this, arguments); };
+document.addEventListener('visibilitychange', () => { if (!document.hidden) { try { tcCheck(); } catch (e) {} if (tcOpen()) tcRender(); } });
+
+/* ── view ── */
+function tcRing(id) { return `<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" class="ck-bg"/><circle cx="50" cy="50" r="46" class="ck-fg" data-tc="${id}"/></svg>`; }
+const tcBtn = (act, label, on = true, dis = false) => on ? `<button type="button" class="btn" data-tca="${act}"${dis ? ' disabled' : ''}>${label}</button>` : '';
+function tcTodayLine() { const o = TC.stats[dk()] || { n: 0, ms: 0 }; return `TODAY · ${o.n} FOCUS SESSION${o.n === 1 ? '' : 'S'} · ${Math.floor(o.ms / 60000)} MIN FOCUSED`; }
+function tcRender() {
+  if (!tcOpen()) return;
+  $('tc-tabs').innerHTML = TC_TABS.map(([k, l]) => `<button type="button" class="tab ${TC.tab === k ? 'on' : ''}" role="tab" aria-selected="${TC.tab === k}" data-tct="${k}">${l}</button>`).join('');
+  let h = '';
+  if (TC.tab === 'clock') {
+    h = `<div class="tc-big" data-tc="clk"></div><div class="tc-sub" data-tc="date"></div><div class="tc-cap">${esc(Intl.DateTimeFormat().resolvedOptions().timeZone || 'LOCAL TIME')}</div>
+      <div class="tc-cap" data-tc="left"></div>`;
+  } else if (TC.tab === 'sw') {
+    const W = TC.sw, started = W.run || W.acc > 0, laps = W.laps.map((v, i) => [i + 1, v - (i ? W.laps[i - 1] : 0), v]).reverse();
+    h = `<div class="tc-big" data-tc="sw"></div><div class="tc-cap">STOPWATCH · NOT COUNTED AS TRACKED HOURS</div>
+      <div class="tc-ctl">${W.run ? tcBtn('sw:pause', 'PAUSE') + tcBtn('sw:lap', 'LAP') : tcBtn('sw:start', started ? 'RESUME' : 'START') + tcBtn('sw:reset', 'RESET', true, !started)}</div>
+      ${laps.length ? `<div class="tc-laps">${laps.map(l => `<div class="tc-lap"><span>#${l[0]}</span><b>+${tcFmt(l[1], true)}</b><span>${tcFmt(l[2], true)}</span></div>`).join('')}</div>` : ''}`;
+  } else if (TC.tab === 'tm') {
+    const M = TC.tm;
+    if (M.st === 'idle') {
+      h = `<div class="tc-set">${[['h', 'HOURS', 99], ['m', 'MINUTES', 59], ['s', 'SECONDS', 59]].map(([k, l, mx]) => `<label class="tc-f">${l}<input type="number" inputmode="numeric" min="0" max="${mx}" value="${M[k]}" data-tcin="tm.${k}"></label>`).join('')}</div>
+        <div class="tc-ctl">${tcBtn('tm:start', 'START')}</div>`;
+    } else {
+      h = `<div class="tc-ring">${tcRing('tmr')}<div class="tc-in"><div class="tc-big" data-tc="tm"></div><div class="tc-cap">${M.st === 'done' ? 'TIME IS UP' : M.st === 'pause' ? 'PAUSED' : 'REMAINING'}</div></div></div>
+        <div class="tc-ctl">${M.st === 'run' ? tcBtn('tm:pause', 'PAUSE') : M.st === 'pause' ? tcBtn('tm:resume', 'RESUME') : ''}${tcBtn('tm:reset', 'RESET')}</div>`;
+    }
+    h += `<div class="tc-cap">TIMER · NOT COUNTED AS TRACKED HOURS</div>`;
+  } else {
+    const F = TC.fc, ar = F.area && G.areas[F.area];
+    if (F.st === 'idle') {
+      const ms = fcMissions(F.area);
+      if (F.mis && !ms.some(t => t.id === F.mis)) F.mis = null;
+      h = `<label class="tc-f">LIFE AREA<select data-tcin="fc.area"><option value="">CHOOSE…</option>${Object.values(G.areas).map(a => `<option value="${esc(a.id)}" ${a.id === F.area ? 'selected' : ''}>${esc(a.name.toUpperCase())}</option>`).join('')}</select></label>
+        ${ms.length ? `<label class="tc-f">TIME MISSION (OPTIONAL)<select data-tcin="fc.mis"><option value="">AREA ONLY</option>${ms.map(t => `<option value="${esc(t.id)}" ${t.id === F.mis ? 'selected' : ''}>${esc(t.title.toUpperCase())}</option>`).join('')}</select></label>` : ''}
+        <div class="tc-set">${[['focus', 'FOCUS MIN', 1, 180], ['short', 'SHORT MIN', 1, 60], ['long', 'LONG MIN', 1, 90], ['every', 'LONG AFTER', 1, 12]].map(([k, l, a, b]) => `<label class="tc-f sm">${l}<input type="number" inputmode="numeric" min="${a}" max="${b}" value="${F.cfg[k]}" data-tcin="fc.cfg.${k}"></label>`).join('')}</div>
+        <div class="tc-ctl">${tcBtn('fc:start', 'START FOCUS', true, !ar)}</div>
+        <div class="tc-note">Only focus time counts. It runs ${ar ? esc(ar.name) : 'the chosen area'}'s own clock, which pauses during breaks, so your hours, XP and streaks are booked once by the normal tracking.</div>`;
+    } else {
+      const mi = F.mis && findTask(F.area, F.mis, dk());
+      h = `<div class="tc-ph ${F.phase === 'focus' ? '' : 'brk'}">${FC_NAME[F.phase]}</div>
+        <div class="tc-ring">${tcRing('fcr')}<div class="tc-in"><div class="tc-big" data-tc="fc"></div><div class="tc-cap">${F.st === 'pause' ? 'PAUSED' : 'SESSION ' + F.n}</div></div></div>
+        <div class="tc-cap">${ar ? esc(ar.name.toUpperCase()) : 'NO AREA'}${mi ? ' · ' + esc(mi.title.toUpperCase()) : ''} · ${F.cyc} OF ${F.cfg.every} BEFORE LONG BREAK</div>
+        <div class="tc-ctl">${F.st === 'run' ? tcBtn('fc:pause', 'PAUSE') : tcBtn('fc:resume', 'RESUME')}${tcBtn('fc:skip', 'SKIP')}${tcBtn('fc:stop', 'STOP')}</div>`;
+    }
+    h += `<div class="tc-cap">${tcTodayLine()}</div>`;
+  }
+  if (TC.tab !== 'clock') h += `<div class="tc-tog"><button type="button" class="tab ${TC.snd ? 'on' : ''}" data-tca="x:snd" aria-pressed="${TC.snd}">SOUND ${TC.snd ? 'ON' : 'OFF'}</button><button type="button" class="tab ${TC.notif ? 'on' : ''}" data-tca="x:notif" aria-pressed="${TC.notif}">NOTIFICATIONS ${TC.notif ? 'ON' : 'OFF'}</button></div>`;
+  $('tc-body').innerHTML = h;
+  tcLive(true);
+}
+let tcRaf = 0;
+const tcSet = (k, v, html) => { const e = document.querySelector(`#tc-body [data-tc="${k}"]`); if (!e) return; if (html) { if (e.innerHTML !== v) e.innerHTML = v; } else if (e.textContent !== v) e.textContent = v; };
+const tcArc = (k, f) => { const e = document.querySelector(`#tc-body [data-tc="${k}"]`); if (e) e.style.strokeDashoffset = (289.03 * (1 - clamp(f, 0, 1))).toFixed(2); };
+const tcTimeF = new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+const tcDateF = new Intl.DateTimeFormat(undefined, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+function tcLive(force) {
+  if (!force) tcRaf = 0;
+  if (!tcOpen() || document.hidden) return;
+  const now = new Date();
+  if (TC.tab === 'clock') { tcSet('clk', tcTimeF.format(now)); tcSet('date', tcDateF.format(now).toUpperCase()); tcSet('left', typeof msLeftToday === 'function' ? `${hm(msLeftToday())} LEFT IN TODAY'S TRACKED HOURS` : ''); }
+  else if (TC.tab === 'sw') tcSet('sw', tcFmt(swMs(), true), true);
+  else if (TC.tab === 'tm' && TC.tm.st !== 'idle') { const l = tmLeft(); tcSet('tm', tcCd(l)); tcArc('tmr', TC.tm.dur ? l / TC.tm.dur : 0); }
+  else if (TC.tab === 'fc' && TC.fc.st !== 'idle') { const l = fcLeft(); tcSet('fc', tcCd(l)); tcArc('fcr', TC.fc.len ? l / TC.fc.len : 0); }
+  if (!tcRaf) tcRaf = requestAnimationFrame(() => tcLive(false));
+}
+function openTimeCenter(tab) {
+  if (tab) TC.tab = tab;
+  const m = $('dots-menu'); if (m) m.classList.remove('open');
+  openOverlay('tc-overlay'); tcCheck(); tcRender();
+}
+const _coTC = closeOverlay;
+closeOverlay = function (id) { const r = _coTC.apply(this, arguments); if (id === 'tc-overlay') { cancelAnimationFrame(tcRaf); tcRaf = 0; } return r; };
+$('tc-overlay').addEventListener('click', e => {
+  const t = e.target.closest('[data-tct]');
+  if (t) { TC.tab = t.dataset.tct; tcSave(); sfx('tick'); tcRender(); return; }
+  const b = e.target.closest('[data-tca]'); if (!b || b.disabled) return;
+  const [k, a] = b.dataset.tca.split(':');
+  if (k === 'sw') swAct(a); else if (k === 'tm') tmAct(a); else if (k === 'fc') fcAct(a);
+  else if (a === 'snd') { TC.snd = !TC.snd; tcSave(); tcRender(); }
+  else if (a === 'notif') {
+    if (!TC.notif && 'Notification' in window && Notification.permission === 'default') Notification.requestPermission().then(() => tcRender()).catch(() => {});
+    if (!TC.notif && 'Notification' in window && Notification.permission === 'denied') showToast('NOTIFICATIONS ARE BLOCKED IN THIS BROWSER');
+    TC.notif = !TC.notif; tcSave(); tcRender();
+  }
+});
+$('tc-overlay').addEventListener('change', e => {
+  const el = e.target.closest('[data-tcin]'); if (!el) return;
+  const path = el.dataset.tcin, v = el.value;
+  if (path.startsWith('tm.')) { const k = path.slice(3); TC.tm[k] = tcNum(v, 0, k === 'h' ? 99 : 59); el.value = TC.tm[k]; }
+  else if (path === 'fc.area') { TC.fc.area = v || null; TC.fc.mis = null; tcSave(); tcRender(); return; }
+  else if (path === 'fc.mis') TC.fc.mis = v || null;
+  else if (path.startsWith('fc.cfg.')) { const k = path.slice(7), lim = { focus: [1, 180], short: [1, 60], long: [1, 90], every: [1, 12] }[k]; TC.fc.cfg[k] = tcNum(v, lim[0], lim[1]); el.value = TC.fc.cfg[k]; }
+  tcSave();
+});
+/* ══════════════════════════════════════════════════════
+   PERFORMANCE CHECK
+   A live frame meter, and switches that turn one kind of effect off. Nothing here is saved; reloading puts everything back.
+   ══════════════════════════════════════════════════════ */
+const PF_FX = [
+  ['nofog', 'FOG & MIST', 'drifting background images'],
+  ['nomouse', 'MOUSE GLOW', 'light that follows the cursor, parallax'],
+  ['noanim', 'ALL MOTION', 'every CSS animation'],
+  ['notrans', 'FADES', 'every CSS transition'],
+  ['nofx', 'BLUR, BLEND, SHADOWS', 'blur, blending and shadow effects'],
+  ['noart', 'PICTURES', 'card and figure artwork'],
+];
+const pfRoot = document.documentElement;
+let pfRun = false, pfFr = [], pfLong = 0, pfLast = 0, pfT = 0, pfObs = null;
+function pfLoop(t) {
+  if (!pfRun) return;
+  if (pfLast) pfFr.push(t - pfLast); pfLast = t;
+  window.__natRaf(pfLoop);
+}
+function pfShow() {
+  const el = $('pf-meter'); if (!el) return;
+  const f = pfFr; pfFr = [];
+  if (f.length) {
+    const sum = f.reduce((a, b) => a + b, 0), fps = f.length / (sum / 1000), worst = Math.max.apply(null, f), bad = f.filter(x => x > 33).length;
+    const heap = performance.memory ? (performance.memory.usedJSHeapSize / 1048576).toFixed(0) + ' MB' : 'n/a';
+    el.textContent = `FPS      ${fps.toFixed(0)}\nWORST    ${worst.toFixed(0)} ms\nSLOW     ${bad} frames over 33 ms\nFREEZES  ${pfLong} over 50 ms\nPAGE     ${curPage.replace('pg-', '')}   MEMORY ${heap}`;
+  }
+  pfLong = 0;
+}
+function pfMeter(on) {
+  const el = $('pf-meter'); if (!el) return;
+  pfRun = on; el.classList.toggle('on', on); clearInterval(pfT);
+  if (pfObs) { try { pfObs.disconnect(); } catch (e) {} pfObs = null; }
+  if (on) {
+    pfFr = []; pfLast = 0; pfLong = 0; window.__natRaf(pfLoop); pfT = setInterval(pfShow, 1000);
+    try { pfObs = new PerformanceObserver(l => { pfLong += l.getEntries().length; }); pfObs.observe({ entryTypes: ['longtask'] }); } catch (e) {}
+  }
+}
+const _lookPF = lookPanelHTML;
+lookPanelHTML = function () {
+  return _lookPF.apply(this, arguments) + `<div class="dev-section"><label class="dl">PERFORMANCE CHECK</label>
+    <div class="dim sm">Is the game laggy on your device? Turn the meter on, then switch effects off one at a time. When the FPS jumps up or the lag goes away, that is the effect causing it. Nothing is saved, and reloading puts everything back.</div>
+    <div class="pf-grid"><button class="pf-b ${pfRun ? 'off' : ''}" data-pf-meter>${pfRun ? 'METER ON' : 'SHOW FRAME METER'}<small>FPS, slow frames, freezes (bottom left)</small></button>${PF_FX.map(f => `<button class="pf-b ${pfRoot.classList.contains('pf-' + f[0]) ? 'off' : ''}" data-pf="${f[0]}">${pfRoot.classList.contains('pf-' + f[0]) ? 'OFF · ' : ''}${f[1]}<small>${f[2]}</small></button>`).join('')}</div></div>`;
+};
+document.addEventListener('click', e => {
+  const m = e.target.closest && e.target.closest('[data-pf-meter]');
+  if (m) { pfMeter(!pfRun); m.classList.toggle('off', pfRun); m.firstChild.textContent = pfRun ? 'METER ON' : 'SHOW FRAME METER'; return; }
+  const b = e.target.closest && e.target.closest('[data-pf]'); if (!b) return;
+  const k = 'pf-' + b.dataset.pf, off = !pfRoot.classList.contains(k); pfRoot.classList.toggle(k, off);
+  b.classList.toggle('off', off); b.firstChild.textContent = (off ? 'OFF · ' : '') + PF_FX.find(f => f[0] === b.dataset.pf)[1];
+});
+{ const m = document.createElement('div'); m.id = 'pf-meter'; m.setAttribute('aria-hidden', 'true'); document.body.appendChild(m); }
 
 /* ══════════════════════════════════════════════════════
    INIT
