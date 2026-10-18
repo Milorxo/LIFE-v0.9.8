@@ -1620,7 +1620,7 @@ body.dragging-now { user-select:none; cursor:grabbing; }
 
 
 /* ── Time Center: clock, stopwatch, timer, focus sessions ── */
-.tc-ov { background:radial-gradient(circle at 50% 30%, #12161e 0%, #06070a 80%); }
+#tc-overlay.tc-ov { background:var(--tcbg, radial-gradient(circle at 50% 30%, #12161e 0%, #06070a 80%)) !important; }
 .tc-wrap { max-width:620px; display:grid; gap:1.3rem; justify-items:center; align-content:start; text-align:center; }
 .tc-tabs { align-items:center; }
 .tc-wrap .ov-head { margin:0; }
@@ -1674,20 +1674,32 @@ body.dragging-now { user-select:none; cursor:grabbing; }
 .tc-sw button.on { outline:2px solid #fff; outline-offset:3px; }
 .tc-sw label { position:relative; width:30px; height:30px; border-radius:50%; border:1px dashed rgba(255,255,255,.4); display:grid; place-items:center; cursor:pointer; color:var(--muted); font-size:1rem; overflow:hidden; }
 .tc-sw label input { position:absolute; inset:0; opacity:0; cursor:pointer; }
-/* full screen: only the time, large and calm */
+.tc-big, .tc-ring svg, .tc-prev { opacity:var(--tcb, 1); transition:opacity .2s; }
+.tc-style { max-height:calc(100vh - 7rem); overflow-y:auto; }
+.tc-rng { display:flex; align-items:center; gap:.7rem; color:var(--muted); }
+.tc-rng input { flex:1; accent-color:var(--tcc, #fff); height:28px; cursor:pointer; }
+.tc-fonts { display:grid; grid-template-columns:repeat(3, 1fr); gap:.4rem; }
+.tc-fonts button { display:grid; gap:.15rem; justify-items:center; padding:.55rem .2rem; border-radius:12px; border:1px solid var(--line); background:transparent; color:#fff; cursor:pointer; }
+.tc-fonts button b { font-size:1.15rem; line-height:1.1; font-variant-numeric:tabular-nums; }
+.tc-fonts button small { font:500 .5rem var(--mono); letter-spacing:.14em; color:var(--dim); text-transform:uppercase; }
+.tc-fonts button.on { border-color:rgba(255,255,255,.75); background:rgba(255,255,255,.06); }
+.tc-sw .tc-bgb { width:38px; height:38px; border-radius:12px; background:var(--c); box-shadow:none; border:1px solid rgba(255,255,255,.22); }
+.tc-big[data-tc=sw] { font-size:clamp(2rem, 9vw, 5.2rem); white-space:nowrap; }
+/* full screen (inside the app): only the numbers, large and calm; a click anywhere leaves */
 .tc-full .tc-wrap { max-width:none; width:100%; height:100%; max-height:none; align-content:center; }
-.tc-full .ov-head, .tc-full .tc-tabs, .tc-full .tc-cap, .tc-full .tc-note, .tc-full .tc-tog, .tc-full .tc-set, .tc-full .tc-f { display:none !important; }
+.tc-full .ov-head, .tc-full .tc-tabs, .tc-full .tc-cap, .tc-full .tc-note, .tc-full .tc-tog, .tc-full .tc-set, .tc-full .tc-f,
+.tc-full .tc-tools, .tc-full .overlay-close, .tc-full .tc-ctl, .tc-full .tc-laps, .tc-full .tc-sub, .tc-full .tc-ph, .tc-full .tc-ring svg, .tc-full .tc-style { display:none !important; }
+.tc-full { cursor:pointer; }
+.tc-full .tc-big[data-tc=sw] { font-size:clamp(3rem, 10.5vw, 14rem); }
+.tc-full .tc-ring { width:auto; aspect-ratio:auto; }
+.tc-full .tc-ring .tc-in { position:static; }
 .tc-full .tc-big { font-size:clamp(4rem, 17vw, 15rem); }
 .tc-big[data-tc=clk] { font-size:clamp(2rem, 9.5vw, 5.2rem); white-space:nowrap; }
 .tc-full .tc-big[data-tc=clk] { font-size:clamp(3rem, 11.5vw, 14rem); }
 .tc-full .tc-ring { width:min(82vmin, 760px); }
-.tc-full .tc-ring .tc-big { font-size:clamp(3rem, 12vmin, 9rem); }
+.tc-full .tc-ring .tc-big { font-size:clamp(4rem, 19vw, 16rem); }
 .tc-full .tc-sub { font-size:clamp(.8rem, 1.6vw, 1.2rem); letter-spacing:.32em; color:var(--muted); }
 .tc-full .tc-laps { max-height:22vh; }
-.tc-full .tc-ctl { opacity:.25; transition:opacity .4s var(--ease); }
-.tc-full .tc-ctl:hover, .tc-full .tc-ctl:focus-within, .tc-full.tc-awake .tc-ctl { opacity:1; }
-.tc-full .tc-tools, .tc-full .overlay-close { opacity:.3; transition:opacity .4s var(--ease); }
-.tc-full .tc-tools:hover, .tc-full .overlay-close:hover, .tc-full.tc-awake .tc-tools, .tc-full.tc-awake .overlay-close { opacity:1; }
 @media (max-width:600px) { #tc-overlay .overlay-content.tc-wrap { padding-top:calc(env(safe-area-inset-top,0px) + 4.6rem) !important; } #tc-overlay.tc-full .overlay-content.tc-wrap { padding-top:calc(env(safe-area-inset-top,0px) + 1rem) !important; } .tc-tools { top:1rem; left:1rem; } .tc-style { top:4.2rem; left:16px; } }
 @media (max-width:600px) { .tc-wrap { gap:1rem; padding:3.6rem .4rem 2rem; } .tc-tabs { flex-wrap:nowrap; gap:.3rem; } .tc-tabs .tab { padding:.55rem .7rem; font-size:.56rem; letter-spacing:.1em; } .tc-ctl .btn { min-width:96px; } }
 /* ── performance check (Developer mode → Look): switches that turn one kind of effect off, to find what is slow on a device ── */
@@ -7706,6 +7718,10 @@ function tcFmt(ms, cs) {
   return cs ? main + '<small>.' + pad(Math.floor(ms % 1000 / 10)) + '</small>' : main;
 }
 const tcCd = ms => tcFmt(Math.ceil(Math.max(0, ms) / 1000) * 1000);
+function tcSwFmt(ms) {
+  ms = Math.max(0, ms); const t = Math.floor(ms / 1000);
+  return `${pad(Math.floor(t / 3600))}:${pad(Math.floor(t % 3600 / 60))}:${pad(t % 60)}` + (TC.swMs ? `<small>.${String(Math.floor(ms % 1000)).padStart(3, '0')}</small>` : '');
+}
 function tcAlert(title, text) {
   if (TC.snd) { try { sfx('dayDone'); } catch (e) {} }
   if (typeof remShow === 'function') { try { remShow(title, text); } catch (e) { showToast(title); } } else showToast(title);
@@ -7859,7 +7875,7 @@ function tcRender() {
     const W = TC.sw, started = W.run || W.acc > 0, laps = W.laps.map((v, i) => [i + 1, v - (i ? W.laps[i - 1] : 0), v]).reverse();
     h = `<div class="tc-big" data-tc="sw"></div><div class="tc-cap">STOPWATCH · NOT COUNTED AS TRACKED HOURS</div>
       <div class="tc-ctl">${W.run ? tcBtn('sw:pause', 'PAUSE') + tcBtn('sw:lap', 'LAP') : tcBtn('sw:start', started ? 'RESUME' : 'START') + tcBtn('sw:reset', 'RESET', true, !started)}</div>
-      ${laps.length ? `<div class="tc-laps">${laps.map(l => `<div class="tc-lap"><span>#${l[0]}</span><b>+${tcFmt(l[1], true)}</b><span>${tcFmt(l[2], true)}</span></div>`).join('')}</div>` : ''}`;
+      ${laps.length ? `<div class="tc-laps">${laps.map(l => `<div class="tc-lap"><span>#${l[0]}</span><b>+${tcSwFmt(l[1])}</b><span>${tcSwFmt(l[2])}</span></div>`).join('')}</div>` : ''}`;
   } else if (TC.tab === 'tm') {
     const M = TC.tm;
     if (M.st === 'idle') {
@@ -7889,21 +7905,31 @@ function tcRender() {
     }
     h += `<div class="tc-cap">${tcTodayLine()}</div>`;
   }
+  if (TC.tab === 'sw') h += `<div class="tc-tog"><button type="button" class="tab ${TC.swMs ? 'on' : ''}" data-tca="x:ms" aria-pressed="${TC.swMs}">MILLISECONDS ${TC.swMs ? 'ON' : 'OFF'}</button></div>`;
   if (TC.tab !== 'clock') h += `<div class="tc-tog"><button type="button" class="tab ${TC.snd ? 'on' : ''}" data-tca="x:snd" aria-pressed="${TC.snd}">SOUND ${TC.snd ? 'ON' : 'OFF'}</button><button type="button" class="tab ${TC.notif ? 'on' : ''}" data-tca="x:notif" aria-pressed="${TC.notif}">NOTIFICATIONS ${TC.notif ? 'ON' : 'OFF'}</button></div>`;
   $('tc-body').innerHTML = h;
-  tcLive(true);
+  tcLive(true); tcFit();
 }
 let tcRaf = 0;
 const tcSet = (k, v, html) => { const e = document.querySelector(`#tc-body [data-tc="${k}"]`); if (!e) return; if (html) { if (e.innerHTML !== v) e.innerHTML = v; } else if (e.textContent !== v) e.textContent = v; };
 const tcArc = (k, f) => { const e = document.querySelector(`#tc-body [data-tc="${k}"]`); if (e) e.style.strokeDashoffset = (289.03 * (1 - clamp(f, 0, 1))).toFixed(2); };
 const tcTimeF = new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 const tcDateF = new Intl.DateTimeFormat(undefined, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+/* Wide fonts can be broader than the screen at full size: shrink the number just enough to fit. */
+function tcFit() {
+  const e = document.querySelector('#tc-body .tc-big'); if (!e) return;
+  e.style.fontSize = '';
+  const max = innerWidth * .94, w = e.getBoundingClientRect().width;
+  if (w > max) e.style.fontSize = (parseFloat(getComputedStyle(e).fontSize) * max / w).toFixed(1) + 'px';
+}
+addEventListener('resize', () => { if (tcOpen()) tcFit(); });
+if (document.fonts && document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', () => { if (tcOpen()) tcFit(); });
 function tcLive(force) {
   if (!force) tcRaf = 0;
   if (!tcOpen() || document.hidden) return;
   const now = new Date();
   if (TC.tab === 'clock') { tcSet('clk', tcTimeF.format(now)); tcSet('date', tcDateF.format(now).toUpperCase()); tcSet('left', typeof msLeftToday === 'function' ? `${hm(msLeftToday())} LEFT IN TODAY'S TRACKED HOURS` : ''); }
-  else if (TC.tab === 'sw') tcSet('sw', tcFmt(swMs(), true), true);
+  else if (TC.tab === 'sw') tcSet('sw', tcSwFmt(swMs()), true);
   else if (TC.tab === 'tm' && TC.tm.st !== 'idle') { const l = tmLeft(); tcSet('tm', tcCd(l)); tcArc('tmr', TC.tm.dur ? l / TC.tm.dur : 0); }
   else if (TC.tab === 'fc' && TC.fc.st !== 'idle') { const l = fcLeft(); tcSet('fc', tcCd(l)); tcArc('fcr', TC.fc.len ? l / TC.fc.len : 0); }
   if (!tcRaf) tcRaf = requestAnimationFrame(() => tcLive(false));
@@ -7911,7 +7937,7 @@ function tcLive(force) {
 function openTimeCenter(tab) {
   if (tab) TC.tab = tab;
   const m = $('dots-menu'); if (m) m.classList.remove('open');
-  openOverlay('tc-overlay'); tcCheck(); tcRender();
+  tcFontsLoad(); openOverlay('tc-overlay'); tcCheck(); tcRender();
 }
 const _coTC = closeOverlay;
 closeOverlay = function (id) { const r = _coTC.apply(this, arguments); if (id === 'tc-overlay') { cancelAnimationFrame(tcRaf); tcRaf = 0; } return r; };
@@ -7922,6 +7948,7 @@ $('tc-overlay').addEventListener('click', e => {
   const [k, a] = b.dataset.tca.split(':');
   if (k === 'sw') swAct(a); else if (k === 'tm') tmAct(a); else if (k === 'fc') fcAct(a);
   else if (a === 'snd') { TC.snd = !TC.snd; tcSave(); tcRender(); }
+  else if (a === 'ms') { TC.swMs = !TC.swMs; tcSave(); tcRender(); }
   else if (a === 'notif') {
     if (!TC.notif && 'Notification' in window && Notification.permission === 'default') Notification.requestPermission().then(() => tcRender()).catch(() => {});
     if (!TC.notif && 'Notification' in window && Notification.permission === 'denied') showToast('NOTIFICATIONS ARE BLOCKED IN THIS BROWSER');
@@ -7939,21 +7966,46 @@ $('tc-overlay').addEventListener('change', e => {
 });
 
 /* ── Time Center look: number font, color and glow (saved), and a full-screen view ── */
-const TC_FONTS = [['thin', 'Thin', 'var(--sans)', 200, '.03em'], ['light', 'Light', 'var(--sans)', 300, '.02em'], ['bold', 'Bold', 'var(--sans)', 600, '0em'], ['mono', 'Mono', 'var(--mono)', 300, '-.02em']];
+/* [key, label, family, weight, letter-spacing]; the extra families load only when the Time Center first opens */
+const TC_FONTS = [
+  ['thin', 'Thin', "'Outfit'", 200, '.03em'], ['light', 'Light', "'Outfit'", 300, '.02em'], ['bold', 'Bold', "'Outfit'", 600, '0em'], ['mono', 'Mono', "'JetBrains Mono'", 300, '-.02em'],
+  ['inter', 'Inter', "'Inter'", 200, '-.01em'], ['manrope', 'Manrope', "'Manrope'", 200, '0em'], ['sora', 'Sora', "'Sora'", 200, '0em'], ['urbanist', 'Urbanist', "'Urbanist'", 200, '.02em'],
+  ['lexend', 'Lexend', "'Lexend'", 200, '0em'], ['poppins', 'Poppins', "'Poppins'", 200, '0em'], ['montserrat', 'Montserrat', "'Montserrat'", 200, '0em'], ['raleway', 'Raleway', "'Raleway'", 200, '.02em'],
+  ['grotesk', 'Grotesk', "'Space Grotesk'", 300, '-.02em'], ['plex', 'Plex Mono', "'IBM Plex Mono'", 200, '-.03em'], ['digital', 'Digital', "'Share Tech Mono'", 400, '0em'], ['orbitron', 'Orbitron', "'Orbitron'", 400, '.04em'],
+  ['rajdhani', 'Rajdhani', "'Rajdhani'", 300, '.02em'], ['oxanium', 'Oxanium', "'Oxanium'", 300, '.02em'], ['bebas', 'Bebas', "'Bebas Neue'", 400, '.04em'], ['cinzel', 'Cinzel', "'Cinzel'", 500, '.04em'],
+  ['playfair', 'Playfair', "'Playfair Display'", 400, '0em'], ['major', 'Major', "'Major Mono Display'", 400, '0em'],
+];
+const TC_FONT_URL = 'https://fonts.googleapis.com/css2?family=Outfit:wght@200&family=Inter:wght@200&family=Manrope:wght@200&family=Sora:wght@200&family=Urbanist:wght@200&family=Lexend:wght@200&family=Poppins:wght@200&family=Montserrat:wght@200&family=Raleway:wght@200&family=Space+Grotesk:wght@300&family=IBM+Plex+Mono:wght@200&family=Share+Tech+Mono&family=Orbitron:wght@400&family=Rajdhani:wght@300&family=Oxanium:wght@300&family=Bebas+Neue&family=Playfair+Display:wght@400&family=Major+Mono+Display&display=swap';
+function tcFontsLoad() { if (document.getElementById('tc-fonts')) return; const l = document.createElement('link'); l.id = 'tc-fonts'; l.rel = 'stylesheet'; l.href = TC_FONT_URL; document.head.appendChild(l); }
+const TC_BGS = [
+  ['night', 'Night', 'radial-gradient(circle at 50% 30%, #12161e 0%, #06070a 80%)'],
+  ['black', 'Black', '#000'],
+  ['midnight', 'Midnight', 'radial-gradient(circle at 50% 35%, #0f2038 0%, #03060c 78%)'],
+  ['aurora', 'Aurora', 'radial-gradient(ellipse at 15% 0%, #0e3a3a 0%, transparent 55%), radial-gradient(ellipse at 95% 100%, #2b1648 0%, transparent 60%), #05070a'],
+  ['ember', 'Ember', 'radial-gradient(ellipse at 50% 115%, #3d1706 0%, #0a0505 65%)'],
+  ['forest', 'Forest', 'radial-gradient(circle at 50% 30%, #10261a 0%, #040806 80%)'],
+  ['plum', 'Plum', 'radial-gradient(circle at 50% 30%, #261334 0%, #060409 80%)'],
+  ['slate', 'Slate', 'linear-gradient(180deg, #1c1f26 0%, #0a0b0e 100%)'],
+];
 const TC_COLORS = [['#ffffff', 'White'], ['#cfe3ff', 'Ice'], ['#9fd8ff', 'Sky'], ['#8ff0c8', 'Mint'], ['#f2d28b', 'Gold'], ['#ffb38a', 'Ember'], ['#ff8fae', 'Rose'], ['#c7a8ff', 'Violet']];
 const TC_GLOWS = [['off', 'None'], ['soft', 'Soft'], ['bright', 'Bright']];
-TC.look = Object.assign({ font: 'thin', color: '#ffffff', glow: 'soft' }, TC.look || {});
+TC.look = Object.assign({ font: 'thin', color: '#ffffff', glow: 'soft', bg: 'night', bright: 100 }, TC.look || {});
+if (TC.swMs == null) TC.swMs = true;
 function tcLookApply() {
   const L = TC.look, ov = $('tc-overlay'), f = TC_FONTS.find(x => x[0] === L.font) || TC_FONTS[0];
   const c = /^#[0-9a-f]{6}$/i.test(L.color) ? L.color : '#ffffff';
   ov.style.setProperty('--tcc', c); ov.style.setProperty('--tcf', f[2]); ov.style.setProperty('--tcw', f[3]); ov.style.setProperty('--tcls', f[4]);
+  const bg = TC_BGS.find(x => x[0] === L.bg) || TC_BGS[0]; ov.style.setProperty('--tcbg', bg[2]);
+  ov.style.setProperty('--tcb', (clamp(+L.bright || 100, 15, 100) / 100).toFixed(2));
   ov.style.setProperty('--tcg', L.glow === 'off' ? 'none' : L.glow === 'bright' ? `0 0 18px ${c}99, 0 0 50px ${c}55` : `0 0 30px ${c}40`);
 }
 function tcStyleHTML() {
   const L = TC.look;
   return `<div class="tc-prev">12:34</div>
-    <h5>NUMBER STYLE</h5><div class="tc-chips">${TC_FONTS.map(f => `<button type="button" data-tcl="font:${f[0]}" class="${L.font === f[0] ? 'on' : ''}" style="font-family:${f[2]};font-weight:${f[3]}">${f[1]}</button>`).join('')}</div>
+    <h5>BRIGHTNESS</h5><div class="tc-rng"><span>☾</span><input type="range" min="15" max="100" step="1" value="${clamp(+L.bright || 100, 15, 100)}" data-tcl-bright aria-label="Number brightness"><span>☀</span></div>
+    <h5>NUMBER STYLE</h5><div class="tc-fonts">${TC_FONTS.map(f => `<button type="button" data-tcl="font:${f[0]}" class="${L.font === f[0] ? 'on' : ''}"><b style="font-family:${f[2]};font-weight:${f[3]}">12:34</b><small>${f[1]}</small></button>`).join('')}</div>
     <h5>COLOR</h5><div class="tc-sw">${TC_COLORS.map(c => `<button type="button" data-tcl="color:${c[0]}" class="${L.color.toLowerCase() === c[0] ? 'on' : ''}" style="--c:${c[0]}" title="${c[1]}" aria-label="${c[1]}"></button>`).join('')}<label title="Any color" aria-label="Pick any color">+<input type="color" value="${esc(L.color)}" data-tcl-pick></label></div>
+    <h5>BACKGROUND</h5><div class="tc-sw">${TC_BGS.map(b => `<button type="button" data-tcl="bg:${b[0]}" class="tc-bgb ${L.bg === b[0] ? 'on' : ''}" style="--c:${b[2]}" title="${b[1]}" aria-label="${b[1]} background"></button>`).join('')}</div>
     <h5>GLOW</h5><div class="tc-chips">${TC_GLOWS.map(g => `<button type="button" data-tcl="glow:${g[0]}" class="${L.glow === g[0] ? 'on' : ''}" style="font:500 .62rem var(--mono);letter-spacing:.16em">${g[1].toUpperCase()}</button>`).join('')}</div>`;
 }
 function tcStyleToggle(force) {
@@ -7964,25 +8016,22 @@ function tcStyleToggle(force) {
 const tcIsFull = () => $('tc-overlay').classList.contains('tc-full');
 function tcFull(on) {
   const ov = $('tc-overlay'); on = on == null ? !tcIsFull() : on;
-  ov.classList.toggle('tc-full', on); tcStyleToggle(false);
-  try {
-    if (on && !document.fullscreenElement && ov.requestFullscreen) ov.requestFullscreen().catch(() => {});
-    if (!on && document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(() => {});
-  } catch (e) {}
-  tcWake();
+  ov.classList.toggle('tc-full', on); tcStyleToggle(false); tcFit();
 }
-let tcWakeT = 0;
-function tcWake() { const ov = $('tc-overlay'); ov.classList.add('tc-awake'); clearTimeout(tcWakeT); tcWakeT = setTimeout(() => ov.classList.remove('tc-awake'), 2500); }
-document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement && tcIsFull()) $('tc-overlay').classList.remove('tc-full'); });
-$('tc-overlay').addEventListener('pointermove', () => { if (tcIsFull()) tcWake(); }, { passive: true });
+/* While full screen, a click or tap anywhere only leaves full screen (it never reaches the buttons underneath). */
+document.addEventListener('click', e => { if (tcOpen() && tcIsFull()) { e.stopPropagation(); e.preventDefault(); tcFull(false); } }, true);
 $('tc-overlay').addEventListener('click', e => {
   const x = e.target.closest('[data-tcx]');
   if (x) { if (x.dataset.tcx === 'full') tcFull(); else tcStyleToggle(); sfx('tick'); return; }
   const l = e.target.closest('[data-tcl]');
-  if (l) { const [k, v] = l.dataset.tcl.split(':'); TC.look[k] = v; tcLookApply(); tcSave(); $('tc-style').innerHTML = tcStyleHTML(); sfx('tick'); return; }
+  if (l) { const [k, v] = l.dataset.tcl.split(':'); TC.look[k] = v; tcLookApply(); tcFit(); tcSave(); $('tc-style').innerHTML = tcStyleHTML(); sfx('tick'); return; }
   if (!$('tc-style').hidden && !e.target.closest('#tc-style')) tcStyleToggle(false);
 });
-$('tc-overlay').addEventListener('input', e => { if (e.target.matches('[data-tcl-pick]')) { TC.look.color = e.target.value; tcLookApply(); } });
+$('tc-overlay').addEventListener('input', e => {
+  if (e.target.matches('[data-tcl-pick]')) { TC.look.color = e.target.value; tcLookApply(); }
+  if (e.target.matches('[data-tcl-bright]')) { TC.look.bright = +e.target.value; tcLookApply(); }
+});
+$('tc-overlay').addEventListener('change', e => { if (e.target.matches('[data-tcl-bright]')) tcSave(); });
 $('tc-overlay').addEventListener('change', e => { if (e.target.matches('[data-tcl-pick]')) { TC.look.color = e.target.value; tcSave(); $('tc-style').innerHTML = tcStyleHTML(); } });
 $('tc-overlay').addEventListener('keydown', e => { const x = e.target.closest && e.target.closest('[data-tcx]'); if (x && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); x.click(); } });
 addEventListener('keydown', e => {
