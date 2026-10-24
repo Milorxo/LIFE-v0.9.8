@@ -1659,6 +1659,43 @@ body.dragging-now { user-select:none; cursor:grabbing; }
 .dp-map { min-width:44px; min-height:44px; margin:-.4rem -.4rem -.4rem 0; border-radius:9px; border:1px solid var(--line2); background:transparent; color:#d9c8ff; font:600 .5rem var(--mono); letter-spacing:.14em; cursor:pointer; flex:none; }
 @media (prefers-reduced-motion:reduce) { .mm-n.mm-hl { animation:none; box-shadow:0 0 0 4px rgba(207,227,255,.6); } }
 @media (max-width:640px) { .mm-filt { top:calc(env(safe-area-inset-top,0px) + 186px); } .fb-ideas { top:4px; right:4px; padding:3px 6px; font-size:.42rem; } }
+/* ── v0.12.0 · movable drawings, any colour, details ── */
+#pg-map #mm-ink .hit { stroke-width:44px; vector-effect:non-scaling-stroke; }
+#pg-map:not(.mm-drawing) #mm-ink .hit, #pg-map.mm-movetool #mm-ink .hit { pointer-events:stroke; cursor:move; }
+#mm-ink g.sel > :first-child { filter:drop-shadow(0 0 4px rgba(207,227,255,.7)); }
+#mm-sover { z-index:2; }
+.mm-sbox { fill:none; stroke:#cfe3ff; stroke-width:1.5px; stroke-dasharray:6 4; vector-effect:non-scaling-stroke; }
+.mm-shhit { fill:transparent; pointer-events:all; cursor:grab; }
+.mm-shdot { fill:#cfe3ff; stroke:#0b0c0f; pointer-events:none; }
+.mm-movetool .mm-view { cursor:default; }
+.mm-n.mm-lightc { background:color-mix(in srgb, var(--c) 82%, #111318); color:#14161a; }
+.mm-n.mm-lightc.mm-link .mm-t { color:#0b2a6b; }
+.mm-dmark { position:absolute; right:8px; bottom:4px; font:600 13px/1 var(--sans); opacity:.75; pointer-events:none; }
+.mm-rainbow { position:relative; flex:none; width:44px; height:44px; display:grid; place-items:center; border-radius:11px; cursor:pointer; }
+.mm-rainbow::before { content:''; width:22px; height:22px; border-radius:50%; background:conic-gradient(#ff4d4d, #ffcf4d, #6dff6d, #4dd8ff, #6d6dff, #ff4dd8, #ff4d4d); border:2px solid #000; box-shadow:0 0 0 1px rgba(255,255,255,.25); }
+#pg-map .mm-rainbow input { position:absolute; inset:0; width:100%; min-width:0; height:100%; min-height:0; opacity:0; cursor:pointer; border:0; padding:0; margin:0; }
+.mm-recent { display:contents; }
+.mm-sbar { flex-wrap:wrap; justify-content:center; overflow:visible; width:max-content; max-width:calc(100% - 24px); }
+.mm-scrim { position:absolute; inset:0; z-index:9; background:rgba(4,5,7,.5); }
+.mm-det { position:absolute; z-index:10; top:0; right:0; bottom:0; width:min(400px, 100%); display:flex; flex-direction:column; gap:14px; padding:calc(env(safe-area-inset-top,0px) + 16px) max(18px, env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 18px) 18px; overflow-y:auto; overscroll-behavior:contain; background:#121519; border-left:1px solid var(--line2); box-shadow:-30px 0 70px -30px #000; }
+.mm-det-head { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.mm-det-head b { font:600 .66rem var(--mono); letter-spacing:.26em; color:#fff; }
+.mm-det-x { width:44px; height:44px; border-radius:12px; border:1px solid var(--line2); background:transparent; color:#fff; font-size:1rem; cursor:pointer; }
+.mm-f { display:grid; gap:7px; font:500 .54rem var(--mono); letter-spacing:.2em; color:var(--dim); }
+.mm-f textarea, .mm-f input, .mm-f select { width:100%; min-height:44px; padding:10px 12px; border-radius:11px; border:1px solid var(--line2); background:#0a0c10; color:#fff; font:400 .95rem/1.45 var(--sans); letter-spacing:0; color-scheme:dark; resize:vertical; }
+.mm-f small { justify-self:end; font:400 .55rem var(--mono); letter-spacing:.1em; color:var(--dim); }
+.mm-err { color:#ff9c9c; font-size:.78rem; margin-top:-8px; }
+.mm-det .mm-row, .mm-dcols { display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+.mm-det button:not(.mm-det-x):not(.mm-sw) { min-height:44px; padding:0 14px; border-radius:11px; border:1px solid var(--line2); background:transparent; color:#eef1f6; font:500 .6rem var(--mono); letter-spacing:.14em; cursor:pointer; }
+.mm-det button.on { background:#fff; color:#0b0c0f; border-color:#fff; }
+.mm-det .mm-sw { width:44px; height:44px; padding:0; display:grid; place-items:center; border-radius:11px; border:1px solid transparent; background:transparent; cursor:pointer; }
+.mm-det .mm-sw.on { background:rgba(255,255,255,.12); }
+.mm-dmis p { margin:0; font:400 .85rem var(--sans); letter-spacing:0; color:#cdd3dc; }
+.mm-mform.mm-inline { position:static; transform:none; width:auto; box-shadow:none; padding:14px; margin-top:4px; background:#0d1014; }
+@media (max-width:640px) {
+  .mm-det { top:auto; left:0; right:0; width:auto; max-height:80%; border-left:0; border-top:1px solid var(--line2); border-radius:20px 20px 0 0; box-shadow:0 -30px 70px -30px #000; padding-left:max(16px, env(safe-area-inset-left,0px)); }
+  .mm-sbar { width:calc(100% - 24px); }
+}
 /* ── Time Center: clock, stopwatch, timer, focus sessions ── */
 #tc-overlay.tc-ov { background:var(--tcbg, radial-gradient(circle at 50% 30%, #12161e 0%, #06070a 80%)) !important; }
 .tc-wrap { max-width:620px; display:grid; gap:1.3rem; justify-items:center; align-content:start; text-align:center; }
@@ -1912,13 +1949,13 @@ body.dragging-now { user-select:none; cursor:grabbing; }
     <button type="button" data-mm="selmode" aria-pressed="false" aria-label="Select several shapes">▢ SELECT</button>
     <button type="button" data-mm="draw" aria-label="Draw">✎ DRAW</button>
   </div>
-  <div class="mm-hint" id="mm-hint">DRAG TO MOVE · SCROLL OR PINCH TO ZOOM · DOUBLE-CLICK A SHAPE TO WRITE · SHIFT + DRAG TO SELECT</div>
+  <div class="mm-hint" id="mm-hint">DRAG TO MOVE · SCROLL OR PINCH TO ZOOM · DOUBLE-CLICK A SHAPE FOR DETAILS · SHIFT + DRAG TO SELECT</div>
   <div class="mm-bar mm-bot" id="mm-sel" hidden>
     <div class="mm-row" id="mm-sel-main">
-      <button type="button" data-mm="edit" aria-label="Edit text">EDIT TEXT</button>
+      <button type="button" data-mm="edit" aria-label="Edit text">EDIT TEXT</button><button type="button" data-mm4="details" aria-label="Open details">DETAILS</button>
       <button type="button" data-mm="link" aria-label="Set a link">LINK</button>
       <button type="button" data-mm="img-set" aria-label="Put a picture in this shape">IMAGE</button><button type="button" id="mm-noimg" data-mm="img-del" aria-label="Remove the picture" hidden>NO IMAGE</button>
-      <button type="button" class="mm-sw" data-mcol="#3a3f49" aria-label="Grey"><i style="--c:#8a919d"></i></button><button type="button" class="mm-sw" data-mcol="#4c7dff" aria-label="Blue"><i style="--c:#4c7dff"></i></button><button type="button" class="mm-sw" data-mcol="#ff7a45" aria-label="Orange"><i style="--c:#ff7a45"></i></button><button type="button" class="mm-sw" data-mcol="#3fbf88" aria-label="Green"><i style="--c:#3fbf88"></i></button><button type="button" class="mm-sw" data-mcol="#b36bff" aria-label="Purple"><i style="--c:#b36bff"></i></button>
+      <button type="button" class="mm-sw" data-mcol="#3a3f49" aria-label="Grey"><i style="--c:#8a919d"></i></button><button type="button" class="mm-sw" data-mcol="#4c7dff" aria-label="Blue"><i style="--c:#4c7dff"></i></button><button type="button" class="mm-sw" data-mcol="#ff7a45" aria-label="Orange"><i style="--c:#ff7a45"></i></button><button type="button" class="mm-sw" data-mcol="#3fbf88" aria-label="Green"><i style="--c:#3fbf88"></i></button><button type="button" class="mm-sw" data-mcol="#b36bff" aria-label="Purple"><i style="--c:#b36bff"></i></button><label class="mm-rainbow" aria-label="Pick any colour for this shape" title="Pick any colour for this shape"><input type="color" data-pick="node" aria-label="Pick any colour for this shape"></label><span class="mm-recent"></span>
       <button type="button" data-mm3="mission" aria-label="Turn this box into a mission">→ MISSION</button><button type="button" data-mm3="idea" aria-pressed="false" aria-label="Mark as an idea">IDEA</button><button type="button" data-mm3="area" aria-label="Link to a life area">AREA</button>
       <button type="button" data-mm="connect" aria-pressed="false" aria-label="Connect to another shape">CONNECT</button>
       <button type="button" class="mm-del" data-mm="del" aria-label="Delete shape">DELETE</button>
@@ -1941,10 +1978,26 @@ body.dragging-now { user-select:none; cursor:grabbing; }
     <div class="mm-mf2"><label>MINUTES (ABOUT)<input id="mm-mf-min" type="number" inputmode="numeric" min="0" max="1440" placeholder="30"></label><label>DO IT BY<input id="mm-mf-day" type="date"></label></div>
     <div class="mm-mf-b"><button type="button" data-mm3="mf-no">CANCEL</button><button type="button" class="on" data-mm3="mf-ok">CREATE MISSION</button></div>
   </div>
+  <div class="mm-bar mm-bot mm-sbar" id="mm-sbar" hidden>
+    <span class="mm-cnt" id="mm-sbar-n">DRAWING</span><button type="button" class="mm-sw" data-sc="#ffffff" aria-label="White"><i style="--c:#ffffff"></i></button><button type="button" class="mm-sw" data-sc="#4c7dff" aria-label="Blue"><i style="--c:#4c7dff"></i></button><button type="button" class="mm-sw" data-sc="#ff7a45" aria-label="Orange"><i style="--c:#ff7a45"></i></button><button type="button" class="mm-sw" data-sc="#3fbf88" aria-label="Green"><i style="--c:#3fbf88"></i></button><button type="button" class="mm-sw" data-sc="#b36bff" aria-label="Purple"><i style="--c:#b36bff"></i></button><label class="mm-rainbow" aria-label="Pick any colour for this drawing" title="Pick any colour for this drawing"><input type="color" data-pick="stroke" aria-label="Pick any colour for this drawing"></label><span class="mm-recent"></span>
+    <button type="button" data-mm4="s-thin" aria-label="Thinner line">THINNER</button><button type="button" data-mm4="s-thick" aria-label="Thicker line">THICKER</button><button type="button" data-mm4="s-dup" aria-label="Duplicate">DUPLICATE</button><button type="button" class="mm-del" data-mm4="s-del" aria-label="Delete drawing">DELETE</button><button type="button" data-mm4="s-done" aria-label="Done">DONE</button>
+  </div>
+  <div class="mm-scrim" id="mm-scrim" hidden></div>
+  <aside class="mm-det" id="mm-det" role="dialog" aria-modal="true" aria-labelledby="mm-det-h" hidden>
+    <div class="mm-det-head"><b id="mm-det-h">DETAILS</b><button type="button" class="mm-det-x" data-mm4="det-close" aria-label="Close details">✕</button></div>
+    <label class="mm-f">TITLE<textarea id="mm-d-title" rows="2" maxlength="2000" aria-label="Title"></textarea></label>
+    <label class="mm-f">DESCRIPTION<textarea id="mm-d-desc" rows="6" maxlength="5000" aria-label="Description"></textarea><small id="mm-d-cnt">0 / 5000</small></label>
+    <label class="mm-f">LINK<input id="mm-d-url" type="url" inputmode="url" placeholder="https://…" autocomplete="off" aria-label="Link address"></label><small class="mm-err" id="mm-d-urlerr" hidden>Only web links (http or https) can be used.</small>
+    <div class="mm-f">COLOUR<div class="mm-row mm-dcols"><button type="button" class="mm-sw" data-dcol="#3a3f49" aria-label="Grey"><i style="--c:#8a919d"></i></button><button type="button" class="mm-sw" data-dcol="#4c7dff" aria-label="Blue"><i style="--c:#4c7dff"></i></button><button type="button" class="mm-sw" data-dcol="#ff7a45" aria-label="Orange"><i style="--c:#ff7a45"></i></button><button type="button" class="mm-sw" data-dcol="#3fbf88" aria-label="Green"><i style="--c:#3fbf88"></i></button><button type="button" class="mm-sw" data-dcol="#b36bff" aria-label="Purple"><i style="--c:#b36bff"></i></button><label class="mm-rainbow" aria-label="Pick any colour for this shape" title="Pick any colour for this shape"><input type="color" data-pick="node" aria-label="Pick any colour for this shape"></label><span class="mm-recent"></span></div></div>
+    <section class="mm-f mm-dmis" id="mm-d-mis" aria-label="Mission">MISSION<p id="mm-d-mst"></p>
+      <div class="mm-row"><button type="button" id="mm-d-mbtn" data-mm4="d-mis" aria-label="Mission">→ MAKE IT A MISSION</button><button type="button" id="mm-d-idea" data-mm4="d-idea" aria-pressed="false" aria-label="Mark as an idea">MARK AS IDEA</button></div>
+      <label class="mm-f">LIFE AREA<select id="mm-d-area" aria-label="Life area"></select></label>
+    </section>
+  </aside>
   <input type="file" id="mm-file" accept="image/*" hidden>
   <div class="mm-bar mm-bot mm-drawbar" id="mm-draw" hidden>
-    <button type="button" class="on" data-tool="pen" aria-pressed="true" aria-label="Pen">PEN</button><button type="button" data-tool="rect" aria-pressed="false" aria-label="Box">BOX</button><button type="button" data-tool="ellipse" aria-pressed="false" aria-label="Oval">OVAL</button><button type="button" data-tool="line" aria-pressed="false" aria-label="Line">LINE</button><button type="button" data-tool="arrow" aria-pressed="false" aria-label="Arrow">ARROW</button><button type="button" data-tool="erase" aria-pressed="false" aria-label="Eraser">ERASE</button>
-    <button type="button" class="mm-sw on" data-ink="#ffffff" aria-pressed="true" aria-label="White ink"><i style="--c:#ffffff"></i></button><button type="button" class="mm-sw" data-ink="#4c7dff" aria-pressed="false" aria-label="Blue ink"><i style="--c:#4c7dff"></i></button><button type="button" class="mm-sw" data-ink="#ff7a45" aria-pressed="false" aria-label="Orange ink"><i style="--c:#ff7a45"></i></button><button type="button" class="mm-sw" data-ink="#3fbf88" aria-pressed="false" aria-label="Green ink"><i style="--c:#3fbf88"></i></button><button type="button" class="mm-sw" data-ink="#b36bff" aria-pressed="false" aria-label="Purple ink"><i style="--c:#b36bff"></i></button>
+    <button type="button" data-tool="move" aria-pressed="false" aria-label="Move and select drawings">MOVE</button><button type="button" class="on" data-tool="pen" aria-pressed="true" aria-label="Pen">PEN</button><button type="button" data-tool="rect" aria-pressed="false" aria-label="Box">BOX</button><button type="button" data-tool="ellipse" aria-pressed="false" aria-label="Oval">OVAL</button><button type="button" data-tool="line" aria-pressed="false" aria-label="Line">LINE</button><button type="button" data-tool="arrow" aria-pressed="false" aria-label="Arrow">ARROW</button><button type="button" data-tool="erase" aria-pressed="false" aria-label="Eraser">ERASE</button>
+    <button type="button" class="mm-sw on" data-ink="#ffffff" aria-pressed="true" aria-label="White ink"><i style="--c:#ffffff"></i></button><button type="button" class="mm-sw" data-ink="#4c7dff" aria-pressed="false" aria-label="Blue ink"><i style="--c:#4c7dff"></i></button><button type="button" class="mm-sw" data-ink="#ff7a45" aria-pressed="false" aria-label="Orange ink"><i style="--c:#ff7a45"></i></button><button type="button" class="mm-sw" data-ink="#3fbf88" aria-pressed="false" aria-label="Green ink"><i style="--c:#3fbf88"></i></button><button type="button" class="mm-sw" data-ink="#b36bff" aria-pressed="false" aria-label="Purple ink"><i style="--c:#b36bff"></i></button><label class="mm-rainbow" aria-label="Pick any ink colour" title="Pick any ink colour"><input type="color" data-pick="ink" aria-label="Pick any ink colour"></label><span class="mm-recent"></span>
     <button type="button" data-mm="width" aria-label="Line thickness">THIN</button><button type="button" data-mm="undo" aria-label="Undo">UNDO</button><button type="button" class="on" data-mm="done" aria-label="Finish drawing">DONE</button>
   </div>
   <div class="mm-zoom">
@@ -1976,7 +2029,7 @@ body.dragging-now { user-select:none; cursor:grabbing; }
     <span class="word">LIFE</span>
   </div>
   <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
-  <div class="sys-label" style="bottom:30px;left:44px;">V 0.11.0</div>
+  <div class="sys-label" style="bottom:30px;left:44px;">V 0.12.0</div>
   <div class="play-center">
     <h1 class="play-title">LIFE</h1>
     <div class="play-date" id="play-date"></div>
@@ -2482,7 +2535,7 @@ function migrate(s) {
   return out;
 }
 
-const APP_VER = '0.11.0';
+const APP_VER = '0.12.0';
 /* The first time a new version opens, keep a copy of the save as it was, so an upgrade can always be undone from Developer mode. */
 function safetyCopy() {
   try {
@@ -8442,9 +8495,9 @@ const mapTx = (mode, fn) => mapDb().then(db => new Promise((res, rej) => {
   const r = fn(st); if (r) r.onsuccess = () => { out = r.result; };
   tx.oncomplete = () => res(out); tx.onerror = () => rej(tx.error); tx.onabort = () => rej(tx.error);
 }));
-const mapIdbAll = () => mapTx('readonly', st => st.getAll());
+const mapIdbAll = () => mapTx('readonly', st => st.getAll()).then(l => (l || []).filter(b => b && b.id !== '__prefs'));
 const mapIdbPut = b => mapTx('readwrite', st => { st.put(b); });
-const mapIdbReplace = list => mapTx('readwrite', st => { st.clear(); list.forEach(b => st.put(b)); });
+const mapIdbReplace = list => mapTx('readwrite', st => { st.clear(); list.filter(b => b && b.id !== '__prefs').forEach(b => st.put(b)); if (MAPS.prefs && MAPS.prefs.recent && MAPS.prefs.recent.length) st.put({ id: '__prefs', recent: MAPS.prefs.recent.slice(0, 6) }); });
 const mapIdbDel = id => mapTx('readwrite', st => { st.delete(id); });
 function mapWarn(on) {
   MAPS.ok = !on; const w = $('mm-warn'); if (!w) return;
@@ -8575,7 +8628,7 @@ function mapNodeEl(o) {
   const src = o.img && MAPS.board.imgs && MAPS.board.imgs[o.img]; let im = el.querySelector('.mm-img');
   if (src) { if (!im) { im = document.createElement('img'); im.className = 'mm-img'; im.alt = ''; im.draggable = false; el.insertBefore(im, el.querySelector('.mm-h')); } if (im.getAttribute('src') !== src) im.src = src; }
   else if (im) im.remove();
-  el.style.cssText = `left:${o.x}px;top:${o.y}px;width:${o.w}px;height:${o.h}px;--c:${mapDispCol(o.c)}`;
+  el.style.cssText = `left:${o.x}px;top:${o.y}px;width:${o.w}px;height:${o.h}px`; el.style.setProperty('--c', mapDispCol(o.c));
   const t = el.firstChild; if (MPV.editing !== o.id && t.textContent !== o.text) t.textContent = o.text;
   el.setAttribute('role', 'button'); el.setAttribute('tabindex', '0');
   el.setAttribute('aria-label', (o.text || (o.img ? 'Picture' : 'Empty ' + o.kind)) + (o.img && o.text ? ', with a picture' : '') + (o.url ? ', link to ' + o.url : ''));
@@ -8786,6 +8839,7 @@ function mapPinchStart() {
   if (mapErase) { mapCommit(mapErase); mapErase = null; }
   if (mapBand) { mapBand.el.remove(); mapBand = null; }
   /* a finger that started on a shape was dragging it: put the shape back, the two fingers now zoom */
+  if (mapDrag && mapDrag.sorig) mapDrag.sorig.forEach((so, sid) => { const st = mapStroke(sid); if (st) { Object.assign(st, mapSClone(so)); mapSDraw(st); } });
   if (mapDrag) { const d = mapDrag; mapDrag = null; (d.group || [{ id: d.id, ox: d.ox, oy: d.oy }]).forEach(g => { const o = mapNode(g.id); if (!o) return; o.x = g.ox; o.y = g.oy; if (!d.group) { o.w = d.ow; o.h = d.oh; } mapNodeEl(o); mapLinesFor(o.id); }); }
 }
 function mapEraseAt(cx, cy) {
@@ -8832,7 +8886,7 @@ function mapViewUp(e) {
   if (mapBand) {
     const B = mapBand; mapBand = null; B.el.remove(); mapBoxMode(false);
     const v = MAPS.board.view, x0 = (Math.min(B.x0, B.x1) - v.x) / v.k, x1 = (Math.max(B.x0, B.x1) - v.x) / v.k, y0 = (Math.min(B.y0, B.y1) - v.y) / v.k, y1 = (Math.max(B.y0, B.y1) - v.y) / v.k;
-    mapSelectMany(MAPS.board.nodes.filter(n => n.x < x1 && n.x + n.w > x0 && n.y < y1 && n.y + n.h > y0).map(n => n.id)); return;
+    mapSelectMixed(MAPS.board.nodes.filter(n => n.x < x1 && n.x + n.w > x0 && n.y < y1 && n.y + n.h > y0).map(n => n.id), MAPS.board.strokes.filter(st => { const b = mapSBox(st); return b.x0 < x1 && b.x1 > x0 && b.y0 < y1 && b.y1 > y0; }).map(st => st.id)); return;
   }
   if (mapErase) { const b = mapErase; mapErase = null; mapCommit(b); return; }
   const c = MPV.cur; if (!c) return;
@@ -8854,8 +8908,8 @@ function mapNodeDown(e) {
   if (mapPtrs.size >= 2) { mapPinchStart(); return; }
   if (MPV.editing && MPV.editing !== o.id) document.activeElement.blur();
   $('mm-boards').hidden = true;
-  if (MPV.multi.size > 1 && MPV.multi.has(o.id) && !e.target.classList.contains('mm-h')) {
-    mapDrag = { id: o.id, pid: e.pointerId, sx: e.clientX, sy: e.clientY, moved: false, before: mapSnap(), group: [...MPV.multi].map(id => { const n = mapNode(id); return { id, ox: n.x, oy: n.y }; }) };
+  if ((MPV.multi.size > 1 || (MPV.multi.size && MPV.ss.size)) && MPV.multi.has(o.id) && !e.target.classList.contains('mm-h')) {
+    mapDrag = { id: o.id, pid: e.pointerId, sx: e.clientX, sy: e.clientY, moved: false, before: mapSnap(), group: [...MPV.multi].map(id => { const n = mapNode(id); return { id, ox: n.x, oy: n.y }; }), sorig: new Map([...MPV.ss].map(x => [x, mapSClone(mapStroke(x))])) };
     try { el.setPointerCapture(e.pointerId); } catch (er) {}
     return;
   }
@@ -8871,7 +8925,9 @@ function mapNodeMove(e) {
   if (!d.moved && Math.abs(dx) + Math.abs(dy) < 4 / k) return; d.moved = true;
   if (d.group) {
     d.group.forEach(g => { const n = mapNode(g.id); if (!n) return; n.x = Math.round(g.ox + dx); n.y = Math.round(g.oy + dy); const ne = document.getElementById('mmn-' + n.id); ne.style.left = n.x + 'px'; ne.style.top = n.y + 'px'; });
-    const ids = new Set(d.group.map(g => g.id)); MAPS.board.edges.forEach(ed => { if (ids.has(ed[0]) || ids.has(ed[1])) mapLine(ed); }); return;
+    const ids = new Set(d.group.map(g => g.id)); MAPS.board.edges.forEach(ed => { if (ids.has(ed[0]) || ids.has(ed[1])) mapLine(ed); });
+    if (d.sorig && d.sorig.size) { d.sorig.forEach((so, sid) => { const st = mapStroke(sid); if (st) { mapSMove(st, so, dx, dy); mapSDraw(st); } }); mapSOverlay(); }
+    return;
   }
   if (d.resize) { o.w = Math.round(Math.max(70, d.ow + dx)); o.h = o.kind === 'circle' ? o.w : Math.round(Math.max(44, d.oh + dy)); }
   else { o.x = Math.round(d.ox + dx); o.y = Math.round(d.oy + dy); }
@@ -8894,8 +8950,7 @@ function mapNodeUp(e) {
   const nodes = $('mm-nodes');
   nodes.addEventListener('pointerdown', mapNodeDown); nodes.addEventListener('pointermove', mapNodeMove);
   nodes.addEventListener('pointerup', mapNodeUp); nodes.addEventListener('pointercancel', mapNodeUp);
-  nodes.addEventListener('dblclick', e => { const el = e.target.closest('.mm-n'); if (el && !MPV.draw) mapEditText(el.dataset.id); });
-  nodes.addEventListener('keydown', e => { const el = e.target.closest('.mm-n'); if (!el || e.target !== el) return; if (e.key === 'Enter') { e.preventDefault(); mapSelect(el.dataset.id); const o = mapNode(el.dataset.id); if (o && o.url) mapOpenUrl(o.url); else mapEditText(el.dataset.id); } });
+  nodes.addEventListener('keydown', e => { const el = e.target.closest('.mm-n'); if (!el || e.target !== el) return; if (e.key === 'Enter') { e.preventDefault(); mapSelect(el.dataset.id); const o = mapNode(el.dataset.id); if (o && o.url) mapOpenUrl(o.url); else mapDetails(el.dataset.id); } });
   /* trackpad two-finger scroll moves the map; a mouse wheel or a pinch (ctrl + wheel) zooms */
   vw.addEventListener('wheel', e => {
     e.preventDefault(); const r = vw.getBoundingClientRect(), v = MAPS.board.view;
@@ -9217,6 +9272,424 @@ dpLine = function (p, h, key, today) {
   } catch (e) {}
   return r;
 };
+
+/* ══════════════════════════════════════════════════════
+   v0.12.0  ·  MAP: movable drawings, any colour, a details sheet
+   Drawings are objects: select (MOVE tool, or a tap outside pen/eraser), drag, resize from handles,
+   recolour, thicker/thinner, duplicate, delete. Colours are strict #rrggbb set through style properties only.
+   Double-click / double-tap a shape opens DETAILS (title, description, link, colour, mission).
+   ══════════════════════════════════════════════════════ */
+const MAP_HEX = /^#[0-9a-f]{6}$/i, MAP_W = [1, 2, 3, 5, 7, 10, 14, 20];
+MAPS.prefs = { recent: [] };
+MPV.ss = new Set();                                           /* selected drawings (ids) */
+const mapHexOk = c => typeof c === 'string' && MAP_HEX.test(c) ? c.toLowerCase() : null;
+function mapLum(hex) {
+  const v = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16) / 255).map(c => c <= .03928 ? c / 12.92 : Math.pow((c + .055) / 1.055, 2.4));
+  return .2126 * v[0] + .7152 * v[1] + .0722 * v[2];
+}
+/* ── recent custom colours: kept in the map storage (one '__prefs' record beside the maps) ── */
+function mapPrefsLoad() { return mapTx('readonly', st => st.get('__prefs')).then(p => { const r = p && Array.isArray(p.recent) ? p.recent.map(mapHexOk).filter(Boolean).slice(0, 6) : []; MAPS.prefs.recent = r; mapRecentUI(); }).catch(() => {}); }
+function mapPrefsSave() { mapTx('readwrite', st => { st.put({ id: '__prefs', recent: MAPS.prefs.recent.slice(0, 6) }); }).catch(() => {}); }
+function mapRecentAdd(c) {
+  c = mapHexOk(c); if (!c || MAP_COLS.some(x => x[0] === c || x[1] === c) || MAP_INK.some(x => x[0] === c)) return;
+  MAPS.prefs.recent = [c, ...MAPS.prefs.recent.filter(x => x !== c)].slice(0, 6); mapPrefsSave(); mapRecentUI();
+}
+/* every "recent" row: buttons built with the DOM, colour set as a style property */
+function mapRecentUI() {
+  document.querySelectorAll('.mm-recent').forEach(box => {
+    box.textContent = '';
+    MAPS.prefs.recent.forEach(c => {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'mm-sw'; b.dataset.rc = c; b.setAttribute('aria-label', 'Recent colour ' + c);
+      const i = document.createElement('i'); i.style.setProperty('--c', c); b.appendChild(i); box.appendChild(b);
+    });
+  });
+}
+
+/* ── geometry of a drawing ── */
+function mapSBox(s) {
+  if (s.type === 'pen') { const xs = s.pts.map(p => p[0]), ys = s.pts.map(p => p[1]); return { x0: Math.min(...xs), y0: Math.min(...ys), x1: Math.max(...xs), y1: Math.max(...ys) }; }
+  return { x0: Math.min(s.x0, s.x1), y0: Math.min(s.y0, s.y1), x1: Math.max(s.x0, s.x1), y1: Math.max(s.y0, s.y1) };
+}
+const mapStroke = id => MAPS.board.strokes.find(s => s.id === id);
+const mapSClone = s => JSON.parse(JSON.stringify(s));
+function mapSMove(s, o, dx, dy) {                              /* s = live, o = original */
+  if (s.type === 'pen') s.pts = o.pts.map(p => [Math.round((p[0] + dx) * 10) / 10, Math.round((p[1] + dy) * 10) / 10]);
+  else { s.x0 = o.x0 + dx; s.y0 = o.y0 + dy; s.x1 = o.x1 + dx; s.y1 = o.y1 + dy; }
+}
+function mapSDraw(s) {
+  const g = document.querySelector(`#mm-ink g[data-sid="${CSS.escape(s.id)}"]`); if (!g) return;
+  [...g.children].forEach(ch => mapShapeSet(ch, s));
+  const v = g.firstChild; v.style.stroke = s.c; v.style.strokeWidth = s.w;
+}
+/* the dashed outline and the handles of the selected drawing(s) */
+function mapSOverlay() {
+  const ov = $('mm-sover'); if (!ov) return; ov.textContent = '';
+  if (!MPV.ss.size || !MAPS.board) return;
+  const k = MAPS.board.view.k, one = MPV.ss.size === 1 && !MPV.multi.size ? mapStroke([...MPV.ss][0]) : null;
+  MPV.ss.forEach(id => {
+    const s = mapStroke(id); if (!s) return; const b = mapSBox(s), pad = 8 / k;
+    const r = document.createElementNS(NSV, 'rect'); r.setAttribute('class', 'mm-sbox');
+    r.setAttribute('x', b.x0 - pad); r.setAttribute('y', b.y0 - pad); r.setAttribute('width', b.x1 - b.x0 + pad * 2); r.setAttribute('height', b.y1 - b.y0 + pad * 2); ov.appendChild(r);
+  });
+  if (!one) return;
+  const b = mapSBox(one), pts = one.type === 'line' || one.type === 'arrow' ? [['p0', one.x0, one.y0], ['p1', one.x1, one.y1]] : [['nw', b.x0, b.y0], ['ne', b.x1, b.y0], ['sw', b.x0, b.y1], ['se', b.x1, b.y1]];
+  pts.forEach(([h, x, y]) => {
+    const g = document.createElementNS(NSV, 'g'); g.setAttribute('class', 'mm-sh'); g.dataset.h = h; g.dataset.sid = one.id;
+    const hit = document.createElementNS(NSV, 'circle'); hit.setAttribute('class', 'mm-shhit'); hit.setAttribute('cx', x); hit.setAttribute('cy', y); hit.setAttribute('r', 22 / k);
+    const dot = document.createElementNS(NSV, 'circle'); dot.setAttribute('class', 'mm-shdot'); dot.setAttribute('cx', x); dot.setAttribute('cy', y); dot.setAttribute('r', 8 / k); dot.style.strokeWidth = 3 / k;
+    g.appendChild(hit); g.appendChild(dot); ov.appendChild(g);
+  });
+}
+/* ── selecting drawings ── */
+function mapSSelect(ids, keepNodes) {
+  if (!keepNodes) mapSelect(null);
+  MPV.ss = new Set((ids || []).filter(id => mapStroke(id)));
+  document.querySelectorAll('#mm-ink g[data-sid]').forEach(g => g.classList.toggle('sel', MPV.ss.has(g.dataset.sid)));
+  mapSOverlay(); mapSBarUI();
+}
+function mapSBarUI() {
+  const only = MPV.ss.size && !MPV.multi.size && !MPV.sel;
+  $('mm-sbar').hidden = !only;
+  if (only && MPV.draw) $('mm-draw').hidden = true; else if (MPV.draw) $('mm-draw').hidden = false;
+  if (only) {
+    const c = mapStroke([...MPV.ss][0]).c;
+    document.querySelectorAll('#mm-sbar [data-sc]').forEach(b => b.classList.toggle('on', b.dataset.sc === c));
+    $('mm-sbar-n').textContent = MPV.ss.size === 1 ? 'DRAWING' : MPV.ss.size + ' DRAWINGS';
+  }
+  if (MPV.multi.size || (MPV.ss.size && MPV.multi.size)) {
+    const n = MPV.multi.size, d = MPV.ss.size; $('mm-multi').hidden = MPV.draw;
+    $('mm-multi-n').textContent = [n ? n + ' SHAPE' + (n > 1 ? 'S' : '') : '', d ? d + ' DRAWING' + (d > 1 ? 'S' : '') : ''].filter(Boolean).join(' · ');
+  }
+}
+function mapSEdit(fn) {                                          /* one undo step for a change to every selected drawing */
+  if (!MPV.ss.size) return; const before = mapSnap();
+  MPV.ss.forEach(id => { const s = mapStroke(id); if (s) { fn(s); mapSDraw(s); } });
+  mapCommit(before); mapSOverlay(); mapSBarUI();
+}
+function mapSColor(c) { c = mapHexOk(c); if (c) mapSEdit(s => { s.c = c; }); }
+function mapSWidth(dir) { mapSEdit(s => { const i = MAP_W.reduce((bi, w, j) => Math.abs(w - s.w) < Math.abs(MAP_W[bi] - s.w) ? j : bi, 0); s.w = MAP_W[clamp(i + dir, 0, MAP_W.length - 1)]; }); }
+function mapSDup() {
+  if (!MPV.ss.size) return; const before = mapSnap(), made = [];
+  MPV.ss.forEach(id => { const s = mapStroke(id); if (!s) return; const c = mapSClone(s); c.id = uid('s'); mapSMove(c, mapSClone(s), 24, 24); MAPS.board.strokes.push(c); $('mm-ink').appendChild(mapStrokeEl(c)); made.push(c.id); });
+  mapCommit(before); mapSSelect(made); showToast(made.length > 1 ? 'DRAWINGS DUPLICATED' : 'DRAWING DUPLICATED');
+}
+function mapSDelete() {
+  if (!MPV.ss.size) return; const before = mapSnap(), ids = new Set(MPV.ss);
+  MAPS.board.strokes = MAPS.board.strokes.filter(s => !ids.has(s.id));
+  ids.forEach(id => { const g = document.querySelector(`#mm-ink g[data-sid="${CSS.escape(id)}"]`); if (g) g.remove(); });
+  MPV.ss = new Set(); mapCommit(before); mapSOverlay(); mapSBarUI();
+}
+
+/* ── dragging a drawing or one of its handles (pointer captured on the canvas) ── */
+let mapSD = null;
+const mapSPickable = () => !MPV.draw || MPV.tool === 'move';
+function mapSDown(e) {
+  if (e.button > 0 || mapPtrs.size) return;
+  const h = e.target.closest && e.target.closest('#mm-sover .mm-sh'), g = !h && e.target.closest && e.target.closest('#mm-ink g[data-sid]');
+  if (!h && !g) return;
+  if (!mapSPickable() && !h) return;
+  /* outside draw mode a shape under the finger wins over a drawing's wide grab area */
+  if (g && !MPV.draw) {
+    const under = document.elementsFromPoint(e.clientX, e.clientY).find(x => x.closest && x.closest('#mm-nodes .mm-n'));
+    if (under) { e.stopImmediatePropagation(); mapNodeDown({ target: under, pointerId: e.pointerId, clientX: e.clientX, clientY: e.clientY, button: e.button, stopPropagation() {} }); return; }
+  }
+  e.stopImmediatePropagation(); e.preventDefault();
+  if (MPV.editing && document.activeElement) document.activeElement.blur();
+  const id = (h || g).dataset.sid, s = mapStroke(id); if (!s) return;
+  const mixed = !h && MPV.ss.has(id) && (MPV.multi.size || MPV.ss.size > 1);
+  if (!h && !MPV.ss.has(id)) mapSSelect([id]);
+  const k = MAPS.board.view.k;
+  mapSD = { pid: e.pointerId, sx: e.clientX, sy: e.clientY, k, h: h ? h.dataset.h : null, id, moved: false, before: mapSnap(),
+    orig: new Map([...(mixed ? MPV.ss : [id])].map(x => [x, mapSClone(mapStroke(x))])),
+    nodes: mixed ? [...MPV.multi].map(x => { const n = mapNode(x); return { id: x, ox: n.x, oy: n.y }; }) : [] };
+  mapPtrs.set(e.pointerId, [e.clientX, e.clientY]);
+  try { mpView().setPointerCapture(e.pointerId); } catch (er) {}
+}
+function mapSResize(s, o, h, dx, dy) {
+  if (h === 'p0') { s.x0 = o.x0 + dx; s.y0 = o.y0 + dy; return; }
+  if (h === 'p1') { s.x1 = o.x1 + dx; s.y1 = o.y1 + dy; return; }
+  const b = mapSBox(o), nb = { ...b };
+  if (h.includes('w')) nb.x0 = Math.min(b.x0 + dx, b.x1 - 4); else nb.x1 = Math.max(b.x1 + dx, b.x0 + 4);
+  if (h.includes('n')) nb.y0 = Math.min(b.y0 + dy, b.y1 - 4); else nb.y1 = Math.max(b.y1 + dy, b.y0 + 4);
+  if (s.type === 'pen') {
+    const sx = (nb.x1 - nb.x0) / Math.max(1e-6, b.x1 - b.x0), sy = (nb.y1 - nb.y0) / Math.max(1e-6, b.y1 - b.y0);
+    s.pts = o.pts.map(p => [Math.round((nb.x0 + (p[0] - b.x0) * sx) * 10) / 10, Math.round((nb.y0 + (p[1] - b.y0) * sy) * 10) / 10]);
+  } else { s.x0 = nb.x0; s.y0 = nb.y0; s.x1 = nb.x1; s.y1 = nb.y1; }
+}
+function mapSMoveEv(e) {
+  const d = mapSD; if (!d || d.pid !== e.pointerId) return;
+  e.stopImmediatePropagation();
+  if (mapPtrs.size > 1) return;
+  const dx = (e.clientX - d.sx) / d.k, dy = (e.clientY - d.sy) / d.k;
+  if (!d.moved && Math.abs(dx) + Math.abs(dy) < 4 / d.k) return; d.moved = true;
+  d.orig.forEach((o, id) => { const s = mapStroke(id); if (!s) return; if (d.h) mapSResize(s, o, d.h, dx, dy); else mapSMove(s, o, dx, dy); mapSDraw(s); });
+  d.nodes.forEach(g => { const n = mapNode(g.id); if (!n) return; n.x = Math.round(g.ox + dx); n.y = Math.round(g.oy + dy); const ne = document.getElementById('mmn-' + n.id); ne.style.left = n.x + 'px'; ne.style.top = n.y + 'px'; mapLinesFor(n.id); });
+  mapSOverlay();
+}
+function mapSUp(e) {
+  const d = mapSD; if (!d || d.pid !== e.pointerId) return;
+  e.stopImmediatePropagation(); mapSD = null; mapPtrs.delete(e.pointerId);
+  if (d.moved) mapCommit(d.before);
+  mapSOverlay(); mapSBarUI();
+}
+/* a second finger arriving while dragging a drawing: undo the drag, let the two fingers zoom */
+function mapSCancel() {
+  const d = mapSD; if (!d) return; mapSD = null;
+  d.orig.forEach((o, id) => { const s = mapStroke(id); if (s) { Object.assign(s, mapSClone(o)); mapSDraw(s); } });
+  d.nodes.forEach(g => { const n = mapNode(g.id); if (n) { n.x = g.ox; n.y = g.oy; mapNodeEl(n); mapLinesFor(n.id); } });
+  mapSOverlay();
+}
+
+/* ── colours: presets, a native colour picker (live preview, one undo step), recent colours ── */
+let mapColLive = null;                                         /* { before, target } while the picker is open */
+function mapColTarget(t) { return t === 'stroke' ? (MPV.ss.size ? 'stroke' : null) : t === 'node' ? (MPV.sel ? 'node' : null) : 'ink'; }
+function mapColApply(t, c, live) {
+  c = mapHexOk(c); if (!c) return;
+  if (t === 'ink') { MPV.ink = c; mapInkUI(); if (!live) mapRecentAdd(c); return; }
+  if (!mapColLive || mapColLive.target !== t) mapColLive = { before: mapSnap(), target: t };
+  if (t === 'node') { const o = mapNode(MPV.sel); if (o) { o.c = c; mapNodeEl(o); } }
+  else MPV.ss.forEach(id => { const s = mapStroke(id); if (s) { s.c = c; mapSDraw(s); } });
+  if (!live) { const L = mapColLive; mapColLive = null; mapCommit(L.before); mapRecentAdd(c); if (t === 'node') mapSelect(MPV.sel); else mapSBarUI(); mapDetFill(); }
+}
+function mapInkUI() {
+  document.querySelectorAll('#mm-draw [data-ink]').forEach(x => { const on = x.dataset.ink === MPV.ink; x.classList.toggle('on', on); x.setAttribute('aria-pressed', on); });
+  document.querySelectorAll('#mm-draw [data-rc]').forEach(x => x.classList.toggle('on', x.dataset.rc === MPV.ink));
+}
+
+/* ── DETAILS: a sheet (phone) or side panel (desktop) for one shape ── */
+let mapDetPend = null;                                         /* { before, t } while typing; committed after a pause */
+function mapDetCommit() { if (!mapDetPend) return; clearTimeout(mapDetPend.t); const b = mapDetPend.before; mapDetPend = null; mapCommit(b); }
+function mapDetEdit(fn) {
+  const o = mapNode(MPV.sel); if (!o) return;
+  if (!mapDetPend) mapDetPend = { before: mapSnap(), t: 0 };
+  fn(o); mapNodeEl(o); mapTouch();
+  clearTimeout(mapDetPend.t); mapDetPend.t = setTimeout(mapDetCommit, 700);
+}
+const mapDetOpen = () => !$('mm-det').hidden;
+function mapDetails(id) {
+  const o = mapNode(id); if (!o) return;
+  if (MPV.editing && document.activeElement) document.activeElement.blur();
+  mapSSelect([], true); if (MPV.sel !== id) mapSelect(id);
+  $('mm-det').hidden = false; $('mm-scrim').hidden = false; $('mm-sel').hidden = true;
+  mapDetFill(true);
+  setTimeout(() => { if (mapDetOpen() && !isPhone()) $('mm-d-title').focus(); }, 0);
+}
+function mapDetFill(all) {
+  if (!mapDetOpen()) return; const o = mapNode(MPV.sel); if (!o) { mapDetClose(); return; }
+  const set = (id, v) => { const el = $(id); if (all || document.activeElement !== el) el.value = v; };
+  set('mm-d-title', o.text || ''); set('mm-d-desc', o.desc || ''); set('mm-d-url', o.url || '');
+  $('mm-d-cnt').textContent = (o.desc || '').length + ' / 5000';
+  $('mm-d-urlerr').hidden = true;
+  document.querySelectorAll('#mm-det [data-dcol]').forEach(b => b.classList.toggle('on', b.dataset.dcol === o.c));
+  document.querySelectorAll('#mm-det [data-rc]').forEach(b => b.classList.toggle('on', b.dataset.rc === o.c));
+  const st = mapTaskState(o), live = st && st !== 'gone';
+  $('mm-d-mst').textContent = live ? 'Linked mission: ' + MAP_STATE_TXT[st].toLowerCase() + (o.task.d !== dk() ? ' · ' + prettyDate(o.task.d) : '') : 'Not a mission yet.';
+  $('mm-d-mbtn').textContent = live ? 'OPEN MISSION' : '→ MAKE IT A MISSION';
+  const ib = $('mm-d-idea'); ib.classList.toggle('on', !!o.idea); ib.setAttribute('aria-pressed', !!o.idea); ib.textContent = o.idea ? 'IDEA ✓' : 'MARK AS IDEA';
+  const ar = $('mm-d-area'); if (all || document.activeElement !== ar) {
+    ar.textContent = '';
+    const none = document.createElement('option'); none.value = ''; none.textContent = 'NO AREA'; ar.appendChild(none);
+    Object.values(G.areas).forEach(a => { const op = document.createElement('option'); op.value = a.id; op.textContent = a.name; ar.appendChild(op); });
+    ar.value = o.area && G.areas[o.area] ? o.area : '';
+  }
+}
+function mapDetClose(deselect) {
+  if (!mapDetOpen()) return;
+  mapDetCommit(); if (document.activeElement && $('mm-det').contains(document.activeElement)) document.activeElement.blur();
+  $('mm-det').hidden = true; $('mm-scrim').hidden = true; $('mm-mform').hidden = true;
+  if (deselect) mapSelect(null); else mapSelect(MPV.sel);
+}
+
+/* ── wiring ── */
+(function () {
+  const vw = $('mm-view');
+  /* an overlay for the selected drawing's outline and handles, above the ink */
+  const ov = document.createElementNS(NSV, 'svg'); ov.id = 'mm-sover'; ov.setAttribute('class', 'mm-svg'); ov.setAttribute('aria-hidden', 'true'); $('mm-world').appendChild(ov);
+  vw.addEventListener('pointerdown', mapSDown, true);
+  vw.addEventListener('pointermove', mapSMoveEv, true);
+  vw.addEventListener('pointerup', mapSUp, true); vw.addEventListener('pointercancel', mapSUp, true);
+  /* the details sheet carries the mission form instead of a separate popup */
+  const mf = $('mm-mform'); mf.classList.add('mm-inline'); $('mm-d-mis').appendChild(mf);
+  $('pg-map').addEventListener('click', e => {
+    const rc = e.target.closest('[data-rc]');
+    if (rc) { const t = rc.closest('#mm-sbar') ? 'stroke' : rc.closest('#mm-draw') ? 'ink' : 'node'; if (mapColTarget(t)) mapColApply(t, rc.dataset.rc, false); return; }
+    const sc = e.target.closest('[data-sc]'); if (sc) { mapSColor(sc.dataset.sc); return; }
+    const dc = e.target.closest('[data-dcol]'); if (dc) { mapSetColor(dc.dataset.dcol); mapDetFill(); return; }
+    const b = e.target.closest('[data-mm4]'); if (!b) return;
+    const a = b.dataset.mm4;
+    if (a === 's-thick') mapSWidth(1); else if (a === 's-thin') mapSWidth(-1);
+    else if (a === 's-dup') mapSDup(); else if (a === 's-del') mapSDelete();
+    else if (a === 's-done') mapSSelect([]);
+    else if (a === 'details') { if (MPV.sel) mapDetails(MPV.sel); }
+    else if (a === 'det-close') mapDetClose(false);
+    else if (a === 'd-mis') { mapDetCommit(); mapMissionForm(); mapDetFill(); }
+    else if (a === 'd-idea') { mapDetCommit(); mapToggleIdea(); mapDetFill(); }
+  });
+  $('mm-scrim').addEventListener('click', () => mapDetClose(false));
+  /* the native colour inputs: live preview while dragging, one undo step when done */
+  $('pg-map').addEventListener('input', e => {
+    const p = e.target.closest('[data-pick]'); if (p) { const t = mapColTarget(p.dataset.pick); if (t) mapColApply(t, p.value, true); return; }
+    const f = e.target.id;
+    if (f === 'mm-d-title') mapDetEdit(o => { o.text = e.target.value.slice(0, 2000); });
+    else if (f === 'mm-d-desc') { mapDetEdit(o => { const v = e.target.value.slice(0, 5000); if (v) o.desc = v; else delete o.desc; }); $('mm-d-cnt').textContent = e.target.value.length + ' / 5000'; }
+    else if (f === 'mm-d-url') { const u = mapUrl(e.target.value); $('mm-d-urlerr').hidden = u !== null; if (u !== null) mapDetEdit(o => { o.url = u; }); }
+  });
+  $('pg-map').addEventListener('change', e => {
+    const p = e.target.closest('[data-pick]'); if (p) { const t = mapColTarget(p.dataset.pick); if (t) mapColApply(t, p.value, false); return; }
+    if (e.target.id === 'mm-d-area') { mapDetCommit(); const o = mapNode(MPV.sel); if (o) { const b = mapSnap(); if (e.target.value) o.area = e.target.value; else delete o.area; mapNodeEl(o); mapCommit(b); } }
+    if (e.target.id === 'mm-d-url' || e.target.id === 'mm-d-title' || e.target.id === 'mm-d-desc') mapDetCommit();
+  });
+  /* Escape inside a field closes the sheet and clears the selection */
+  addEventListener('keydown', e => {
+    if (curPage !== 'pg-map' || e.key !== 'Escape') return;
+    if (mapDetOpen() && !document.querySelector('.modal.open')) { e.preventDefault(); e.stopImmediatePropagation(); mapDetClose(true); return; }
+    if (MPV.ss.size && !MPV.draw) { e.preventDefault(); e.stopImmediatePropagation(); mapSSelect([]); }
+  }, true);
+  addEventListener('keydown', e => {
+    if (curPage !== 'pg-map' || !MPV.ss.size || mapDetOpen() || (e.target.matches && e.target.matches('input,textarea,select,[contenteditable=true]'))) return;
+    if ((e.key === 'Delete' || e.key === 'Backspace') && !MPV.sel && !MPV.multi.size) { e.preventDefault(); e.stopImmediatePropagation(); mapSDelete(); }
+  }, true);
+})();
+
+/* ── hooks into the existing map code ── */
+/* clean: strict colours, a description, unique drawing ids */
+const _cleanV4 = mapClean;
+mapClean = function (b) {
+  const src = new Map(((b && Array.isArray(b.nodes)) ? b.nodes : []).filter(n => n && n.id).map(n => [String(n.id), n])), r = _cleanV4.apply(this, arguments);
+  r.nodes.forEach(n => { const s = src.get(n.id) || {}; if (typeof s.desc === 'string' && s.desc) n.desc = s.desc.slice(0, 5000); n.c = mapHexOk(n.c) || '#3a3f49'; });
+  const seen = new Set();
+  r.strokes.forEach(s => { s.c = mapHexOk(s.c) || '#ffffff'; s.w = clamp(+s.w || 3, 1, 40); if (seen.has(s.id)) s.id = uid('s'); seen.add(s.id); });
+  return r;
+};
+/* a shape: custom colour, light colours get dark text, the "≡" mark for a description */
+const _nodeElV4 = mapNodeEl;
+mapNodeEl = function (o) {
+  const el = _nodeElV4.apply(this, arguments);
+  const c = mapHexOk(el.style.getPropertyValue('--c').trim()) || mapHexOk(o.c);
+  el.classList.toggle('mm-lightc', !!c && !(o.area && G.areas[o.area]) && !MAP_COLS.some(x => x[0] === o.c) && mapLum(c) > .5);
+  let m = el.querySelector('.mm-dmark');
+  if (o.desc) { if (!m) { m = document.createElement('span'); m.className = 'mm-dmark'; m.setAttribute('aria-hidden', 'true'); m.textContent = '≡'; el.appendChild(m); } }
+  else if (m) m.remove();
+  if (o.desc) el.setAttribute('aria-label', el.getAttribute('aria-label') + ', has a description');
+  return el;
+};
+/* a drawing: colour through style properties only */
+const _strokeElV4 = mapStrokeEl;
+mapStrokeEl = function (s) {
+  const g = _strokeElV4.apply(this, arguments), v = g.firstChild;
+  v.removeAttribute('style'); v.style.stroke = mapHexOk(s.c) || '#ffffff'; v.style.strokeWidth = clamp(+s.w || 3, 1, 40);
+  if (MPV.ss.has(s.id)) g.classList.add('sel');
+  return g;
+};
+/* selecting a shape clears the drawing selection (and the other way round); the sheet follows the selection */
+const _selV4 = mapSelect;
+mapSelect = function (id) {
+  const r = _selV4.apply(this, arguments);
+  if (id && MPV.ss.size) { MPV.ss = new Set(); document.querySelectorAll('#mm-ink g.sel').forEach(g => g.classList.remove('sel')); mapSOverlay(); }
+  if (!id && !MPV.multi.size && MPV.ss.size && !mapSD) { /* keep a drawing selection made just before */ }
+  $('mm-sbar').hidden = !(MPV.ss.size && !MPV.multi.size && !MPV.sel);
+  if (mapDetOpen()) { if (!MPV.sel) mapDetClose(false); else { $('mm-sel').hidden = true; mapDetFill(true); } }
+  if (MPV.sel) { const o = mapNode(MPV.sel); document.querySelectorAll('#mm-sel [data-rc]').forEach(b => b.classList.toggle('on', !!o && b.dataset.rc === o.c)); }
+  return r;
+};
+/* tapping empty canvas clears drawings too */
+const _viewDownV4 = mapViewDown, _viewMoveV4 = mapViewMove;
+mapViewDown = function (e) {
+  /* MOVE tool: empty canvas clears the selection and pans instead of drawing */
+  if (MPV.draw && MPV.tool === 'move') {
+    mapPtrs.set(e.pointerId, [e.clientX, e.clientY]); try { mpView().setPointerCapture(e.pointerId); } catch (er) {}
+    if (mapPtrs.size === 2) { mapPinchStart(); return; }
+    if (mapPtrs.size === 1) { if (MPV.ss.size) mapSSelect([]); mpView().classList.add('pan'); }
+    return;
+  }
+  if (!MPV.draw && !mapPtrs.size && !e.shiftKey && !MPV.box && MPV.ss.size && !(e.target.closest && e.target.closest('.mm-n'))) mapSSelect([]);
+  return _viewDownV4.apply(this, arguments);
+};
+mapViewMove = function (e) {
+  if (MPV.draw && MPV.tool === 'move' && mapPtrs.size === 1 && mapPtrs.has(e.pointerId)) {
+    const p = mapPtrs.get(e.pointerId), v = MAPS.board.view; mapPtrs.set(e.pointerId, [e.clientX, e.clientY]);
+    v.x += e.clientX - p[0]; v.y += e.clientY - p[1]; mapApply(); mapTouchView(); return;
+  }
+  return _viewMoveV4.apply(this, arguments);
+};
+(function () { const vw = $('mm-view'); vw.removeEventListener('pointerdown', _viewDownV4); vw.addEventListener('pointerdown', e => mapViewDown(e)); vw.removeEventListener('pointermove', _viewMoveV4); vw.addEventListener('pointermove', e => mapViewMove(e)); })();
+/* two fingers while dragging a drawing: give the gesture to pinch-zoom */
+const _pinchV4 = mapPinchStart;
+mapPinchStart = function () { mapSCancel(); return _pinchV4.apply(this, arguments); };
+const _toolV4 = mapTool;
+mapTool = function (t) { const r = _toolV4.apply(this, arguments); $('pg-map').classList.toggle('mm-movetool', MPV.draw && t === 'move'); if (t !== 'move' && MPV.ss.size) mapSSelect([]); return r; };
+const _drawV4 = mapDrawMode;
+mapDrawMode = function (on) { if (MPV.ss.size) mapSSelect([]); const r = _drawV4.apply(this, arguments); $('pg-map').classList.toggle('mm-movetool', on && MPV.tool === 'move'); if (on) mapInkUI(); return r; };
+const _applyV4 = mapApply;
+mapApply = function () { const r = _applyV4.apply(this, arguments); if (MPV.ss.size) mapSOverlay(); return r; };
+const _renderV4 = mapRenderAll;
+mapRenderAll = function () { const r = _renderV4.apply(this, arguments); MPV.ss = new Set([...MPV.ss].filter(id => MAPS.board && mapStroke(id))); mapSOverlay(); mapSBarUI(); return r; };
+const _restoreV4 = mapRestore;
+mapRestore = function () { MPV.ss = new Set(); mapColLive = null; return _restoreV4.apply(this, arguments); };
+const _undoV4 = mapUndo, _redoV4 = mapRedo;
+mapUndo = function () { mapDetCommit(); const r = _undoV4.apply(this, arguments); mapSOverlay(); mapSBarUI(); return r; };
+mapRedo = function () { mapDetCommit(); const r = _redoV4.apply(this, arguments); mapSOverlay(); mapSBarUI(); return r; };
+const _leaveV4 = mapLeave;
+mapLeave = function () { mapDetClose(true); mapSCancel(); mapSSelect([]); clearTimeout(mapTapT); mapTapT = 0; mapTap = null; return _leaveV4.apply(this, arguments); };
+/* delete: shapes and drawings selected together go together, as one undo step */
+const _delV4 = mapDelete;
+mapDelete = function () {
+  if (!MPV.ss.size) return _delV4.apply(this, arguments);
+  if (!MPV.multi.size && !MPV.sel) { mapSDelete(); return; }
+  if (!MPV.multi.size) return _delV4.apply(this, arguments);
+  const nids = new Set(MPV.multi), sids = new Set(MPV.ss), n = MAPS.board.edges.filter(e => nids.has(e[0]) || nids.has(e[1])).length;
+  const go = () => {
+    const before = mapSnap(), B = MAPS.board;
+    B.nodes = B.nodes.filter(x => !nids.has(x.id)); B.edges = B.edges.filter(e => !nids.has(e[0]) && !nids.has(e[1])); B.strokes = B.strokes.filter(x => !sids.has(x.id));
+    nids.forEach(id => { const el = document.getElementById('mmn-' + id); if (el) el.remove(); });
+    sids.forEach(id => { const g = document.querySelector(`#mm-ink g[data-sid="${CSS.escape(id)}"]`); if (g) g.remove(); });
+    $('mm-lines').querySelectorAll('line').forEach(l => { const k = l.dataset.k.split('|'); if (nids.has(k[0]) || nids.has(k[1])) l.remove(); });
+    MPV.multi.clear(); MPV.ss = new Set(); mapSelect(null); mapSOverlay(); mapCommit(before); mapSBarUI();
+  };
+  const what = `${nids.size} shape${nids.size > 1 ? 's' : ''} and ${sids.size} drawing${sids.size > 1 ? 's' : ''}`;
+  if (n) confirmBox(`Delete ${what}, and ${n} connection${n > 1 ? 's' : ''}?<br><br>You can bring them back with UNDO.`, 'DELETE', go); else go();
+};
+/* the selection box picks drawings as well as shapes */
+function mapSelectMixed(nids, sids) {
+  mapSelect(null); MPV.ss = new Set();
+  if (!sids.length) { mapSelectMany(nids); mapSOverlay(); return; }
+  if (!nids.length) { mapSSelect(sids); return; }
+  nids.forEach(id => MPV.multi.add(id)); nids.forEach(id => mapNodeEl(mapNode(id)));
+  MPV.ss = new Set(sids); document.querySelectorAll('#mm-ink g[data-sid]').forEach(g => g.classList.toggle('sel', MPV.ss.has(g.dataset.sid)));
+  mapSOverlay(); mapSBarUI();
+}
+
+/* ── double tap on a shape opens DETAILS; a single tap on a link waits ~300 ms so a double tap never opens it ── */
+let mapTap = null, mapTapT = 0;
+const _nodeUpV4 = mapNodeUp;
+mapNodeUp = function (e) {
+  const d = mapDrag;
+  if (!d || d.pid !== e.pointerId || d.moved || d.group || d.resize || e.type !== 'pointerup' || MPV.editing) return _nodeUpV4.apply(this, arguments);
+  if (mapPtrs.has(e.pointerId)) { mapPtrs.delete(e.pointerId); if (mapPtrs.size < 2) mapPinch = null; if (!mapPtrs.size) mpView().classList.remove('pan'); }
+  mapDrag = null;
+  const o = mapNode(d.id); if (!o) return;
+  const now = performance.now();
+  if (mapTap && mapTap.id === o.id && now - mapTap.t < 330) { clearTimeout(mapTapT); mapTapT = 0; mapTap = null; mapDetails(o.id); return; }
+  clearTimeout(mapTapT); mapTapT = 0; mapTap = { id: o.id, t: now };
+  if (o.url) { const u = o.url; mapTapT = setTimeout(() => { mapTapT = 0; mapTap = null; if (curPage === 'pg-map') mapOpenUrl(u); }, 300); }
+};
+(function () { const n = $('mm-nodes'); n.removeEventListener('pointerup', _nodeUpV4); n.addEventListener('pointerup', e => mapNodeUp(e)); })();
+/* a double tap means two taps in a row on the same shape: a tap anywhere else in between starts over */
+document.addEventListener('pointerdown', e => { if (!mapTap) return; const el = e.target.closest && e.target.closest('#mm-nodes .mm-n'); if (!el || el.dataset.id !== mapTap.id) { mapTap = null; } }, true);
+/* the shape's "→ MISSION" now lives inside DETAILS */
+const _mfV4 = mapMissionForm;
+mapMissionForm = function () {
+  const n = mapNode(MPV.sel); if (!n) return;
+  if (!mapDetOpen() && !(n.task && mapTaskState(n) !== 'gone')) mapDetails(n.id);
+  const r = _mfV4.apply(this, arguments);
+  if (!$('mm-mform').hidden) setTimeout(() => $('mm-mform').scrollIntoView({ block: 'nearest' }), 0);
+  return r;
+};
+const _mcV4 = mapMissionCreate;
+mapMissionCreate = function () { const id = MPV.sel, r = _mcV4.apply(this, arguments); if (id && mapDetOpen()) { if (MPV.sel !== id) mapSelect(id); mapDetFill(true); } return r; };
+/* load the recent colours with the maps */
+mapLoad = (function (orig) { return function () { return orig.apply(this, arguments).then(v => { mapPrefsLoad(); return v; }); }; })(mapLoad);
+(function wait() { if (MAPS.loaded) mapPrefsLoad(); else setTimeout(wait, 300); })();   /* stops as soon as the maps have loaded */
 
 /* ── backups: maps ride along as an extra "maps" field; old backups simply lack it ── */
 function mapBackup() { if (MAPS.dirty) mapFlush(); return MAPS.loaded ? JSON.parse(JSON.stringify(MAPS.list)) : undefined; }
