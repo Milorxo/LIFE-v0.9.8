@@ -1631,6 +1631,34 @@ body.dragging-now { user-select:none; cursor:grabbing; }
 .rs-row output { font:400 .72rem var(--mono); color:var(--muted); width:46px; text-align:right; }
 .rs-row select { flex:1; min-width:0; }
 @media (max-width:520px) { .rs-grid { grid-template-columns:1fr; } }
+.mm-badge { position:absolute; top:-13px; left:10px; z-index:2; min-height:24px; padding:0 9px; border-radius:999px; border:1px solid #6d8fd0; background:#16203a; color:#cfe3ff; font:600 .5rem var(--mono); letter-spacing:.14em; cursor:pointer; }
+.mm-badge::after { content:''; position:absolute; inset:-10px -6px; }
+.mm-badge[data-st="running"] { border-color:#3fbf88; background:#11281f; color:#8ff0c8; }
+.mm-badge[data-st="done"] { border-color:#3fbf88; background:#3fbf88; color:#06130d; }
+.mm-badge[data-st="missed"] { border-color:#ff8d8d; background:#2a1414; color:#ffc2c2; }
+.mm-tag { position:absolute; top:-11px; right:10px; z-index:1; max-width:calc(100% - 20px); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; padding:3px 8px; border-radius:999px; border:1px solid var(--c, #8a919d); background:#111318; color:var(--c, #8a919d); font:600 .46rem var(--mono); letter-spacing:.14em; pointer-events:none; }
+.mm-n.mm-hl { animation:mmHl 2.4s ease-out; }
+@keyframes mmHl { 0%, 40% { box-shadow:0 0 0 6px rgba(207,227,255,.55), 0 0 40px rgba(207,227,255,.5); } 100% { box-shadow:0 10px 26px -14px #000; } }
+.mm-filter .mm-n:not(.mm-isidea), .mm-filter #mm-ink, .mm-filter #mm-lines { opacity:.16; }
+.mm-filter .mm-hint { display:none; }
+.mm-filt { top:calc(env(safe-area-inset-top,0px) + 132px); align-items:center; }
+.mm-mform { position:absolute; left:50%; top:50%; transform:translate(-50%, -50%); z-index:8; width:min(420px, calc(100% - 24px)); display:grid; gap:12px; padding:18px; border-radius:18px; background:rgba(18,21,26,.98); border:1px solid var(--line2); box-shadow:0 30px 70px -20px #000; }
+.mm-mform > b { font:600 .7rem var(--mono); letter-spacing:.24em; color:#fff; } .mm-mform > small { color:var(--dim); font-size:.8rem; margin-top:-6px; }
+.mm-mform label { display:grid; gap:6px; font:500 .54rem var(--mono); letter-spacing:.2em; color:var(--dim); }
+.mm-mform input, .mm-mform select { min-height:44px; padding:0 12px; border-radius:11px; border:1px solid var(--line2); background:#0a0c10; color:#fff; font:400 .95rem var(--sans); color-scheme:dark; min-width:0; }
+.mm-mf2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.mm-mf-b { display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap; }
+.mm-mf-b button { min-height:44px; padding:0 16px; border-radius:11px; border:1px solid var(--line2); background:transparent; color:#eef1f6; font:500 .62rem var(--mono); letter-spacing:.16em; cursor:pointer; }
+.mm-mf-b button.on { background:#fff; color:#0b0c0f; border-color:#fff; }
+.mm-alist { display:flex; gap:6px; flex-wrap:wrap; }
+.mm-alist button i { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:7px; vertical-align:middle; }
+.cs-box .fb.map { position:relative; }
+.fb-ideas { position:absolute; top:8px; right:10px; z-index:2; padding:4px 9px; border-radius:999px; border:1px solid rgba(217,200,255,.5); background:rgba(40,28,70,.9); color:#e6dcff; font:600 .48rem var(--mono); letter-spacing:.14em; cursor:pointer; white-space:nowrap; }
+.fb-ideas::after { content:''; position:absolute; inset:-12px -8px; }
+.fb-ideas[hidden] { display:none; }
+.dp-map { min-width:44px; min-height:44px; margin:-.4rem -.4rem -.4rem 0; border-radius:9px; border:1px solid var(--line2); background:transparent; color:#d9c8ff; font:600 .5rem var(--mono); letter-spacing:.14em; cursor:pointer; flex:none; }
+@media (prefers-reduced-motion:reduce) { .mm-n.mm-hl { animation:none; box-shadow:0 0 0 4px rgba(207,227,255,.6); } }
+@media (max-width:640px) { .mm-filt { top:calc(env(safe-area-inset-top,0px) + 186px); } .fb-ideas { top:4px; right:4px; padding:3px 6px; font-size:.42rem; } }
 /* ── Time Center: clock, stopwatch, timer, focus sessions ── */
 #tc-overlay.tc-ov { background:var(--tcbg, radial-gradient(circle at 50% 30%, #12161e 0%, #06070a 80%)) !important; }
 .tc-wrap { max-width:620px; display:grid; gap:1.3rem; justify-items:center; align-content:start; text-align:center; }
@@ -1769,7 +1797,26 @@ body.dragging-now { user-select:none; cursor:grabbing; }
 .mm-head { position:absolute; left:0; right:0; top:0; z-index:5; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:calc(env(safe-area-inset-top,0px) + 12px) max(16px, env(safe-area-inset-right,0px)) 0 max(16px, env(safe-area-inset-left,0px)); pointer-events:none; }
 .mm-head > * { pointer-events:auto; }
 .mm-back { min-height:44px; background:rgba(16,19,24,.9); }
-.mm-name { display:grid; justify-items:center; gap:2px; text-align:center; min-width:0; pointer-events:none !important; }
+.mm-name { display:grid; justify-items:center; gap:2px; text-align:center; min-width:0; min-height:44px; padding:4px 14px; border-radius:12px; border:1px solid transparent; background:transparent; color:#fff; cursor:pointer; }
+.mm-name:hover, .mm-name[aria-expanded="true"] { border-color:var(--line2); background:rgba(16,19,24,.9); }
+.mm-name:focus-visible { outline:2px solid #cfe3ff; }
+.mm-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:inherit; pointer-events:none; -webkit-user-drag:none; }
+.mm-n.mm-hasimg { padding:0; align-items:flex-end; }
+.mm-n.mm-hasimg .mm-t { position:relative; z-index:1; width:100%; padding:14px 8px 6px; border-radius:0 0 10px 10px; background:linear-gradient(transparent, rgba(0,0,0,.78)); font-size:13px; }
+.mm-n.mm-hasimg.mm-notext .mm-t:not([contenteditable=true]) { display:none; }
+.mm-n.mm-hasimg.mm-circle .mm-t, .mm-n.mm-hasimg.mm-bubble .mm-t { background:none; padding-bottom:14%; text-shadow:0 1px 3px #000, 0 0 12px rgba(0,0,0,.9); }
+.mm-band { position:absolute; z-index:3; border:1.5px dashed #cfe3ff; background:rgba(207,227,255,.08); border-radius:4px; pointer-events:none; }
+.mm-cnt { align-self:center; padding:0 10px; font:500 .6rem var(--mono); letter-spacing:.16em; color:#cfe3ff; white-space:nowrap; }
+.mm-boards { position:absolute; left:50%; top:calc(env(safe-area-inset-top,0px) + 62px); transform:translateX(-50%); z-index:7; width:min(380px, calc(100% - 24px)); max-height:min(70vh, 520px); display:grid; grid-template-rows:minmax(0,1fr) auto auto; gap:8px; padding:8px; border-radius:16px; background:rgba(18,21,26,.98); border:1px solid var(--line2); box-shadow:0 24px 60px -18px #000; }
+.mm-bl { display:grid; gap:4px; overflow-y:auto; min-height:0; }
+.mm-bi { display:flex; justify-content:space-between; align-items:center; gap:10px; min-height:48px; padding:0 14px; border-radius:11px; border:1px solid transparent; background:transparent; color:#eef1f6; cursor:pointer; text-align:left; }
+.mm-bi b { font:500 .95rem var(--sans); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0; }
+.mm-bi small { flex:none; font:500 .52rem var(--mono); letter-spacing:.14em; color:var(--dim); }
+.mm-bi:hover { background:rgba(255,255,255,.06); } .mm-bi.on { border-color:rgba(255,255,255,.6); background:rgba(255,255,255,.06); }
+.mm-ren, .mm-bact { display:flex; gap:6px; flex-wrap:wrap; }
+.mm-ren input { flex:1; min-width:0; min-height:44px; padding:0 12px; border-radius:11px; border:1px solid var(--line2); background:#0a0c10; color:#fff; font:400 .95rem var(--sans); }
+.mm-boards button:not(.mm-bi) { flex:1; min-height:44px; min-width:44px; padding:0 12px; border-radius:11px; border:1px solid var(--line); background:transparent; color:#eef1f6; font:500 .6rem var(--mono); letter-spacing:.14em; cursor:pointer; white-space:nowrap; }
+.mm-boards .mm-del { color:#ff8d8d; }
 .mm-name span { font:500 .55rem var(--mono); letter-spacing:.3em; color:var(--dim); }
 .mm-name b { font:600 .95rem var(--serif); letter-spacing:.14em; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:40vw; }
 .mm-hist { display:flex; gap:6px; }
@@ -1810,6 +1857,7 @@ body.dragging-now { user-select:none; cursor:grabbing; }
   .mm-row { flex-wrap:wrap; justify-content:center; }
   .mm-bar button { padding:0 9px; }
   .mm-zoom { bottom:calc(env(safe-area-inset-bottom,0px) + 196px); }
+  .mm-top { flex-wrap:wrap; justify-content:center; overflow:visible; width:calc(100% - 24px); }
 }
 </style>
 </head>
@@ -1850,7 +1898,7 @@ body.dragging-now { user-select:none; cursor:grabbing; }
   <div class="mm-sr" id="mm-alt" aria-live="polite"></div>
   <header class="mm-head">
     <button type="button" class="back mm-back" data-mm="back" aria-label="Back to your profile"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>BACK</button>
-    <div class="mm-name"><span>MAP</span><b id="mm-title">MY MAP</b></div>
+    <button type="button" class="mm-name" id="mm-title-b" data-mm="boards" aria-haspopup="true" aria-expanded="false" aria-label="Your maps: switch, add, rename or delete"><span>MAP ▾</span><b id="mm-title">MY MAP</b></button>
     <div class="mm-hist">
       <button type="button" class="mm-ib" data-mm="undo" aria-label="Undo" title="Undo"><svg viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg></button>
       <button type="button" class="mm-ib" data-mm="redo" aria-label="Redo" title="Redo"><svg viewBox="0 0 24 24"><path d="m15 14 5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h3"/></svg></button>
@@ -1860,22 +1908,40 @@ body.dragging-now { user-select:none; cursor:grabbing; }
     <button type="button" data-mm="add" data-kind="box" aria-label="Add a box">＋ BOX</button>
     <button type="button" data-mm="add" data-kind="bubble" aria-label="Add a bubble">＋ BUBBLE</button>
     <button type="button" data-mm="add" data-kind="circle" aria-label="Add a circle">＋ CIRCLE</button>
+    <button type="button" data-mm="img-add" aria-label="Add a picture">＋ IMAGE</button>
+    <button type="button" data-mm="selmode" aria-pressed="false" aria-label="Select several shapes">▢ SELECT</button>
     <button type="button" data-mm="draw" aria-label="Draw">✎ DRAW</button>
   </div>
-  <div class="mm-hint" id="mm-hint">DRAG TO MOVE · SCROLL OR PINCH TO ZOOM · DOUBLE-CLICK A SHAPE TO WRITE</div>
+  <div class="mm-hint" id="mm-hint">DRAG TO MOVE · SCROLL OR PINCH TO ZOOM · DOUBLE-CLICK A SHAPE TO WRITE · SHIFT + DRAG TO SELECT</div>
   <div class="mm-bar mm-bot" id="mm-sel" hidden>
     <div class="mm-row" id="mm-sel-main">
       <button type="button" data-mm="edit" aria-label="Edit text">EDIT TEXT</button>
       <button type="button" data-mm="link" aria-label="Set a link">LINK</button>
+      <button type="button" data-mm="img-set" aria-label="Put a picture in this shape">IMAGE</button><button type="button" id="mm-noimg" data-mm="img-del" aria-label="Remove the picture" hidden>NO IMAGE</button>
       <button type="button" class="mm-sw" data-mcol="#3a3f49" aria-label="Grey"><i style="--c:#8a919d"></i></button><button type="button" class="mm-sw" data-mcol="#4c7dff" aria-label="Blue"><i style="--c:#4c7dff"></i></button><button type="button" class="mm-sw" data-mcol="#ff7a45" aria-label="Orange"><i style="--c:#ff7a45"></i></button><button type="button" class="mm-sw" data-mcol="#3fbf88" aria-label="Green"><i style="--c:#3fbf88"></i></button><button type="button" class="mm-sw" data-mcol="#b36bff" aria-label="Purple"><i style="--c:#b36bff"></i></button>
+      <button type="button" data-mm3="mission" aria-label="Turn this box into a mission">→ MISSION</button><button type="button" data-mm3="idea" aria-pressed="false" aria-label="Mark as an idea">IDEA</button><button type="button" data-mm3="area" aria-label="Link to a life area">AREA</button>
       <button type="button" data-mm="connect" aria-pressed="false" aria-label="Connect to another shape">CONNECT</button>
       <button type="button" class="mm-del" data-mm="del" aria-label="Delete shape">DELETE</button>
     </div>
+    <div class="mm-row" id="mm-area" hidden><div class="mm-alist" id="mm-area-list"></div><button type="button" data-mm3="area-back" aria-label="Back">BACK</button></div>
     <div class="mm-row" id="mm-url" hidden>
       <input id="mm-url-in" type="url" inputmode="url" placeholder="https://…" aria-label="Link address" autocomplete="off">
       <button type="button" data-mm="url-ok" aria-label="Save link">SET</button><button type="button" data-mm="url-no" aria-label="Remove link">NO LINK</button>
     </div>
   </div>
+  <div class="mm-bar mm-bot" id="mm-multi" hidden>
+    <span class="mm-cnt" id="mm-multi-n">2 SELECTED</span><button type="button" class="mm-del" data-mm="del" aria-label="Delete the selected shapes">DELETE</button><button type="button" data-mm="multi-done" aria-label="Clear the selection">DONE</button>
+  </div>
+  <div class="mm-boards" id="mm-boards" hidden></div>
+  <div class="mm-bar mm-filt" id="mm-filt" hidden><span class="mm-cnt" id="mm-filt-t"></span><button type="button" data-mm3="filt-off" aria-label="Show every shape">SHOW ALL</button></div>
+  <div class="mm-mform" id="mm-mform" role="dialog" aria-label="Turn this box into a mission" hidden>
+    <b>NEW MISSION</b><small>A one-time task in your game, linked to this box.</small>
+    <label>TITLE<input id="mm-mf-title" maxlength="80" autocomplete="off"></label>
+    <label>LIFE AREA<select id="mm-mf-area"></select></label>
+    <div class="mm-mf2"><label>MINUTES (ABOUT)<input id="mm-mf-min" type="number" inputmode="numeric" min="0" max="1440" placeholder="30"></label><label>DO IT BY<input id="mm-mf-day" type="date"></label></div>
+    <div class="mm-mf-b"><button type="button" data-mm3="mf-no">CANCEL</button><button type="button" class="on" data-mm3="mf-ok">CREATE MISSION</button></div>
+  </div>
+  <input type="file" id="mm-file" accept="image/*" hidden>
   <div class="mm-bar mm-bot mm-drawbar" id="mm-draw" hidden>
     <button type="button" class="on" data-tool="pen" aria-pressed="true" aria-label="Pen">PEN</button><button type="button" data-tool="rect" aria-pressed="false" aria-label="Box">BOX</button><button type="button" data-tool="ellipse" aria-pressed="false" aria-label="Oval">OVAL</button><button type="button" data-tool="line" aria-pressed="false" aria-label="Line">LINE</button><button type="button" data-tool="arrow" aria-pressed="false" aria-label="Arrow">ARROW</button><button type="button" data-tool="erase" aria-pressed="false" aria-label="Eraser">ERASE</button>
     <button type="button" class="mm-sw on" data-ink="#ffffff" aria-pressed="true" aria-label="White ink"><i style="--c:#ffffff"></i></button><button type="button" class="mm-sw" data-ink="#4c7dff" aria-pressed="false" aria-label="Blue ink"><i style="--c:#4c7dff"></i></button><button type="button" class="mm-sw" data-ink="#ff7a45" aria-pressed="false" aria-label="Orange ink"><i style="--c:#ff7a45"></i></button><button type="button" class="mm-sw" data-ink="#3fbf88" aria-pressed="false" aria-label="Green ink"><i style="--c:#3fbf88"></i></button><button type="button" class="mm-sw" data-ink="#b36bff" aria-pressed="false" aria-label="Purple ink"><i style="--c:#b36bff"></i></button>
@@ -1910,7 +1976,7 @@ body.dragging-now { user-select:none; cursor:grabbing; }
     <span class="word">LIFE</span>
   </div>
   <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
-  <div class="sys-label" style="bottom:30px;left:44px;">V 0.10.0</div>
+  <div class="sys-label" style="bottom:30px;left:44px;">V 0.11.0</div>
   <div class="play-center">
     <h1 class="play-title">LIFE</h1>
     <div class="play-date" id="play-date"></div>
@@ -1959,7 +2025,7 @@ body.dragging-now { user-select:none; cursor:grabbing; }
         <div class="cs-box">
           <div class="fb big cal" onclick="navigateTo('pg-calendar')" role="button" tabindex="0" aria-label="Calendar"><i class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3.5"/><path d="M3 10h18M8 3v4M16 3v4"/><circle cx="12" cy="15.5" r="1.6"/></svg></i><b>CALENDAR</b><small>PLAN YOUR DAYS</small></div>
           <div class="fb big sto" onclick="openStore('pg-profile')" role="button" tabindex="0" aria-label="Store"><i class="ic"><svg viewBox="0 0 24 24"><path d="M4.5 9h15l-1.3 11.2a1 1 0 0 1-1 .8H6.8a1 1 0 0 1-1-.8zM8.5 9V8a3.5 3.5 0 0 1 7 0v1"/><path d="M12 12.5v4M10.4 14h2.4a1 1 0 0 1 0 2h-1.6"/></svg></i><b>STORE</b><small>SPEND YOUR MONEY</small></div>
-          <div class="fb big map" onclick="navigateTo('pg-map')" role="button" tabindex="0" aria-label="Map"><i class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.6"/><circle cx="5" cy="6" r="1.8"/><circle cx="19" cy="6.5" r="1.8"/><circle cx="6" cy="18.5" r="1.8"/><circle cx="18.5" cy="18" r="1.8"/><path d="M10 10.4 6.4 7.3M14.1 10.6l3.4-2.8M10.2 13.9l-3 3.2M13.9 13.8l3.2 2.9"/></svg></i><b>MAP</b><small>SKETCH YOUR IDEAS</small></div>
+          <div class="fb big map" onclick="navigateTo('pg-map')" role="button" tabindex="0" aria-label="Map"><i class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.6"/><circle cx="5" cy="6" r="1.8"/><circle cx="19" cy="6.5" r="1.8"/><circle cx="6" cy="18.5" r="1.8"/><circle cx="18.5" cy="18" r="1.8"/><path d="M10 10.4 6.4 7.3M14.1 10.6l3.4-2.8M10.2 13.9l-3 3.2M13.9 13.8l3.2 2.9"/></svg></i><b>MAP</b><small>SKETCH YOUR IDEAS</small><span class="fb-ideas" id="fb-ideas" role="button" tabindex="0" hidden></span></div>
         </div>
         <div class="sd-row">
           <button class="sdb" onclick="openTimeCenter()" aria-label="Time Center"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9.5 2.5h5M12 2.5V5"/></svg><span>TIME</span></button>
@@ -2416,7 +2482,7 @@ function migrate(s) {
   return out;
 }
 
-const APP_VER = '0.10.0';
+const APP_VER = '0.11.0';
 /* The first time a new version opens, keep a copy of the save as it was, so an upgrade can always be undone from Developer mode. */
 function safetyCopy() {
   try {
@@ -8352,9 +8418,10 @@ const MAP_DB = 'life_maps', MAP_REV = 'life_maps_rev', MAP_HIST = 100;
 const MAP_COLS = [['#3a3f49', '#8a919d', 'Grey'], ['#4c7dff', '#4c7dff', 'Blue'], ['#ff7a45', '#ff7a45', 'Orange'], ['#3fbf88', '#3fbf88', 'Green'], ['#b36bff', '#b36bff', 'Purple']];
 const MAP_INK = [['#ffffff', 'White'], ['#4c7dff', 'Blue'], ['#ff7a45', 'Orange'], ['#3fbf88', 'Green'], ['#b36bff', 'Purple']];
 const MAPS = { list: [], board: null, loaded: false, ok: true, dirty: false, stale: false, rev: null, saveT: 0, undo: [], redo: [] };
-const MPV = { sel: null, connect: false, draw: false, tool: 'pen', ink: '#ffffff', w: 3, cur: null, curEl: null, editing: null };
+const MPV = { sel: null, multi: new Set(), box: false, connect: false, draw: false, tool: 'pen', ink: '#ffffff', w: 3, cur: null, curEl: null, editing: null, imgFor: null };
+const MAP_CUR = 'life_maps_cur';
 const NSV = 'http://www.w3.org/2000/svg';
-const mapNew = (name) => ({ id: uid('b'), name: name || 'My map', nodes: [], edges: [], strokes: [], view: { x: 0, y: 0, k: 1 }, updated: Date.now() });
+const mapNew = (name) => ({ id: uid('b'), name: name || 'My map', nodes: [], edges: [], strokes: [], imgs: {}, view: { x: 0, y: 0, k: 1 }, updated: Date.now() });
 
 /* ── storage: IndexedDB, with a visible warning if it cannot be used ── */
 let mapDbP = null;
@@ -8378,6 +8445,7 @@ const mapTx = (mode, fn) => mapDb().then(db => new Promise((res, rej) => {
 const mapIdbAll = () => mapTx('readonly', st => st.getAll());
 const mapIdbPut = b => mapTx('readwrite', st => { st.put(b); });
 const mapIdbReplace = list => mapTx('readwrite', st => { st.clear(); list.forEach(b => st.put(b)); });
+const mapIdbDel = id => mapTx('readwrite', st => { st.delete(id); });
 function mapWarn(on) {
   MAPS.ok = !on; const w = $('mm-warn'); if (!w) return;
   w.hidden = !on; if (on) w.textContent = 'THIS BROWSER CANNOT SAVE THE MAP. CHANGES WILL BE LOST WHEN YOU CLOSE LIFE.';
@@ -8385,18 +8453,24 @@ function mapWarn(on) {
 function mapClean(b) {
   b = b && typeof b === 'object' ? b : {};
   const num = (v, d) => isFinite(+v) ? +v : d;
-  const nodes = (Array.isArray(b.nodes) ? b.nodes : []).filter(n => n && n.id).map(n => ({ id: String(n.id), kind: ['box', 'bubble', 'circle'].includes(n.kind) ? n.kind : 'box', x: num(n.x, 0), y: num(n.y, 0), w: clamp(num(n.w, 170), 70, 4000), h: clamp(num(n.h, 70), 44, 4000), text: String(n.text || '').slice(0, 2000), c: /^#[0-9a-f]{6}$/i.test(n.c) ? n.c : '#3a3f49', url: mapUrl(n.url || '') || '' }));
+  const srcImgs = b.imgs && typeof b.imgs === 'object' ? b.imgs : {}, imgs = {};
+  const okImg = v => typeof v === 'string' && /^data:image\/(jpeg|png|webp);base64,/.test(v) && v.length < 3e6;
+  const nodes = (Array.isArray(b.nodes) ? b.nodes : []).filter(n => n && n.id).map(n => {
+    const img = n.img && okImg(srcImgs[n.img]) ? String(n.img) : '';
+    if (img) imgs[img] = srcImgs[img];
+    return { id: String(n.id), kind: ['box', 'bubble', 'circle'].includes(n.kind) ? n.kind : 'box', x: num(n.x, 0), y: num(n.y, 0), w: clamp(num(n.w, 170), 70, 4000), h: clamp(num(n.h, 70), 44, 4000), text: String(n.text || '').slice(0, 2000), c: /^#[0-9a-f]{6}$/i.test(n.c) ? n.c : '#3a3f49', url: mapUrl(n.url || '') || '', img };
+  });
   const ids = new Set(nodes.map(n => n.id));
   const edges = (Array.isArray(b.edges) ? b.edges : []).filter(e => Array.isArray(e) && ids.has(String(e[0])) && ids.has(String(e[1])) && e[0] !== e[1]).map(e => [String(e[0]), String(e[1])]);
   const strokes = (Array.isArray(b.strokes) ? b.strokes : []).filter(s => s && s.type).map(s => s.type === 'pen'
     ? { id: String(s.id || uid('s')), type: 'pen', pts: (Array.isArray(s.pts) ? s.pts : []).filter(p => Array.isArray(p)).map(p => [num(p[0], 0), num(p[1], 0)]), c: String(s.c || '#fff'), w: num(s.w, 3) }
     : { id: String(s.id || uid('s')), type: ['rect', 'ellipse', 'line', 'arrow'].includes(s.type) ? s.type : 'line', x0: num(s.x0, 0), y0: num(s.y0, 0), x1: num(s.x1, 0), y1: num(s.y1, 0), c: String(s.c || '#fff'), w: num(s.w, 3) });
   const v = b.view || {};
-  return { id: String(b.id || uid('b')), name: String(b.name || 'My map').slice(0, 60), nodes, edges, strokes, view: { x: num(v.x, 0), y: num(v.y, 0), k: clamp(num(v.k, 1), .2, 3) }, updated: num(b.updated, Date.now()) };
+  return { id: String(b.id || uid('b')), name: String(b.name || 'My map').slice(0, 60), nodes, edges, strokes, imgs, view: { x: num(v.x, 0), y: num(v.y, 0), k: clamp(num(v.k, 1), .2, 3) }, updated: num(b.updated, Date.now()) };
 }
 function mapStarter() {
   const b = mapNew('My map');
-  b.nodes.push({ id: uid('n'), kind: 'circle', x: -75, y: -75, w: 150, h: 150, text: 'LIFE', c: '#b36bff', url: '' });
+  b.nodes.push({ id: uid('n'), kind: 'circle', x: -75, y: -75, w: 150, h: 150, text: 'LIFE', c: '#b36bff', url: '', img: '' });
   return b;
 }
 function mapLoad() {
@@ -8404,7 +8478,8 @@ function mapLoad() {
   return mapIdbAll().then(list => {
     MAPS.list = (list || []).map(mapClean).sort((a, b) => a.updated - b.updated);
     if (!MAPS.list.length) { MAPS.list = [mapStarter()]; MAPS.board = MAPS.list[0]; MAPS.loaded = true; MAPS.dirty = true; mapFlush(); }
-    MAPS.board = MAPS.list[MAPS.list.length - 1]; MAPS.loaded = true; mapWarn(false);
+    let cur = null; try { cur = localStorage.getItem(MAP_CUR); } catch (e) {}
+    MAPS.board = MAPS.list.find(b => b.id === cur) || MAPS.list[MAPS.list.length - 1]; MAPS.loaded = true; mapWarn(false);
   }).catch(() => {
     if (!MAPS.list.length) MAPS.list = [mapStarter()];
     MAPS.board = MAPS.list[MAPS.list.length - 1]; MAPS.loaded = true; mapWarn(true);
@@ -8436,7 +8511,7 @@ addEventListener('storage', e => {
   if (e.key !== MAP_REV || !e.newValue || e.newValue.split(':')[0] === TAB_ID) return;
   if (MAPS.dirty) { MAPS.stale = true; mapStaleBar(); return; }
   MAPS.rev = e.newValue;
-  mapIdbAll().then(list => { if (!list || !list.length) return; const id = MAPS.board && MAPS.board.id; MAPS.list = list.map(mapClean).sort((a, b) => a.updated - b.updated); MAPS.board = MAPS.list.find(b => b.id === id) || MAPS.list[MAPS.list.length - 1]; MAPS.undo = []; MAPS.redo = []; if (curPage === 'pg-map') mapRenderAll(); }).catch(() => {});
+  mapIdbAll().then(list => { if (!list || !list.length) return; const id = MAPS.board && MAPS.board.id; MAPS.list = list.map(mapClean).sort((a, b) => a.updated - b.updated); MAPS.board = MAPS.list.find(b => b.id === id) || MAPS.list[MAPS.list.length - 1]; MAPS.undo = []; MAPS.redo = []; if (curPage === 'pg-map') { mapSelect(null); $('mm-nodes').textContent = ''; mapRenderAll(); } }).catch(() => {});
 });
 
 /* ── undo / redo: a snapshot of the board before each action ── */
@@ -8496,11 +8571,14 @@ function mapNodeEl(o) {
     el.innerHTML = '<div class="mm-t"></div><i class="mm-h" aria-hidden="true"></i>';
     $('mm-nodes').appendChild(el);
   }
-  el.className = 'mm-n mm-' + o.kind + (o.url ? ' mm-link' : '') + (MPV.sel === o.id ? ' sel' : '');
+  el.className = 'mm-n mm-' + o.kind + (o.url ? ' mm-link' : '') + (MPV.sel === o.id || MPV.multi.has(o.id) ? ' sel' : '') + (o.img ? ' mm-hasimg' : '') + (o.text ? '' : ' mm-notext');
+  const src = o.img && MAPS.board.imgs && MAPS.board.imgs[o.img]; let im = el.querySelector('.mm-img');
+  if (src) { if (!im) { im = document.createElement('img'); im.className = 'mm-img'; im.alt = ''; im.draggable = false; el.insertBefore(im, el.querySelector('.mm-h')); } if (im.getAttribute('src') !== src) im.src = src; }
+  else if (im) im.remove();
   el.style.cssText = `left:${o.x}px;top:${o.y}px;width:${o.w}px;height:${o.h}px;--c:${mapDispCol(o.c)}`;
   const t = el.firstChild; if (MPV.editing !== o.id && t.textContent !== o.text) t.textContent = o.text;
   el.setAttribute('role', 'button'); el.setAttribute('tabindex', '0');
-  el.setAttribute('aria-label', (o.text || 'Empty ' + o.kind) + (o.url ? ', link to ' + o.url : ''));
+  el.setAttribute('aria-label', (o.text || (o.img ? 'Picture' : 'Empty ' + o.kind)) + (o.img && o.text ? ', with a picture' : '') + (o.url ? ', link to ' + o.url : ''));
   return el;
 }
 const mapCenter = o => [o.x + o.w / 2, o.y + o.h / 2];
@@ -8552,28 +8630,36 @@ function mapRenderAll() {
   $('mm-lines').textContent = ''; b.edges.forEach(mapLine);
   mapRenderInk(); mapApply(); mapHistUI(); mapAlt();
   $('mm-title').textContent = b.name.toUpperCase();
+  if (!$('mm-boards').hidden) $('mm-boards').innerHTML = mapBoardsHTML();
 }
 function mapAlt() {
   const b = MAPS.board, el = $('mm-alt'); if (!el || !b) return;
-  el.textContent = `Map "${b.name}" with ${b.nodes.length} shape${b.nodes.length === 1 ? '' : 's'}, ${b.edges.length} connection${b.edges.length === 1 ? '' : 's'} and ${b.strokes.length} drawing${b.strokes.length === 1 ? '' : 's'}.` + (b.nodes.length ? ' Shapes: ' + b.nodes.map(n => n.text || 'empty').join(', ') + '.' : '');
+  el.textContent = `Map "${b.name}" (${MAPS.list.length} map${MAPS.list.length === 1 ? '' : 's'} in total) with ${b.nodes.length} shape${b.nodes.length === 1 ? '' : 's'}, ${b.edges.length} connection${b.edges.length === 1 ? '' : 's'} and ${b.strokes.length} drawing${b.strokes.length === 1 ? '' : 's'}.` + (b.nodes.length ? ' Shapes: ' + b.nodes.map(n => n.text || 'empty').join(', ') + '.' : '');
 }
 
 /* ── selection and the shape toolbar ── */
 function mapSelect(id) {
+  if (MPV.multi.size) { const was = [...MPV.multi]; MPV.multi.clear(); was.forEach(x => { const n = mapNode(x); if (n) mapNodeEl(n); }); $('mm-multi').hidden = true; }
   const prev = MPV.sel; MPV.sel = id || null;
   if (prev && prev !== MPV.sel) { const p = mapNode(prev); if (p) mapNodeEl(p); }
   if (MPV.sel) { const o = mapNode(MPV.sel); if (o) mapNodeEl(o); else MPV.sel = null; }
   if (MPV.connect && !MPV.sel) mapConnect(false);
   $('mm-sel').hidden = !MPV.sel || MPV.draw; $('mm-url').hidden = true; $('mm-sel-main').hidden = false;
-  if (MPV.sel) { const o = mapNode(MPV.sel); document.querySelectorAll('#mm-sel [data-mcol]').forEach(b => b.classList.toggle('on', b.dataset.mcol === o.c)); }
+  if (MPV.sel) { const o = mapNode(MPV.sel); document.querySelectorAll('#mm-sel [data-mcol]').forEach(b => b.classList.toggle('on', b.dataset.mcol === o.c)); $('mm-noimg').hidden = !o.img; }
+}
+function mapSelectMany(ids) {
+  ids = ids.filter(id => mapNode(id));
+  if (ids.length <= 1) { mapSelect(ids[0] || null); return; }
+  mapSelect(null); ids.forEach(id => MPV.multi.add(id)); ids.forEach(id => mapNodeEl(mapNode(id)));
+  $('mm-multi').hidden = MPV.draw; $('mm-multi-n').textContent = ids.length + ' SELECTED';
 }
 function mapConnect(on) { MPV.connect = on; const b = document.querySelector('[data-mm="connect"]'); if (b) { b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); } }
 function mapSpot(w, h) { const r = mpView().getBoundingClientRect(), [cx, cy] = mapPt(r.left + r.width / 2, r.top + r.height / 2); return [Math.round(cx - w / 2 + (Math.random() - .5) * 60), Math.round(cy - h / 2 + (Math.random() - .5) * 60)]; }
 function mapAdd(kind) {
   const before = mapSnap(), w = kind === 'circle' ? 130 : 170, h = kind === 'circle' ? 130 : 70, [x, y] = mapSpot(w, h);
-  const o = { id: uid('n'), kind, x, y, w, h, text: '', c: '#3a3f49', url: '' };
+  const o = { id: uid('n'), kind, x, y, w, h, text: '', c: '#3a3f49', url: '', img: '' };
   MAPS.board.nodes.push(o); mapNodeEl(o); mapCommit(before); mapSelect(o.id);
-  setTimeout(() => mapEditText(o.id, true), 30);
+  mapEditText(o.id, true);   /* right away, inside the tap: a phone only opens its keyboard for a focus made during the tap */
 }
 function mapEditText(id, fresh) {
   const o = mapNode(id); if (!o) return; const el = mapNodeEl(o), t = el.firstChild, before = mapSnap();
@@ -8589,16 +8675,90 @@ function mapEditText(id, fresh) {
   t.addEventListener('blur', done); t.addEventListener('keydown', key);
 }
 function mapDelete() {
-  const id = MPV.sel, o = mapNode(id); if (!o) return;
-  const n = MAPS.board.edges.filter(e => e[0] === id || e[1] === id).length;
+  const ids = new Set(MPV.multi.size ? MPV.multi : MPV.sel ? [MPV.sel] : []); if (!ids.size) return;
+  const n = MAPS.board.edges.filter(e => ids.has(e[0]) || ids.has(e[1])).length, many = ids.size > 1;
   const go = () => {
     const before = mapSnap(), b = MAPS.board;
-    b.nodes = b.nodes.filter(x => x.id !== id); b.edges = b.edges.filter(e => e[0] !== id && e[1] !== id);
-    const el = document.getElementById('mmn-' + id); if (el) el.remove();
-    $('mm-lines').querySelectorAll('line').forEach(l => { const k = l.dataset.k.split('|'); if (k[0] === id || k[1] === id) l.remove(); });
-    mapSelect(null); mapCommit(before);
+    b.nodes = b.nodes.filter(x => !ids.has(x.id)); b.edges = b.edges.filter(e => !ids.has(e[0]) && !ids.has(e[1]));
+    ids.forEach(id => { const el = document.getElementById('mmn-' + id); if (el) el.remove(); });
+    $('mm-lines').querySelectorAll('line').forEach(l => { const k = l.dataset.k.split('|'); if (ids.has(k[0]) || ids.has(k[1])) l.remove(); });
+    MPV.multi.clear(); mapSelect(null); mapCommit(before);
   };
-  if (n) confirmBox(`Delete this shape and its ${n} connection${n > 1 ? 's' : ''}?<br><br>You can bring it back with UNDO.`, 'DELETE', go); else go();
+  const what = many ? `these ${ids.size} shapes` : 'this shape';
+  if (n) confirmBox(`Delete ${what} and ${n} connection${n > 1 ? 's' : ''}?<br><br>You can bring ${many ? 'them' : 'it'} back with UNDO.`, 'DELETE', go); else go();
+}
+
+/* ── pictures: shrunk to at most 360 px on the longest side and saved as JPEG ── */
+function mapImgRead(file) {
+  return new Promise((res, rej) => {
+    if (!file || !/^image\//.test(file.type || 'image/')) { rej(new Error('type')); return; }
+    const u = URL.createObjectURL(file), im = new Image();
+    im.onload = () => {
+      try {
+        const s = Math.min(1, 360 / Math.max(im.naturalWidth, im.naturalHeight)), c = document.createElement('canvas');
+        c.width = Math.max(1, Math.round(im.naturalWidth * s)); c.height = Math.max(1, Math.round(im.naturalHeight * s));
+        const g = c.getContext('2d'); g.fillStyle = '#111318'; g.fillRect(0, 0, c.width, c.height); g.drawImage(im, 0, 0, c.width, c.height);
+        URL.revokeObjectURL(u); res({ src: c.toDataURL('image/jpeg', .8), w: c.width, h: c.height });
+      } catch (e) { URL.revokeObjectURL(u); rej(e); }
+    };
+    im.onerror = () => { URL.revokeObjectURL(u); rej(new Error('decode')); };
+    im.src = u;
+  });
+}
+function mapImgPick(forId) { MPV.imgFor = forId || null; const f = $('mm-file'); f.value = ''; f.click(); }
+function mapImgGot(file) {
+  mapImgRead(file).then(r => {
+    const b = MAPS.board, before = mapSnap(), id = uid('i'); b.imgs = b.imgs || {}; b.imgs[id] = r.src;
+    let o = MPV.imgFor && mapNode(MPV.imgFor);
+    if (o) { o.img = id; mapNodeEl(o); mapCommit(before); mapSelect(o.id); }
+    else {
+      const w = 220, h = Math.round(clamp(w * r.h / r.w, 44, 440)), [x, y] = mapSpot(w, h);
+      o = { id: uid('n'), kind: 'box', x, y, w, h, text: '', c: '#3a3f49', url: '', img: id };
+      b.nodes.push(o); mapNodeEl(o); mapCommit(before); mapSelect(o.id);
+    }
+    MPV.imgFor = null; showToast('PICTURE ADDED');
+  }).catch(() => { MPV.imgFor = null; showToast('THAT PICTURE COULD NOT BE OPENED'); });
+}
+function mapImgClear() { const o = mapNode(MPV.sel); if (!o || !o.img) return; const before = mapSnap(); o.img = ''; mapNodeEl(o); mapCommit(before); mapSelect(o.id); }
+
+/* ── several maps ── */
+function mapBoardsHTML() {
+  const cur = MAPS.board && MAPS.board.id;
+  return `<div class="mm-bl" role="list">${MAPS.list.slice().sort((a, b) => a.name.localeCompare(b.name)).map(b => `<button type="button" role="listitem" class="mm-bi ${b.id === cur ? 'on' : ''}" data-mm="board" data-id="${esc(b.id)}" aria-current="${b.id === cur}"><b>${esc(b.name)}</b><small>${b.nodes.length} SHAPE${b.nodes.length === 1 ? '' : 'S'}</small></button>`).join('')}</div>
+    <div class="mm-ren" id="mm-ren" hidden><input id="mm-ren-in" maxlength="60" aria-label="Map name" autocomplete="off"><button type="button" data-mm="ren-ok">SAVE</button></div>
+    <div class="mm-bact"><button type="button" data-mm="b-new">＋ NEW MAP</button><button type="button" data-mm="b-ren">RENAME</button><button type="button" class="mm-del" data-mm="b-del">DELETE</button></div>`;
+}
+function mapBoards(open) {
+  const p = $('mm-boards'); open = open == null ? p.hidden : open;
+  p.hidden = !open; $('mm-title-b').setAttribute('aria-expanded', open);
+  if (open) { mapSelect(null); p.innerHTML = mapBoardsHTML(); }
+}
+function mapSwitch(id) {
+  const b = MAPS.list.find(x => x.id === id); if (!b) return;
+  if (MPV.editing && document.activeElement) document.activeElement.blur();
+  if (b !== MAPS.board) { mapFlush(); MAPS.board = b; MAPS.undo = []; MAPS.redo = []; }
+  try { localStorage.setItem(MAP_CUR, b.id); } catch (e) {}
+  mapSelect(null); mapConnect(false); $('mm-nodes').textContent = ''; mapRenderAll();
+  if (b.view.x === 0 && b.view.y === 0) mapFit();
+}
+function mapBoardNew() {
+  const n = MAPS.list.length + 1, b = mapNew('Map ' + n);
+  MAPS.list.push(b); mapSwitch(b.id); mapTouch(); mapBoards(false); showToast('NEW MAP');
+}
+function mapBoardRename(v) {
+  v = String(v || '').trim().slice(0, 60); if (!v) { showToast('GIVE THE MAP A NAME'); return; }
+  MAPS.board.name = v; mapTouch(); mapRenderAll(); $('mm-boards').innerHTML = mapBoardsHTML();
+}
+function mapBoardDelete() {
+  const b = MAPS.board; if (!b) return;
+  confirmBox(`Delete the map "${esc(b.name)}"?<br><br>Its ${b.nodes.length} shape${b.nodes.length === 1 ? '' : 's'} and drawings are removed from this device. This cannot be undone.`, 'DELETE MAP', () => {
+    if (MAPS.stale || mapRevOther()) { MAPS.stale = true; mapStaleBar(); return; }
+    clearTimeout(MAPS.saveT); MAPS.dirty = false;
+    mapIdbDel(b.id).then(() => { const r = TAB_ID + ':' + Date.now(); MAPS.rev = r; try { localStorage.setItem(MAP_REV, r); } catch (e) {} }).catch(() => mapWarn(true));
+    MAPS.list = MAPS.list.filter(x => x !== b);
+    if (!MAPS.list.length) { const s = mapStarter(); MAPS.list.push(s); MAPS.board = s; mapTouch(); }
+    MAPS.board = null; mapSwitch(MAPS.list[MAPS.list.length - 1].id); mapBoards(true); showToast('MAP DELETED');
+  });
 }
 function mapSetColor(c) { const o = mapNode(MPV.sel); if (!o || o.c === c) return; const before = mapSnap(); o.c = c; mapNodeEl(o); mapCommit(before); mapSelect(o.id); }
 function mapSetLink(v) {
@@ -8612,19 +8772,21 @@ function mapDrawMode(on) {
   MPV.draw = on; MPV.cur = null; if (MPV.curEl) { MPV.curEl.remove(); MPV.curEl = null; }
   const pg = $('pg-map'); pg.classList.toggle('mm-drawing', on); pg.classList.toggle('mm-erase', on && MPV.tool === 'erase');
   $('mm-draw').hidden = !on; $('mm-tools').hidden = on; $('mm-hint').hidden = on;
-  if (on) { mapSelect(null); mapConnect(false); } else mapSelect(MPV.sel);
+  if (on) { mapSelect(null); mapConnect(false); mapBoxMode(false); $('mm-boards').hidden = true; } else mapSelect(MPV.sel);
 }
+function mapBoxMode(on) { MPV.box = on; const b = document.querySelector('[data-mm="selmode"]'); if (b) { b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); } }
 function mapTool(t) { MPV.tool = t; document.querySelectorAll('#mm-draw [data-tool]').forEach(b => { b.classList.toggle('on', b.dataset.tool === t); b.setAttribute('aria-pressed', b.dataset.tool === t); }); $('pg-map').classList.toggle('mm-erase', MPV.draw && t === 'erase'); }
 
 /* ── pointers: one finger pans or draws; two fingers pinch-zoom and pan, even while drawing ── */
-const mapPtrs = new Map(); let mapPinch = null, mapErase = null, mapDrag = null;
+const mapPtrs = new Map(); let mapPinch = null, mapErase = null, mapDrag = null, mapBand = null;
 function mapPinchStart() {
   const [a, b] = [...mapPtrs.values()], v = MAPS.board.view, r = mpView().getBoundingClientRect();
   mapPinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]) || 1, k: v.k, x: v.x, y: v.y, mx: (a[0] + b[0]) / 2 - r.left, my: (a[1] + b[1]) / 2 - r.top };
   if (MPV.cur) { MPV.cur = null; if (MPV.curEl) { MPV.curEl.remove(); MPV.curEl = null; } }
   if (mapErase) { mapCommit(mapErase); mapErase = null; }
+  if (mapBand) { mapBand.el.remove(); mapBand = null; }
   /* a finger that started on a shape was dragging it: put the shape back, the two fingers now zoom */
-  if (mapDrag) { const d = mapDrag, o = mapNode(d.id); mapDrag = null; if (o) { o.x = d.ox; o.y = d.oy; o.w = d.ow; o.h = d.oh; mapNodeEl(o); mapLinesFor(o.id); } }
+  if (mapDrag) { const d = mapDrag; mapDrag = null; (d.group || [{ id: d.id, ox: d.ox, oy: d.oy }]).forEach(g => { const o = mapNode(g.id); if (!o) return; o.x = g.ox; o.y = g.oy; if (!d.group) { o.w = d.ow; o.h = d.oh; } mapNodeEl(o); mapLinesFor(o.id); }); }
 }
 function mapEraseAt(cx, cy) {
   const el = document.elementFromPoint(cx, cy), g = el && el.closest && el.closest('#mm-ink g[data-sid]'); if (!g) return;
@@ -8635,7 +8797,12 @@ function mapViewDown(e) {
   mapPtrs.set(e.pointerId, [e.clientX, e.clientY]); try { mpView().setPointerCapture(e.pointerId); } catch (er) {}
   if (mapPtrs.size === 2) { mapPinchStart(); return; }
   if (mapPtrs.size !== 1) return;
-  if (!MPV.draw) { mpView().classList.add('pan'); if (MPV.editing) document.activeElement.blur(); mapSelect(null); return; }
+  if (!MPV.draw) {
+    if (MPV.editing) document.activeElement.blur();
+    $('mm-boards').hidden = true;
+    if (MPV.box || e.shiftKey) { const r = mpView().getBoundingClientRect(), el = document.createElement('div'); el.className = 'mm-band'; mpView().appendChild(el); mapBand = { x0: e.clientX - r.left, y0: e.clientY - r.top, x1: e.clientX - r.left, y1: e.clientY - r.top, el }; mapBandDraw(); return; }
+    mpView().classList.add('pan'); mapSelect(null); return;
+  }
   if (MPV.tool === 'erase') { mapErase = mapSnap(); mapEraseAt(e.clientX, e.clientY); return; }
   const [x, y] = mapPt(e.clientX, e.clientY);
   MPV.cur = MPV.tool === 'pen' ? { id: uid('s'), type: 'pen', pts: [[x, y]], c: MPV.ink, w: MPV.w } : { id: uid('s'), type: MPV.tool, x0: x, y0: y, x1: x, y1: y, c: MPV.ink, w: MPV.w };
@@ -8651,6 +8818,7 @@ function mapViewMove(e) {
     v.x = mx - (mapPinch.mx - mapPinch.x) * nk / mapPinch.k; v.y = my - (mapPinch.my - mapPinch.y) * nk / mapPinch.k; v.k = nk; mapApply(); mapTouchView(); return;
   }
   if (mapPtrs.size !== 1) return;
+  if (mapBand) { const r = mpView().getBoundingClientRect(); mapBand.x1 = e.clientX - r.left; mapBand.y1 = e.clientY - r.top; mapBandDraw(); return; }
   if (!MPV.draw) { v.x += e.clientX - p[0]; v.y += e.clientY - p[1]; mapApply(); mapTouchView(); return; }
   if (MPV.tool === 'erase') { if (mapErase) mapEraseAt(e.clientX, e.clientY); return; }
   if (!MPV.cur) return;
@@ -8661,12 +8829,18 @@ function mapViewMove(e) {
 function mapViewUp(e) {
   mapPtrs.delete(e.pointerId); if (mapPtrs.size < 2) mapPinch = null; if (!mapPtrs.size) mpView().classList.remove('pan');
   if (mapPtrs.size) return;
+  if (mapBand) {
+    const B = mapBand; mapBand = null; B.el.remove(); mapBoxMode(false);
+    const v = MAPS.board.view, x0 = (Math.min(B.x0, B.x1) - v.x) / v.k, x1 = (Math.max(B.x0, B.x1) - v.x) / v.k, y0 = (Math.min(B.y0, B.y1) - v.y) / v.k, y1 = (Math.max(B.y0, B.y1) - v.y) / v.k;
+    mapSelectMany(MAPS.board.nodes.filter(n => n.x < x1 && n.x + n.w > x0 && n.y < y1 && n.y + n.h > y0).map(n => n.id)); return;
+  }
   if (mapErase) { const b = mapErase; mapErase = null; mapCommit(b); return; }
   const c = MPV.cur; if (!c) return;
   MPV.cur = null; const el = MPV.curEl; MPV.curEl = null;
   if (c.type === 'pen' || Math.hypot(c.x1 - c.x0, c.y1 - c.y0) > 4) { const before = mapSnap(); MAPS.board.strokes.push(c); mapCommit(before); } else if (el) el.remove();
 }
-/* a shape: drag to move, the corner handle resizes, a clean tap opens its link */
+function mapBandDraw() { const B = mapBand, s = B.el.style; s.left = Math.min(B.x0, B.x1) + 'px'; s.top = Math.min(B.y0, B.y1) + 'px'; s.width = Math.abs(B.x1 - B.x0) + 'px'; s.height = Math.abs(B.y1 - B.y0) + 'px'; }
+/* a shape: drag to move (all selected shapes move together), the corner handle resizes, a clean tap opens its link */
 function mapNodeDown(e) {
   const el = e.target.closest('.mm-n'); if (!el || MPV.draw || e.button > 0) return;
   if (e.target.closest('.mm-t[contenteditable=true]')) return;
@@ -8679,6 +8853,12 @@ function mapNodeDown(e) {
   mapPtrs.set(e.pointerId, [e.clientX, e.clientY]);
   if (mapPtrs.size >= 2) { mapPinchStart(); return; }
   if (MPV.editing && MPV.editing !== o.id) document.activeElement.blur();
+  $('mm-boards').hidden = true;
+  if (MPV.multi.size > 1 && MPV.multi.has(o.id) && !e.target.classList.contains('mm-h')) {
+    mapDrag = { id: o.id, pid: e.pointerId, sx: e.clientX, sy: e.clientY, moved: false, before: mapSnap(), group: [...MPV.multi].map(id => { const n = mapNode(id); return { id, ox: n.x, oy: n.y }; }) };
+    try { el.setPointerCapture(e.pointerId); } catch (er) {}
+    return;
+  }
   mapSelect(o.id);
   mapDrag = { id: o.id, pid: e.pointerId, resize: e.target.classList.contains('mm-h'), sx: e.clientX, sy: e.clientY, ox: o.x, oy: o.y, ow: o.w, oh: o.h, moved: false, before: mapSnap() };
   try { el.setPointerCapture(e.pointerId); } catch (er) {}
@@ -8689,6 +8869,10 @@ function mapNodeMove(e) {
   const d = mapDrag; if (!d || d.pid !== e.pointerId) return;
   const o = mapNode(d.id), k = MAPS.board.view.k, dx = (e.clientX - d.sx) / k, dy = (e.clientY - d.sy) / k; if (!o) return;
   if (!d.moved && Math.abs(dx) + Math.abs(dy) < 4 / k) return; d.moved = true;
+  if (d.group) {
+    d.group.forEach(g => { const n = mapNode(g.id); if (!n) return; n.x = Math.round(g.ox + dx); n.y = Math.round(g.oy + dy); const ne = document.getElementById('mmn-' + n.id); ne.style.left = n.x + 'px'; ne.style.top = n.y + 'px'; });
+    const ids = new Set(d.group.map(g => g.id)); MAPS.board.edges.forEach(ed => { if (ids.has(ed[0]) || ids.has(ed[1])) mapLine(ed); }); return;
+  }
   if (d.resize) { o.w = Math.round(Math.max(70, d.ow + dx)); o.h = o.kind === 'circle' ? o.w : Math.round(Math.max(44, d.oh + dy)); }
   else { o.x = Math.round(d.ox + dx); o.y = Math.round(d.oy + dy); }
   const el = document.getElementById('mmn-' + o.id); el.style.left = o.x + 'px'; el.style.top = o.y + 'px'; el.style.width = o.w + 'px'; el.style.height = o.h + 'px';
@@ -8698,6 +8882,7 @@ function mapNodeUp(e) {
   if (mapPtrs.has(e.pointerId)) { mapPtrs.delete(e.pointerId); if (mapPtrs.size < 2) mapPinch = null; if (!mapPtrs.size) mpView().classList.remove('pan'); }
   const d = mapDrag; if (!d || d.pid !== e.pointerId) return; mapDrag = null;
   if (d.moved) { mapCommit(d.before); return; }
+  if (d.group) return;
   const o = mapNode(d.id); if (o && o.url && !d.resize && e.type === 'pointerup' && !MPV.editing) mapOpenUrl(o.url);
 }
 
@@ -8737,7 +8922,20 @@ function mapNodeUp(e) {
     else if (a === 'url-ok') { if (mapSetLink($('mm-url-in').value) !== false) { $('mm-url').hidden = true; $('mm-sel-main').hidden = false; } }
     else if (a === 'url-no') { mapSetLink(''); $('mm-url').hidden = true; $('mm-sel-main').hidden = false; }
     else if (a === 'width') { MPV.w = MPV.w === 3 ? 7 : 3; b.textContent = MPV.w === 3 ? 'THIN' : 'THICK'; }
+    else if (a === 'img-add') mapImgPick(null);
+    else if (a === 'img-set') mapImgPick(MPV.sel);
+    else if (a === 'img-del') mapImgClear();
+    else if (a === 'selmode') { mapBoxMode(!MPV.box); if (MPV.box) showToast('DRAG A BOX AROUND THE SHAPES'); }
+    else if (a === 'multi-done') mapSelect(null);
+    else if (a === 'boards') mapBoards();
+    else if (a === 'board') { mapSwitch(b.dataset.id); mapBoards(false); }
+    else if (a === 'b-new') mapBoardNew();
+    else if (a === 'b-ren') { const r = $('mm-ren'); r.hidden = false; $('mm-ren-in').value = MAPS.board.name; $('mm-ren-in').focus(); $('mm-ren-in').select(); }
+    else if (a === 'ren-ok') mapBoardRename($('mm-ren-in').value);
+    else if (a === 'b-del') mapBoardDelete();
   });
+  $('mm-file').addEventListener('change', e => { const f = e.target.files && e.target.files[0]; if (f) mapImgGot(f); else MPV.imgFor = null; });
+  $('mm-boards').addEventListener('keydown', e => { if (e.target.id === 'mm-ren-in' && e.key === 'Enter') { e.preventDefault(); mapBoardRename(e.target.value); } });
   $('mm-url-in').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); document.querySelector('[data-mm="url-ok"]').click(); } });
   document.querySelectorAll('#mm-sel [data-mcol]').forEach(b => b.addEventListener('click', () => mapSetColor(b.dataset.mcol)));
   document.querySelectorAll('#mm-draw [data-tool]').forEach(b => b.addEventListener('click', () => mapTool(b.dataset.tool)));
@@ -8746,14 +8944,14 @@ function mapNodeUp(e) {
     if (curPage !== 'pg-map' || document.querySelector('.overlay.open,.modal.open')) return;
     const typing = e.target.matches && e.target.matches('input,textarea,[contenteditable=true]');
     if (e.key === 'Escape' && !typing) {
-      if (MPV.draw) mapDrawMode(false); else if (MPV.connect) mapConnect(false); else if (MPV.sel) mapSelect(null); else return;
+      if (MPV.draw) mapDrawMode(false); else if (!$('mm-boards').hidden) mapBoards(false); else if (MPV.box) mapBoxMode(false); else if (MPV.connect) mapConnect(false); else if (MPV.sel || MPV.multi.size) mapSelect(null); else return;
       e.preventDefault(); e.stopImmediatePropagation(); return;
     }
     if (typing) return;
     const mod = e.metaKey || e.ctrlKey;
     if (mod && e.key.toLowerCase() === 'z') { e.preventDefault(); if (e.shiftKey) mapRedo(); else mapUndo(); }
     else if (mod && e.key.toLowerCase() === 'y') { e.preventDefault(); mapRedo(); }
-    else if ((e.key === 'Delete' || e.key === 'Backspace') && MPV.sel) { e.preventDefault(); mapDelete(); }
+    else if ((e.key === 'Delete' || e.key === 'Backspace') && (MPV.sel || MPV.multi.size)) { e.preventDefault(); mapDelete(); }
   }, true);
 })();
 
@@ -8767,7 +8965,7 @@ function mapOpen() {
   };
   if (MAPS.loaded) go(); else mapLoad().then(go);
 }
-function mapLeave() { if (MPV.editing && document.activeElement) document.activeElement.blur(); mapDrawMode(false); mapSelect(null); mapPtrs.clear(); mapPinch = null; mapDrag = null; mapFlush(); }
+function mapLeave() { if (MPV.editing && document.activeElement) document.activeElement.blur(); mapDrawMode(false); mapBoxMode(false); $('mm-boards').hidden = true; mapSelect(null); mapPtrs.clear(); mapPinch = null; mapDrag = null; mapFlush(); }
 const _navMap = navigateTo;
 navigateTo = function (id) {
   if (curPage === 'pg-map' && id !== 'pg-map') mapLeave();
@@ -8776,6 +8974,249 @@ navigateTo = function (id) {
   return r;
 };
 mapLoad();
+
+/* ══════════════════════════════════════════════════════
+   v0.11.0  ·  MAP ↔ MISSIONS
+   A box can become a one-time task (the game's own addDayTask), stay linked to it and show its state.
+   The link lives only in the map's storage (node.task = { d: day, id: task id, a: area }); the game save is untouched.
+   ══════════════════════════════════════════════════════ */
+const MAP_TASK_MARK = 'From your map.';
+/* where the linked task stands: null (no link), 'gone', 'open', 'running', 'done' or 'missed' */
+function mapTaskState(n) {
+  const L = n && n.task; if (!L) return null;
+  const t = (G.dayTasks[L.d] || []).find(x => x.id === L.id); if (!t || !G.areas[t.areaId]) return 'gone';
+  const today = dk();
+  if (((G.history[L.d] || {}).completed || []).includes(L.id)) return 'done';
+  if (L.d < today) return 'missed';
+  if (L.d === today) { const S = typeof sessionFor === 'function' ? sessionFor(t.areaId) : null; if (S && S.running) return 'running'; }
+  return 'open';
+}
+const MAP_STATE_TXT = { open: 'OPEN', running: 'RUNNING', done: 'DONE', missed: 'MISSED' };
+/* a deleted task quietly unlinks its box (the box keeps its text) */
+function mapUnlinkGone(b) {
+  let any = false;
+  (b || MAPS.board).nodes.forEach(n => { if (n.task && mapTaskState(n) === 'gone') { delete n.task; any = true; } });
+  if (any && (!b || b === MAPS.board)) mapTouch();
+  return any;
+}
+function mapBadges() { if (!MAPS.board) return; mapUnlinkGone(); MAPS.board.nodes.forEach(n => { if (n.task || n.idea || n.area) mapNodeEl(n); }); mapIdeasUI(); }
+/* find the box that holds a task, on any map */
+function mapFindTask(id) {
+  for (const b of MAPS.list) { const n = b.nodes.find(x => x.task && x.task.id === id); if (n) return { b, n }; }
+  return null;
+}
+function mapIdeas() {
+  const out = []; MAPS.list.forEach(b => b.nodes.forEach(n => { if (n.idea && (!n.task || mapTaskState(n) === 'gone')) out.push({ b, n }); }));
+  return out;
+}
+/* page 2: a small count on the MAP tile, only when there are ideas waiting */
+function mapIdeasUI() {
+  const el = $('fb-ideas'); if (!el) return;
+  const k = MAPS.loaded ? mapIdeas().length : 0;
+  el.hidden = !k; el.textContent = k + (k === 1 ? ' IDEA' : ' IDEAS');
+  el.setAttribute('aria-label', `${k} idea${k === 1 ? '' : 's'} not yet missions. Open them in the map`);
+  el.title = `${k} idea${k === 1 ? '' : 's'} not yet missions`;
+}
+
+/* ── open the mission behind a box ── */
+function mapOpenTask(n) {
+  const st = mapTaskState(n);
+  if (st === 'gone') { delete n.task; mapNodeEl(n); mapTouch(); showToast('THAT MISSION WAS DELETED · THE BOX IS UNLINKED'); return; }
+  const L = n.task;
+  if (L.d === dk()) { openTaskView(L.a, L.id); if (!$('taskview').classList.contains('open')) showToast('COULD NOT OPEN THAT MISSION'); return; }
+  const [y, m] = L.d.split('-').map(Number); calYear = y; calMonth = m - 1;
+  navigateTo('pg-calendar'); setTimeout(() => {
+    try {
+      openDayPanel(L.d);
+      /* unfold the life area that holds this task, so it is visible straight away */
+      const btn = document.querySelector(`#day-panel [data-map-open="${CSS.escape(L.id)}"]`), sec = btn && btn.closest('.dpa');
+      if (sec && !sec.classList.contains('open')) { sec.classList.add('open'); const t = sec.querySelector('[data-act="dpa"]'); if (t) t.setAttribute('aria-expanded', true); }
+    } catch (e) {}
+  }, 520);
+}
+/* ── open a box from its mission: the right map, centred and highlighted ── */
+let mapFocus = null;
+function mapOpenInMap(taskId) {
+  const f = MAPS.loaded ? mapFindTask(taskId) : null;
+  if (!f) { showToast('THIS MISSION IS NOT ON A MAP ANY MORE'); return false; }
+  if ($('taskview').classList.contains('open')) closeTaskView();
+  if (typeof closeDayPanel === 'function' && $('day-panel') && $('day-panel').classList.contains('open')) closeDayPanel();
+  mapFocus = { b: f.b.id, n: f.n.id };
+  if (curPage === 'pg-map') mapApplyFocus(); else navigateTo('pg-map');
+  return true;
+}
+function mapCenterOn(n) {
+  const v = MAPS.board.view, r = mpView().getBoundingClientRect(), k = Math.max(v.k, 1);
+  MAPS.board.view = { k, x: r.width / 2 - (n.x + n.w / 2) * k, y: r.height / 2 - (n.y + n.h / 2) * k }; mapApply(); mapTouchView();
+}
+function mapApplyFocus() {
+  const F = mapFocus; mapFocus = null; if (!F) return;
+  if (F.ideas) { mapFilter(true); return; }
+  if (!MAPS.list.some(b => b.id === F.b)) { showToast('THAT MAP NO LONGER EXISTS'); return; }
+  mapSwitch(F.b); const n = mapNode(F.n);
+  if (!n) { showToast('THAT BOX IS NO LONGER ON THE MAP'); return; }
+  mapCenterOn(n); mapSelect(n.id);
+  const el = document.getElementById('mmn-' + n.id); el.classList.remove('mm-hl'); void el.offsetWidth; el.classList.add('mm-hl');
+  setTimeout(() => el.classList.remove('mm-hl'), 2600);
+}
+/* ── ideas filter: everything except the waiting ideas fades back ── */
+function mapFilter(on) {
+  const pg = $('pg-map'); MPV.filter = on;
+  if (on) {
+    const all = mapIdeas(); if (!all.length) { MPV.filter = false; pg.classList.remove('mm-filter'); $('mm-filt').hidden = true; showToast('NO IDEAS WAITING'); return; }
+    const cnt = {}; all.forEach(x => { cnt[x.b.id] = (cnt[x.b.id] || 0) + 1; });
+    if (!cnt[MAPS.board.id]) mapSwitch(Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a])[0]);
+    const here = cnt[MAPS.board.id] || 0, other = all.length - here;
+    $('mm-filt-t').textContent = `${here} IDEA${here === 1 ? '' : 'S'} NOT YET MISSIONS${other ? ` · ${other} ON OTHER MAPS` : ''}`;
+    const ids = new Set(all.filter(x => x.b === MAPS.board).map(x => x.n.id));
+    MAPS.board.nodes.forEach(n => { const el = document.getElementById('mmn-' + n.id); if (el) el.classList.toggle('mm-isidea', ids.has(n.id)); });
+    const first = MAPS.board.nodes.find(n => ids.has(n.id)); if (first) mapCenterOn(first);
+  } else document.querySelectorAll('#mm-nodes .mm-isidea').forEach(el => el.classList.remove('mm-isidea'));
+  pg.classList.toggle('mm-filter', !!MPV.filter); $('mm-filt').hidden = !MPV.filter;
+}
+
+/* ── → MISSION: a small form, then the game's own addDayTask ── */
+function mapMissionForm() {
+  const n = mapNode(MPV.sel); if (!n) return;
+  if (n.task && mapTaskState(n) !== 'gone') { mapOpenTask(n); return; }
+  const areas = Object.values(G.areas); if (!areas.length) { showToast('ADD A LIFE AREA FIRST'); return; }
+  const pick = n.area && G.areas[n.area] ? n.area : '';
+  $('mm-mf-title').value = (n.text || '').replace(/\s+/g, ' ').trim().slice(0, 80);
+  $('mm-mf-area').innerHTML = `<option value="" ${pick ? '' : 'selected'} disabled>CHOOSE AN AREA</option>` + areas.map(a => `<option value="${esc(a.id)}" ${a.id === pick ? 'selected' : ''}>${esc(a.name)}</option>`).join('');
+  $('mm-mf-min').value = ''; $('mm-mf-day').value = dk(); $('mm-mf-day').min = dk();
+  $('mm-mform').hidden = false; $('mm-mf-title').focus();
+}
+function mapMissionCreate() {
+  const n = mapNode(MPV.sel); if (!n) { $('mm-mform').hidden = true; return; }
+  const title = $('mm-mf-title').value.trim(), area = $('mm-mf-area').value, day = $('mm-mf-day').value || dk(), min = clamp(Math.round(+$('mm-mf-min').value || 0), 0, 1440);
+  if (!area) { showToast('PICK AN AREA'); return; }
+  const before = (G.dayTasks[day] || []).length;
+  const desc = (min ? `About ${min} min. ` : '') + MAP_TASK_MARK;
+  if (!addDayTask(day, area, title, desc, 50, 10)) return;           /* the game's own one-time task: same rules, same rewards */
+  const list = G.dayTasks[day], t = list.length > before ? list[list.length - 1] : null; if (!t) return;
+  const b0 = mapSnap(); n.task = { d: day, id: t.id, a: area }; mapNodeEl(n); mapCommit(b0);
+  $('mm-mform').hidden = true; mapSelect(n.id); mapIdeasUI();
+  showToast(day === dk() ? 'MISSION ADDED FOR TODAY' : 'MISSION ADDED FOR ' + prettyDate(day).toUpperCase());
+}
+/* ── idea toggle and area link ── */
+function mapToggleIdea() { const n = mapNode(MPV.sel); if (!n) return; const b = mapSnap(); n.idea = !n.idea; mapNodeEl(n); mapCommit(b); mapSelect(n.id); mapIdeasUI(); }
+function mapAreaRow(open) {
+  $('mm-area').hidden = !open; $('mm-sel-main').hidden = open;
+  if (!open) return;
+  const n = mapNode(MPV.sel);
+  $('mm-area-list').innerHTML = `<button type="button" data-mm-area="" class="${n && !n.area ? 'on' : ''}" aria-label="No area">NONE</button>` + Object.values(G.areas).map(a => `<button type="button" data-mm-area="${esc(a.id)}" class="${n && n.area === a.id ? 'on' : ''}" aria-label="${esc(a.name)}"><i style="background:${esc(a.color)}"></i>${esc(a.name.toUpperCase())}</button>`).join('');
+}
+function mapSetArea(id) { const n = mapNode(MPV.sel); if (!n) return; const b = mapSnap(); if (id) n.area = id; else delete n.area; mapNodeEl(n); mapCommit(b); mapAreaRow(false); mapSelect(n.id); }
+
+/* ── wiring ── */
+(function () {
+  $('pg-map').addEventListener('click', e => {
+    const b = e.target.closest('[data-mm3]'); if (b) {
+      const a = b.dataset.mm3;
+      if (a === 'mission') mapMissionForm();
+      else if (a === 'mf-ok') mapMissionCreate();
+      else if (a === 'mf-no') $('mm-mform').hidden = true;
+      else if (a === 'idea') mapToggleIdea();
+      else if (a === 'area') mapAreaRow(true);
+      else if (a === 'area-back') mapAreaRow(false);
+      else if (a === 'filt-off') mapFilter(false);
+      return;
+    }
+    const ar = e.target.closest('[data-mm-area]'); if (ar) { mapSetArea(ar.dataset.mmArea); return; }
+    const bd = e.target.closest('.mm-badge'); if (bd) { const n = mapNode(bd.closest('.mm-n').dataset.id); if (n) mapOpenTask(n); }
+  });
+  $('mm-mform').addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.tagName === 'INPUT') { e.preventDefault(); mapMissionCreate(); } if (e.key === 'Escape') { e.stopPropagation(); $('mm-mform').hidden = true; } });
+  const pill = $('fb-ideas');
+  const go = e => { e.stopPropagation(); e.preventDefault(); mapFocus = { ideas: true }; navigateTo('pg-map'); };
+  pill.addEventListener('click', go); pill.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') go(e); });
+  /* "Open in map" from a mission (today's task view) and from the calendar's day list */
+  document.addEventListener('click', e => { const b = e.target.closest && e.target.closest('[data-map-open]'); if (b) { e.stopPropagation(); mapOpenInMap(b.dataset.mapOpen); } });
+})();
+/* the shape's tag: area colour, idea marker and the mission badge */
+const _nodeElV3 = mapNodeEl;
+mapNodeEl = function (o) {
+  const el = _nodeElV3.apply(this, arguments), A = o.area && G.areas[o.area];
+  if (A) el.style.setProperty('--c', A.color);
+  const st = mapTaskState(o); let bd = el.querySelector('.mm-badge'), tg = el.querySelector('.mm-tag');
+  if (st && st !== 'gone') {
+    if (!bd) { bd = document.createElement('button'); bd.type = 'button'; bd.className = 'mm-badge'; el.appendChild(bd); }
+    bd.dataset.st = st; bd.textContent = MAP_STATE_TXT[st]; bd.setAttribute('aria-label', `Mission ${MAP_STATE_TXT[st].toLowerCase()}. Open it`);
+  } else if (bd) bd.remove();
+  const tag = (o.idea && !(st && st !== 'gone') ? 'IDEA' : '') + (A ? (o.idea && !(st && st !== 'gone') ? ' · ' : '') + A.name.toUpperCase() : '');
+  if (tag) { if (!tg) { tg = document.createElement('span'); tg.className = 'mm-tag'; el.appendChild(tg); } tg.textContent = tag; } else if (tg) tg.remove();
+  el.classList.toggle('mm-linked', !!(st && st !== 'gone'));
+  return el;
+};
+/* tapping the badge must not start a drag */
+const _nodeDownV3 = mapNodeDown;
+mapNodeDown = function (e) { if (e.target.closest && e.target.closest('.mm-badge')) { e.stopPropagation(); return; } return _nodeDownV3.apply(this, arguments); };
+(function () { const nodes = $('mm-nodes'); nodes.removeEventListener('pointerdown', _nodeDownV3); nodes.addEventListener('pointerdown', e => mapNodeDown(e)); })();
+/* the selection bar shows the box's mission and idea state */
+const _selV3 = mapSelect;
+mapSelect = function (id) {
+  const r = _selV3.apply(this, arguments), n = MPV.sel && mapNode(MPV.sel);
+  $('mm-area').hidden = true; $('mm-mform').hidden = true;
+  if (n) { const st = mapTaskState(n), b = document.querySelector('[data-mm3="mission"]'), i = document.querySelector('[data-mm3="idea"]');
+    b.textContent = st && st !== 'gone' ? 'OPEN MISSION' : '→ MISSION'; i.classList.toggle('on', !!n.idea); i.setAttribute('aria-pressed', !!n.idea); }
+  return r;
+};
+/* clean: keep the links, idea flags and area links */
+const _cleanV3 = mapClean;
+mapClean = function (b) {
+  const src = new Map(((b && Array.isArray(b.nodes)) ? b.nodes : []).filter(n => n && n.id).map(n => [String(n.id), n])), r = _cleanV3.apply(this, arguments);
+  r.nodes.forEach(n => {
+    const s = src.get(n.id) || {}, L = s.task;
+    if (L && typeof L === 'object' && /^\d{4}-\d{2}-\d{2}$/.test(L.d || '') && L.id) n.task = { d: L.d, id: String(L.id), a: String(L.a || '') };
+    if (s.idea) n.idea = true;
+    if (s.area && typeof s.area === 'string') n.area = s.area.slice(0, 80);
+  });
+  return r;
+};
+/* opening the map refreshes badges and applies any pending focus (from a mission or the ideas count) */
+const _openV3 = mapOpen;
+mapOpen = function () {
+  const r = _openV3.apply(this, arguments);
+  const after = () => { if (curPage !== 'pg-map') return; mapBadges(); if (mapFocus) mapApplyFocus(); };
+  if (MAPS.loaded) after(); else mapLoad().then(after);
+  return r;
+};
+const _leaveV3 = mapLeave;
+mapLeave = function () { mapFilter(false); $('mm-mform').hidden = true; return _leaveV3.apply(this, arguments); };
+const _switchV3 = mapSwitch;
+mapSwitch = function () { const r = _switchV3.apply(this, arguments); mapBadges(); return r; };
+const _renderV3 = mapRenderAll;
+mapRenderAll = function () { const r = _renderV3.apply(this, arguments); if (MPV.filter && MAPS.board) mapFilter(true); return r; };
+/* the game changed (a mission done, undone, edited, deleted, a clock started): refresh the badges if the map is showing */
+const _saveV3 = saveState;
+saveState = function () { const r = _saveV3.apply(this, arguments); try { if (curPage === 'pg-map' && MAPS.loaded) mapBadges(); else if (MAPS.loaded) mapIdeasUI(); } catch (e) {} return r; };
+const _timerV3 = saveTimer;
+saveTimer = function () { const r = _timerV3.apply(this, arguments); try { if (curPage === 'pg-map' && MAPS.loaded) mapBadges(); } catch (e) {} return r; };
+const _commitV3 = mapCommit;
+mapCommit = function () { const r = _commitV3.apply(this, arguments); mapIdeasUI(); return r; };
+/* page 2 count: after the maps load, and whenever page 2 is drawn */
+const _profV3 = renderProfile;
+renderProfile = function () { const r = _profV3.apply(this, arguments); try { mapIdeasUI(); } catch (e) {} return r; };
+mapLoad = (function (orig) { return function () { return orig.apply(this, arguments).then(v => { mapIdeasUI(); return v; }); }; })(mapLoad);
+(function wait() { if (MAPS.loaded) { try { mapIdeasUI(); } catch (e) {} } else setTimeout(wait, 300); })();   /* stops as soon as the maps have loaded */
+/* "Open in map" on a mission that sits on a map (or came from one) */
+const _tvV3 = openTaskView;
+openTaskView = function (areaId, id) {
+  const r = _tvV3.apply(this, arguments);
+  try {
+    const foot = document.querySelector('#tv-box .tv-foot'), t = (G.dayTasks[dk()] || []).find(x => x.id === id);
+    if (foot && (mapFindTask(id) || (t && String(t.desc || '').includes(MAP_TASK_MARK)))) foot.insertAdjacentHTML('afterbegin', `<button class="btn" data-map-open="${esc(id)}">OPEN IN MAP</button>`);
+  } catch (e) {}
+  return r;
+};
+const _dpV3 = dpLine;
+dpLine = function (p, h, key, today) {
+  const r = _dpV3.apply(this, arguments);
+  try {
+    const t = p.dayOnly ? (G.dayTasks[key] || []).find(x => x.id === p.id) : null;
+    if (t && (mapFindTask(p.id) || String(t.desc || '').includes(MAP_TASK_MARK))) return r.replace(/<\/div>\s*$/, `<button type="button" class="dp-map" data-map-open="${esc(p.id)}" aria-label="Open in map">MAP</button></div>`);
+  } catch (e) {}
+  return r;
+};
 
 /* ── backups: maps ride along as an extra "maps" field; old backups simply lack it ── */
 function mapBackup() { if (MAPS.dirty) mapFlush(); return MAPS.loaded ? JSON.parse(JSON.stringify(MAPS.list)) : undefined; }
@@ -8793,9 +9234,9 @@ showToast = function (msg) {
   if (msg === 'BACKUP RESTORED' && mapPending && Date.now() - mapPending.at < 10 * 60000) {
     const P = mapPending; mapPending = null;
     if (P.maps.length) setTimeout(() => confirmBox(`This backup also has ${P.maps.length} map${P.maps.length > 1 ? 's' : ''}.<br><br>Replace the maps on this device with them?`, 'REPLACE MAPS', () => {
-      MAPS.list = P.maps; MAPS.board = MAPS.list[MAPS.list.length - 1]; MAPS.undo = []; MAPS.redo = []; MAPS.stale = false; MAPS.loaded = true;
+      MAPS.list = P.maps; let cur = null; try { cur = localStorage.getItem(MAP_CUR); } catch (er) {} MAPS.board = MAPS.list.find(x => x.id === cur) || MAPS.list[MAPS.list.length - 1]; MAPS.undo = []; MAPS.redo = []; MAPS.stale = false; MAPS.loaded = true;
       mapIdbReplace(JSON.parse(JSON.stringify(MAPS.list))).then(() => { MAPS.dirty = false; const rv = TAB_ID + ':' + Date.now(); MAPS.rev = rv; try { localStorage.setItem(MAP_REV, rv); } catch (er) {} _toastMap('MAPS RESTORED'); }).catch(() => mapWarn(true));
-      if (curPage === 'pg-map') mapRenderAll();
+      if (curPage === 'pg-map') { $('mm-nodes').textContent = ''; mapRenderAll(); }
     }), 350);
   }
   return r;
