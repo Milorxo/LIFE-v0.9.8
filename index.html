@@ -1619,6 +1619,18 @@ body.dragging-now { user-select:none; cursor:grabbing; }
 
 
 
+/* ── reminder sound & voice (Developer → Reminders) ── */
+.rs-grid { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:.5rem; }
+.rs-b { display:flex; align-items:center; gap:.7rem; min-height:50px; padding:0 .8rem; border-radius:14px; border:1px solid var(--line); background:transparent; color:var(--text); font:400 .9rem var(--sans); cursor:pointer; text-align:left; }
+.rs-b.on { border-color:rgba(255,255,255,.75); background:rgba(255,255,255,.06); }
+.rs-b i { flex:none; width:26px; height:26px; border-radius:50%; display:grid; place-items:center; border:1px solid var(--line2); font-style:normal; font-size:.62rem; }
+.rs-b small { display:block; color:var(--dim); font-size:.72rem; }
+.rs-row { display:flex; align-items:center; gap:.8rem; flex-wrap:wrap; padding:.55rem 0; }
+.rs-row > span { font:500 .56rem var(--mono); letter-spacing:.22em; color:var(--dim); width:84px; flex:none; }
+.rs-row input[type=range] { flex:1; min-width:140px; accent-color:#cfe3ff; }
+.rs-row output { font:400 .72rem var(--mono); color:var(--muted); width:46px; text-align:right; }
+.rs-row select { flex:1; min-width:0; }
+@media (max-width:520px) { .rs-grid { grid-template-columns:1fr; } }
 /* ── Time Center: clock, stopwatch, timer, focus sessions ── */
 #tc-overlay.tc-ov { background:var(--tcbg, radial-gradient(circle at 50% 30%, #12161e 0%, #06070a 80%)) !important; }
 .tc-wrap { max-width:620px; display:grid; gap:1.3rem; justify-items:center; align-content:start; text-align:center; }
@@ -8096,6 +8108,124 @@ addEventListener('keydown', e => {
 const _coTC2 = closeOverlay;
 closeOverlay = function (id) { if (id === 'tc-overlay') { tcStyleToggle(false); if (tcIsFull()) tcFull(false); } return _coTC2.apply(this, arguments); };
 tcLookApply();
+/* ══════════════════════════════════════════════════════
+   REMINDER SOUND & VOICE
+   Eight reminder sounds made in code, plus the device's own voice reading the reminder out.
+   Saved per device (voices differ between devices). Works while LIFE is open, on screen or in the background.
+   ══════════════════════════════════════════════════════ */
+const RS_KEY = 'life_remsnd';
+const RS = { snd: 0, vol: 70, reps: 1, voice: true, vname: '', rate: 95 };
+try { Object.assign(RS, JSON.parse(localStorage.getItem(RS_KEY) || '{}')); } catch (e) {}
+const rsSave = () => { try { localStorage.setItem(RS_KEY, JSON.stringify(RS)); } catch (e) {} };
+let rsBus = null;
+function rsCtx() {
+  const c = sndCtx(); if (!c || c.state === 'closed') return null;
+  if (c.state === 'suspended') c.resume();
+  if (!rsBus) {
+    rsBus = c.createGain(); rsBus.connect(c.destination);
+    const vb = c.createConvolver(), len = c.sampleRate * 1.8, b = c.createBuffer(2, len, c.sampleRate);
+    for (let ch = 0; ch < 2; ch++) { const d = b.getChannelData(ch); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3); }
+    vb.buffer = b; const wg = c.createGain(); wg.gain.value = .35; vb.connect(wg); wg.connect(rsBus); rsBus.verb = vb;
+  }
+  rsBus.gain.value = clamp(+RS.vol || 0, 0, 100) / 100;
+  return c;
+}
+function rsTone(f, t, o) {
+  o = o || {}; const c = AC, a = o.a == null ? .005 : o.a, d = o.d == null ? 1 : o.d, v = o.v == null ? .25 : o.v;
+  const os = c.createOscillator(), g = c.createGain();
+  os.type = o.type || 'sine'; os.frequency.setValueAtTime(f, t); if (o.slide) os.frequency.exponentialRampToValueAtTime(o.slide, t + d);
+  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(v, t + a); g.gain.exponentialRampToValueAtTime(.0001, t + a + d);
+  os.connect(g); g.connect(rsBus); g.connect(rsBus.verb); os.start(t); os.stop(t + a + d + .05);
+}
+const rsBell = (f, t, v, d) => [1, 2.76, 5.4].forEach((m, i) => rsTone(f * m, t, { v: v / (1 + i * 1.6), d: d / (1 + i * .8) }));
+/* [name, description, length of one play in seconds, play(t)] */
+const RS_SOUNDS = [
+  ['Soft Chime', 'Two gentle notes', 1.4, t => { rsTone(880, t, { v: .22, d: 1.4 }); rsTone(1318.5, t + .18, { v: .2, d: 1.6 }); }],
+  ['Bell', 'One clear ring', 2.4, t => rsBell(659.3, t, .3, 2.6)],
+  ['Marimba', 'Warm wooden run', .9, t => [523.3, 659.3, 784].forEach((f, i) => { rsTone(f, t + i * .12, { v: .3, d: .35 }); rsTone(f * 4, t + i * .12, { v: .05, d: .08 }); })],
+  ['Harp', 'Rising arpeggio', 1.2, t => [392, 493.9, 587.3, 784, 987.8].forEach((f, i) => rsTone(f, t + i * .085, { type: 'triangle', v: .16, d: 1.2 }))],
+  ['Crystal', 'High glassy sparkle', 1.2, t => [1568, 2093, 2637].forEach((f, i) => rsBell(f, t + i * .1, .1, 1.2))],
+  ['Digital', 'Short clean beeps', .7, t => [0, .16, .32].forEach(x => rsTone(1046.5, t + x, { type: 'square', v: .06, a: .002, d: .09 }))],
+  ['Pulse', 'Calm low swell', 1.8, t => { rsTone(220, t, { a: .4, d: 1.4, v: .22 }); rsTone(330, t + .1, { a: .4, d: 1.3, v: .14 }); }],
+  ['Gong', 'Deep and slow', 3.2, t => { rsBell(98, t, .35, 4); rsTone(196, t, { v: .1, d: 3, slide: 190 }); }],
+];
+/* Plays the chosen sound (repeated as set) and returns how long it lasts, in seconds. */
+function rsPlay(i, reps) {
+  const c = rsCtx(), S = RS_SOUNDS[clamp(+i || 0, 0, RS_SOUNDS.length - 1)]; if (!c) return 0;
+  reps = clamp(+reps || 1, 1, 3);
+  for (let r = 0; r < reps; r++) { try { S[3](c.currentTime + .05 + r * S[2]); } catch (e) {} }
+  return reps * S[2];
+}
+const rsSynth = window.speechSynthesis || null;
+function rsVoices() { if (!rsSynth) return []; const vs = rsSynth.getVoices(), en = vs.filter(v => /^en/i.test(v.lang)); return en.length ? en : vs; }
+function rsSay(text) {
+  if (!rsSynth || !RS.voice || !text) return;
+  try {
+    rsSynth.cancel();
+    const u = new SpeechSynthesisUtterance(text), v = rsSynth.getVoices().find(x => x.name === RS.vname);
+    if (v) u.voice = v; u.rate = clamp(+RS.rate || 95, 70, 140) / 100; u.volume = Math.max(.2, clamp(+RS.vol || 0, 0, 100) / 100);
+    rsSynth.speak(u);
+  } catch (e) {}
+}
+/* Reminders now use the chosen sound, then the voice reads them out. The old chime is skipped for reminders only. */
+const _rfRS = remFire;
+remFire = function (title, text) {
+  const R = (G && G.remind) || {}, snd = R.sound;
+  R.sound = false;
+  try { return _rfRS.apply(this, arguments); }
+  finally {
+    R.sound = snd;
+    const dur = snd && (typeof SND === 'undefined' || SND.on !== false) ? rsPlay(RS.snd, RS.reps) : 0;
+    const head = String(title || '').toLowerCase();
+    const words = [head === 'test' || head === 'life' ? 'Reminder' : head, String(text || '')].filter(Boolean).join('. ');
+    setTimeout(() => rsSay(words), Math.min(dur, 2.2) * 1000);
+  }
+};
+function rsHTML() {
+  const vs = rsVoices();
+  return `<div class="dev-section"><label class="dl">REMINDER SOUND & VOICE</label>
+    <div class="dim sm">Pick the sound reminders play, and a voice that reads them out. Tap a sound to hear it. Saved on this device.</div>
+    <div class="rs-grid">${RS_SOUNDS.map((x, i) => `<button type="button" class="rs-b ${+RS.snd === i ? 'on' : ''}" data-rs-snd="${i}" aria-pressed="${+RS.snd === i}"><i aria-hidden="true">▶</i><span>${x[0]}<small>${x[1]}</small></span></button>`).join('')}</div>
+    <div class="rs-row"><span>VOLUME</span><input type="range" min="0" max="100" value="${RS.vol}" data-rs-in="vol" aria-label="Reminder volume"><output>${RS.vol}%</output></div>
+    <div class="rs-row"><span>REPEAT</span><div class="tabs">${[1, 2, 3].map(n => `<button type="button" class="tab ${+RS.reps === n ? 'on' : ''}" data-rs-rep="${n}">${n === 1 ? 'ONCE' : n === 2 ? 'TWICE' : '3 TIMES'}</button>`).join('')}</div></div>
+    <div class="rm-row"><div class="rm-t"><b>Read reminders aloud</b><span>${rsSynth ? 'Your device speaks each reminder after the sound' : 'This browser has no voice'}</span></div><div class="rm-c"><label class="rm-sw"><input type="checkbox" data-rs-in="voice" ${RS.voice && rsSynth ? 'checked' : ''} ${rsSynth ? '' : 'disabled'} aria-label="Read reminders aloud"><i></i></label></div></div>
+    ${rsSynth ? `<div class="rs-row"><span>VOICE</span><select data-rs-in="vname" aria-label="Voice"><option value="">DEVICE DEFAULT</option>${vs.map(v => `<option value="${esc(v.name)}" ${v.name === RS.vname ? 'selected' : ''}>${esc(v.name)} · ${esc(v.lang)}</option>`).join('')}</select></div>
+    <div class="rs-row"><span>SPEED</span><input type="range" min="70" max="140" value="${RS.rate}" data-rs-in="rate" aria-label="Voice speed"><output>${(RS.rate / 100).toFixed(2)}×</output></div>` : ''}
+    <div class="rm-btns"><button class="btn sm" data-act="rm-test">PLAY A TEST REMINDER</button></div></div>`;
+}
+const _drRS = devRemind;
+devRemind = function () {
+  const h = _drRS.apply(this, arguments), mark = '<div class="dev-section"><label class="dl">WHEN TO ALERT</label>';
+  return h.includes(mark) ? h.replace(mark, rsHTML() + mark) : h + rsHTML();
+};
+/* Voices often arrive a moment after the page loads: fill the list in place when they do. */
+if (rsSynth && rsSynth.addEventListener) rsSynth.addEventListener('voiceschanged', () => {
+  const sel = document.querySelector('[data-rs-in="vname"]'); if (!sel || sel.options.length > 1) return;
+  sel.insertAdjacentHTML('beforeend', rsVoices().map(v => `<option value="${esc(v.name)}" ${v.name === RS.vname ? 'selected' : ''}>${esc(v.name)} · ${esc(v.lang)}</option>`).join(''));
+});
+$('dev-overlay').addEventListener('click', e => {
+  const b = e.target.closest('[data-rs-snd],[data-rs-rep]'); if (!b) return;
+  if (b.dataset.rsSnd != null) {
+    RS.snd = +b.dataset.rsSnd; rsSave(); rsPlay(RS.snd, 1);
+    b.parentNode.querySelectorAll('.rs-b').forEach(x => { const on = x === b; x.classList.toggle('on', on); x.setAttribute('aria-pressed', on); });
+  } else {
+    RS.reps = +b.dataset.rsRep; rsSave();
+    b.parentNode.querySelectorAll('.tab').forEach(x => x.classList.toggle('on', x === b));
+  }
+});
+$('dev-overlay').addEventListener('input', e => {
+  const t = e.target.closest('[data-rs-in]'); if (!t || t.type !== 'range') return;
+  const k = t.dataset.rsIn; RS[k] = +t.value;
+  const o = t.parentNode.querySelector('output'); if (o) o.textContent = k === 'rate' ? (RS.rate / 100).toFixed(2) + '×' : RS.vol + '%';
+  if (k === 'vol' && rsBus) rsBus.gain.value = RS.vol / 100;
+});
+$('dev-overlay').addEventListener('change', e => {
+  const t = e.target.closest('[data-rs-in]'); if (!t) return;
+  const k = t.dataset.rsIn;
+  if (k === 'voice') RS.voice = t.checked; else if (k === 'vname') { RS.vname = t.value; rsSay('This is your reminder voice.'); } else RS[k] = +t.value;
+  rsSave();
+});
+
 /* ══════════════════════════════════════════════════════
    PERFORMANCE CHECK
    A live frame meter, and switches that turn one kind of effect off. Nothing here is saved; reloading puts everything back.
