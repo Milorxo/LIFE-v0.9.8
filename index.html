@@ -1859,6 +1859,46 @@ body.dragging-now { user-select:none; cursor:grabbing; }
   .mm-zoom { bottom:calc(env(safe-area-inset-bottom,0px) + 196px); }
   .mm-top { flex-wrap:wrap; justify-content:center; overflow:visible; width:calc(100% - 24px); }
 }
+/* ── v0.12.0 · the guide figure comes alive (pg-bubbles). With the switch off (.gd-off) the page looks exactly as before. ── */
+.gd-cv { position:absolute; inset:0; width:100%; height:100%; display:none; pointer-events:none; -webkit-mask-image:linear-gradient(to right, transparent 0, rgba(0,0,0,.1) 8%, rgba(0,0,0,.4) 18%, rgba(0,0,0,.8) 29%, #000 40%, #000 60%, rgba(0,0,0,.8) 71%, rgba(0,0,0,.4) 82%, rgba(0,0,0,.1) 92%, transparent 100%); mask-image:linear-gradient(to right, transparent 0, rgba(0,0,0,.1) 8%, rgba(0,0,0,.4) 18%, rgba(0,0,0,.8) 29%, #000 40%, #000 60%, rgba(0,0,0,.8) 71%, rgba(0,0,0,.4) 82%, rgba(0,0,0,.1) 92%, transparent 100%); }
+#pg-bubbles.gd-live .gd-cv { display:block; }
+#pg-bubbles.gd-live.gd-warp #bc-img { visibility:hidden; }
+.gd-hit { display:none; position:absolute; left:28%; width:44%; top:8%; height:50%; min-width:44px; min-height:44px; pointer-events:auto; cursor:pointer; border-radius:40%; -webkit-tap-highlight-color:transparent; }
+.gd-hit:focus-visible { outline:1px solid rgba(255,255,255,.5); outline-offset:-4px; }
+#pg-bubbles.gd-live .gd-hit { display:block; }
+.gd-hud { display:none; position:absolute; left:0; top:0; gap:5px; pointer-events:none; font-family:var(--mono); font-size:.5rem; letter-spacing:.16em; color:var(--muted); }
+#pg-bubbles.gd-live .gd-hud { display:grid; }
+.gd-hud div { display:grid; grid-template-columns:6.4em 54px; align-items:center; gap:6px; white-space:nowrap; overflow:hidden; }
+.gd-hud i { display:block; height:3px; border-radius:2px; background:rgba(255,255,255,.12); overflow:hidden; }
+.gd-hud i b { display:block; height:100%; width:var(--v,50%); background:var(--c,#9fd4ff); transition:width .9s, background .9s; }
+.gd-hud i.low b { background:#ff7a45; }
+.gd-panel { --ac:#ff7a45; display:none; flex:none; width:min(100% - 24px, 760px); margin:0 auto clamp(10px,2vh,22px); gap:12px; grid-template-columns:minmax(0,1fr) 270px; align-items:stretch; }
+#pg-bubbles.gd-live .gd-panel { display:grid; }
+.gd-dlg { position:relative; padding:16px 14px 18px; border-radius:14px; background:rgba(8,9,12,.84); border:1px solid rgba(255,255,255,.1); min-height:5.4em; cursor:pointer; -webkit-tap-highlight-color:transparent; }
+.gd-dlg:focus-visible { outline:1px solid rgba(255,255,255,.5); }
+.gd-nm { position:absolute; left:12px; top:-11px; background:var(--ac); color:#120a05; font-family:var(--mono); font-size:.52rem; letter-spacing:.22em; padding:4px 10px; border-radius:6px; font-weight:500; transition:background .8s; }
+.gd-tx { font-size:.98rem; line-height:1.4; min-height:2.8em; color:var(--text); overflow-wrap:anywhere; }
+.gd-tx b { color:#ff7a45; font-weight:500; }
+.gd-nx { position:absolute; right:12px; bottom:5px; font-size:.62rem; color:var(--muted); opacity:0; animation:gdNx 1s ease-in-out infinite; }
+.gd-dlg.more .gd-nx { opacity:1; }
+@keyframes gdNx { 50% { transform:translateY(3px); } }
+.gd-act { display:grid; gap:8px; align-content:start; min-width:0; }
+.gd-lab { font-family:var(--mono); font-size:.56rem; letter-spacing:.16em; color:var(--muted); line-height:1.5; overflow-wrap:anywhere; }
+.gd-row { display:flex; gap:10px; }
+.gd-b { font-family:var(--mono); font-size:.7rem; letter-spacing:.16em; min-height:48px; min-width:44px; border-radius:12px; border:1px solid var(--line2, #2c323a); background:transparent; color:var(--text); cursor:pointer; flex:1; }
+.gd-b.go { background:#fff; color:#0a0c10; border-color:#fff; flex:2; font-weight:500; }
+.gd-b:disabled { opacity:.35; cursor:default; }
+.gd-meter { display:flex; gap:4px; height:4px; } .gd-meter i { flex:1; background:var(--line2, #2c323a); border-radius:2px; } .gd-meter i.on { background:#9fd4ff; }
+.gd-why { font-family:var(--mono); font-size:.58rem; color:var(--muted); line-height:1.5; overflow-wrap:anywhere; }
+.gd-sr { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+@media (max-width:700px) {
+  .gd-panel { grid-template-columns:minmax(0,1fr); gap:8px; }
+  .gd-dlg { min-height:4.6em; padding:14px 12px 14px; } .gd-tx { font-size:.92rem; min-height:2.6em; }
+  .gd-act { gap:6px; }
+}
+@media (prefers-reduced-motion:reduce) { .gd-nx { animation:none; } }
+.pf-noart .gd-cv { visibility:hidden !important; }
+#pg-bubbles .back { position:relative; } #pg-bubbles .back::after { content:''; position:absolute; inset:-7px -3px; }   /* invisible 44px hit area, looks the same */
 </style>
 </head>
 <body>
@@ -1976,7 +2016,7 @@ body.dragging-now { user-select:none; cursor:grabbing; }
     <span class="word">LIFE</span>
   </div>
   <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
-  <div class="sys-label" style="bottom:30px;left:44px;">V 0.11.0</div>
+  <div class="sys-label" style="bottom:30px;left:44px;">V 0.12.0</div>
   <div class="play-center">
     <h1 class="play-title">LIFE</h1>
     <div class="play-date" id="play-date"></div>
@@ -2045,7 +2085,12 @@ body.dragging-now { user-select:none; cursor:grabbing; }
     <div class="back" onclick="navigateTo('pg-profile')" role="button" tabindex="0"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>BACK</div>
     <div class="page-title">YOUR LIFE AREAS</div>
   </header>
-  <div class="bub-stage" id="bub-stage"><div class="bub-crest" id="bub-crest"><div class="bc-fig"><div class="bc-ph"><img id="bc-img" alt="" draggable="false"></div></div><div class="bc-nm" id="bc-nm"></div></div><div id="bub-dyn"></div></div>
+  <div class="bub-stage" id="bub-stage"><div class="bub-crest" id="bub-crest"><div class="bc-fig"><div class="bc-ph" id="bc-ph"><img id="bc-img" alt="" draggable="false"><canvas class="gd-cv" id="gd-gl" aria-hidden="true"></canvas><canvas class="gd-cv" id="gd-ov" role="img" aria-label="Your guide"></canvas><div class="gd-hit" id="gd-hit" role="button" tabindex="0" aria-label="Talk to your guide"></div></div></div><div class="bc-nm" id="bc-nm"></div></div><div id="bub-dyn"></div><div class="gd-hud" id="gd-hud" aria-hidden="true"></div></div>
+  <div class="gd-panel" id="gd-panel">
+    <div class="gd-dlg" id="gd-dlg" role="button" tabindex="0" aria-label="Next line"><span class="gd-nm">GUIDE</span><div class="gd-tx" id="gd-tx"></div><span class="gd-nx" aria-hidden="true">▼</span></div>
+    <div class="gd-act"><div class="gd-lab" id="gd-lab"></div><div class="gd-row"><button class="gd-b" id="gd-skip" type="button">NOT NOW</button><button class="gd-b go" id="gd-go" type="button">START</button></div><div class="gd-meter" id="gd-meter" aria-hidden="true"></div><div class="gd-why" id="gd-why"></div></div>
+    <div class="gd-sr" id="gd-live" aria-live="polite"></div>
+  </div>
 </div>
 
 <!-- ═══════ CALENDAR ═══════ -->
@@ -2482,7 +2527,7 @@ function migrate(s) {
   return out;
 }
 
-const APP_VER = '0.11.0';
+const APP_VER = '0.12.0';
 /* The first time a new version opens, keep a copy of the save as it was, so an upgrade can always be undone from Developer mode. */
 function safetyCopy() {
   try {
@@ -9294,6 +9339,475 @@ document.addEventListener('click', e => {
   b.classList.toggle('off', off); b.firstChild.textContent = (off ? 'OFF · ' : '') + PF_FX.find(f => f[0] === b.dataset.pf)[1];
 });
 { const m = document.createElement('div'); m.id = 'pf-meter'; m.setAttribute('aria-hidden', 'true'); document.body.appendChild(m); }
+
+/* ══════════════════════════════════════════════════════
+   v0.12.0  ·  THE GUIDE COMES ALIVE (Your life areas page)
+   One flat picture (ART_FIG) is drawn with WebGL on a 28 × 42 triangle grid that bends every frame (head, hair, breath,
+   shoulders, arms), with a living face drawn on top through the same bend. What he says, where he looks and his mood come
+   only from the real save: today's plan, what is done, the area history, today-only tasks and calendar deadline days.
+   He keeps nothing: no field in the save, nothing between visits. The loop runs only while this page is on screen and the
+   tab is visible, through the app's frame queue (so the 30/60 FPS setting holds), and stops completely otherwise.
+   ══════════════════════════════════════════════════════ */
+const GUIDE_KEY = 'life_fig_anim';   // '0' = the switch in Settings > Animation is off (a device setting, not part of the save)
+const GUIDE = (() => {
+  const pg = $('pg-bubbles'), box = $('bc-ph'), glc = $('gd-gl'), ovc = $('gd-ov');
+  const sm = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+  const RM = matchMedia('(prefers-reduced-motion:reduce)');
+  let REDUCED = RM.matches;
+  let enabled = true; try { enabled = localStorage.getItem(GUIDE_KEY) !== '0'; } catch (e) {}
+
+  /* ── 1. the puppet: displacement of a point (u, v) of the picture, both 0..1. Calibrated to the 848 × 1264 picture. ── */
+  const ASP = 848 / 1264, HA = [3.05, -2.7, -2.2, -1.57, -.95, -.45, .1];
+  function disp(u, v, p) {
+    let du = 0, dv = 0;
+    const wh = 1 - sm(.295, .375, v);                         // head weight (1 on head, 0 on body)
+    const face = Math.exp(-(((u - .5) / .075) ** 2 + ((v - .255) / .085) ** 2));
+    if (wh > 0) {                                             // head roll around the neck
+      const ax = (u - .5) * ASP, ay = v - .315, c = Math.cos(p.roll), s = Math.sin(p.roll);
+      du += wh * ((ax * c - ay * s) / ASP - (u - .5)); dv += wh * (ax * s + ay * c - ay);
+      du += wh * p.turn * (.015 * face + .004);                // turn: the face slides more than the hair outline
+      dv += wh * (p.pitch * (.011 * face + .003) + p.slump * .010);
+    }
+    if (v < .31) {                                            // hair: seven clusters of spikes, each on its own spring
+      const a = Math.atan2(v - .20, (u - .5) * ASP); let hx = 0, hy = 0, sw = 0;
+      for (let i = 0; i < 7; i++) { const d = Math.cos(a - HA[i]); if (d > 0) { const w = d * d; hx += w * p.hx[i]; hy += w * p.hy[i]; sw += w; } }
+      if (sw > 0) { const hw = Math.pow(clamp((.30 - v) / .19, 0, 1), 1.5) * (1 - face * .9), ew = .5 + clamp(Math.abs(u - .5) / .14, 0, 1) * .8;
+        du += hw * ew * (hx / sw) * .032; dv += hw * (hy / sw) * .018; }
+    }
+    const bw = sm(.30, .40, v) * (1 - sm(.88, 1, v));
+    du += bw * (u - .5) * p.breath * .012; dv -= bw * p.breath * (v < .6 ? .006 : .003);   // chest swells
+    const sh = Math.exp(-(((v - .40) / .07) ** 2)) * sm(.03, .15, Math.abs(u - .5));
+    dv -= sh * p.shr * .009;                                                              // shoulders rise / drop
+    const aw = sm(.17, .25, Math.abs(u - .5)) * sm(.38, .5, v) * (1 - sm(.78, .95, v));
+    du += aw * Math.sign(u - .5) * p.arm * (v - .38) * .03;                               // arms hang and swing
+    du += bw * (v - .92) * p.lean * .02; dv += bw * p.slump * .006;                       // lean / slump
+    return [du, dv];
+  }
+
+  let gl = null, prog, posBuf, nIdx = 0, verts, tex, ctx = null, c2 = null, fallback = false, imgOK = false, img = null;
+  const COLS = 28, ROWS = 42;
+  function initGL() {
+    try { gl = glc.getContext('webgl', { alpha: true, antialias: false, premultipliedAlpha: false }); } catch (e) { gl = null; }
+    if (!gl) { fallback = true; c2 = glc.getContext('2d'); return; }
+    const sh = (t, s) => { const o = gl.createShader(t); gl.shaderSource(o, s); gl.compileShader(o); return o; };
+    prog = gl.createProgram();
+    gl.attachShader(prog, sh(gl.VERTEX_SHADER, 'attribute vec2 a;attribute vec2 t;varying vec2 v;void main(){v=t;gl_Position=vec4(a.x*2.-1.,1.-a.y*2.,0.,1.);}'));
+    gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, 'precision mediump float;varying vec2 v;uniform sampler2D s;void main(){gl_FragColor=texture2D(s,v);}'));
+    gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) { gl = null; fallback = true; return; }
+    gl.useProgram(prog);
+    const n = (COLS + 1) * (ROWS + 1), uv = new Float32Array(n * 2); verts = new Float32Array(n * 2);
+    for (let j = 0; j <= ROWS; j++) for (let i = 0; i <= COLS; i++) { const k = (j * (COLS + 1) + i) * 2; uv[k] = i / COLS; uv[k + 1] = j / ROWS; }
+    const ib = []; for (let j = 0; j < ROWS; j++) for (let i = 0; i < COLS; i++) { const a = j * (COLS + 1) + i, b = a + 1, c = a + COLS + 1, d = c + 1; ib.push(a, b, c, b, d, c); }
+    nIdx = ib.length; const idx = gl.createBuffer(); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, idx); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(ib), gl.STATIC_DRAW);
+    const uvb = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, uvb); gl.bufferData(gl.ARRAY_BUFFER, uv, gl.STATIC_DRAW);
+    const lt = gl.getAttribLocation(prog, 't'); gl.enableVertexAttribArray(lt); gl.vertexAttribPointer(lt, 2, gl.FLOAT, false, 0, 0);
+    posBuf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, posBuf); gl.bufferData(gl.ARRAY_BUFFER, verts.byteLength, gl.DYNAMIC_DRAW);
+    const la = gl.getAttribLocation(prog, 'a'); gl.enableVertexAttribArray(la); gl.vertexAttribPointer(la, 2, gl.FLOAT, false, 0, 0);
+    tex = gl.createTexture();
+  }
+  function uploadTex() {
+    if (fallback || !gl) return;
+    gl.bindTexture(gl.TEXTURE_2D, tex); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  }
+  glc.addEventListener('webglcontextlost', e => { e.preventDefault(); gl = null; pg.classList.remove('gd-warp'); });
+  glc.addEventListener('webglcontextrestored', () => { initGL(); if (gl && imgOK) { uploadTex(); resize(); pg.classList.add('gd-warp'); } });
+
+  let W = 1, H = 1, DPR = 1, rect = null;
+  function resize() {
+    const r = box.getBoundingClientRect(); rect = r; if (r.width < 2) return;
+    DPR = Math.min(window.devicePixelRatio || 1, 2); W = Math.max(2, Math.round(r.width * DPR)); H = Math.max(2, Math.round(r.height * DPR));
+    for (const c of [glc, ovc]) if (c.width !== W || c.height !== H) { c.width = W; c.height = H; }
+    if (gl) gl.viewport(0, 0, W, H);
+    if (fallback && c2 && imgOK) { c2.clearRect(0, 0, W, H); c2.drawImage(img, 0, 0, W, H); }
+    if (imgOK) draw();
+  }
+  if (window.ResizeObserver) new ResizeObserver(() => { if (running) resize(); }).observe(box);
+
+  /* ── 2. springs, moods and gestures ── */
+  function Sp(x, k, d) { this.x = x; this.v = 0; this.t = x; this.k = k; this.d = d; }
+  Sp.prototype.step = function (dt) { const n = Math.max(1, Math.ceil(dt / .008)), h = dt / n; for (let i = 0; i < n; i++) { this.v += (this.k * (this.t - this.x) - this.d * this.v) * h; this.x += this.v * h; } };
+  const turn = new Sp(0, 55, 9), roll = new Sp(0, 55, 9), pitch = new Sp(0, 55, 9), gx = new Sp(0, 320, 28), gy = new Sp(0, 320, 28),
+        hxs = [0, 1, 2, 3, 4, 5, 6].map(i => new Sp(0, 30 + i * 3, 2.1 + (i % 3) * .5)), hys = [0, 1, 2, 3, 4, 5, 6].map(i => new Sp(0, 34 + i * 2, 2.4 + (i % 2) * .6)),
+        shr = new Sp(0, 40, 9), lean = new Sp(0, 28, 7), arm = new Sp(0, 22, 2.2), mO = new Sp(0, 260, 26);
+  const EMO = {
+    tired:    { open:.5,  slant:-6, bY:.5,  bA:-9, mC:-.6, mO:0,   pitch:.7,  roll:-.05, slump:1, shr:-.7, br:1.0, ba:.7, col:[255,184,153], fang:0,   bags:.9,  ir:[255,150,90],  gl:.55, ec:[255,122,69], ac:'#ff7a45' },
+    alert:    { open:.95, slant:4,  bY:0,   bA:6,  mC:0,   mO:0,   pitch:.1,  roll:0,    slump:0, shr:0,   br:1.5, ba:.5, col:[255,255,255], fang:.25, bags:.25, ir:[150,195,255], gl:1,   ec:[255,122,69], ac:'#ff7a45' },
+    firm:     { open:.8,  slant:11, bY:.3,  bA:17, mC:0,   mO:0,   pitch:.3,  roll:0,    slump:0, shr:.2,  br:1.6, ba:.5, col:[255,255,255], fang:.35, bags:.4,  ir:[255,190,140], gl:1.3, ec:[255,154,102], ac:'#ff9a66' },
+    annoyed:  { open:.65, slant:14, bY:.4,  bA:22, mC:-.5, mO:.16, pitch:.2,  roll:.05,  slump:0, shr:.4,  br:1.8, ba:.6, col:[255,208,184], fang:1,   bags:.55, ir:[255,105,70],  gl:1.25, ec:[255,90,60], ac:'#ff7a45' },
+    pleased:  { open:1.05, slant:-2, bY:-.9, bA:-3, mC:.8,  mO:.24, pitch:-.2, roll:-.06, slump:0, shr:.1,  br:1.2, ba:.5, col:[230,244,255], fang:.65, bags:0,   ir:[120,215,255], gl:.95, ec:[159,212,255], ac:'#9fd4ff' },
+    surprised:{ open:1.35, slant:0, bY:-1.4, bA:0, mC:0,   mO:.5,  pitch:-.5, roll:0,    slump:0, shr:.9,  br:2.4, ba:.8, col:[255,255,255], fang:.1,  bags:0,   ir:[200,225,255], gl:1.7, ec:[159,212,255], ac:'#9fd4ff' },
+  };
+  const E = Object.assign({}, EMO.alert, { col: EMO.alert.col.slice(), ir: EMO.alert.ir.slice(), ec: EMO.alert.ec.slice() });
+  let TG = EMO.alert, mood = 'alert';
+  function emo(n) { TG = EMO[n]; mood = n; $('gd-panel').style.setProperty('--ac', TG.ac); }
+  const GS = [];
+  const perf = () => performance.now() / 1000;
+  function gesture(type, delay) { GS.push({ type, t0: perf() + (delay || 0) / 1000, dur: { nod:.9, shake:.9, startle:.7, sigh:2.2, stretch:2.4, lean:1.4, tap:.6 }[type] || 1 }); }
+  let nextGust = 4, bph = 0, blinkT = -9, nextBlink = 2, nextIdle = 5, nextSacc = 1.2, sacc = [0, 0], talking = false, talkOpen = 0, ptr = null, ptrT = -99, look = null, time = 0, blinkK = 1;
+  const fx = { pitch:0, turn:0, shr:0, breath:0, open:0, lean:0 };
+  function gestures(now) {
+    fx.pitch = fx.turn = fx.shr = fx.breath = fx.open = fx.lean = 0;
+    for (let i = GS.length - 1; i >= 0; i--) { const g = GS[i], x = (now - g.t0) / g.dur; if (x < 0) continue; if (x > 1) { GS.splice(i, 1); continue; }
+      switch (g.type) {
+        case 'nod': fx.pitch += .55 * Math.sin(x * Math.PI * 4) * (1 - x); break;
+        case 'shake': fx.turn += .8 * Math.sin(x * Math.PI * 4) * (1 - x); break;
+        case 'startle': fx.pitch -= .6 * Math.exp(-x * 5); fx.breath += .9 * Math.exp(-x * 6); fx.open += .35 * Math.exp(-x * 4); fx.lean -= .5 * Math.exp(-x * 4); fx.shr += .8 * Math.exp(-x * 5); break;
+        case 'tap': fx.pitch -= .3 * Math.exp(-x * 6); fx.open += .2 * Math.exp(-x * 5); fx.breath += .4 * Math.exp(-x * 6); break;
+        case 'sigh': fx.breath += 1.1 * Math.sin(Math.PI * Math.min(1, x * 1.6)) * (x < .6 ? 1 : Math.max(0, 1 - (x - .6) * 2.5)) - .5 * Math.sin(Math.PI * x); fx.pitch += .45 * Math.sin(Math.PI * x); fx.shr -= .9 * Math.sin(Math.PI * x); break;
+        case 'stretch': fx.shr += 1.2 * Math.sin(Math.PI * x); fx.pitch -= .4 * Math.sin(Math.PI * x); fx.breath += .8 * Math.sin(Math.PI * x); break;
+        case 'lean': fx.lean += .9 * Math.sin(Math.PI * Math.min(1, x * 1.3)); fx.pitch += .15 * Math.sin(Math.PI * x); break;
+      } }
+  }
+  const P = { turn:0, roll:0, pitch:0, hx:[0,0,0,0,0,0,0], hy:[0,0,0,0,0,0,0], breath:0, shr:0, lean:0, arm:0, slump:0 };
+  function update(dt) {
+    time += dt; const now = perf();
+    const k = 1 - Math.exp(-dt * 4.5);
+    for (const key of ['open', 'slant', 'bY', 'bA', 'mC', 'pitch', 'roll', 'slump', 'shr', 'br', 'ba']) E[key] += (TG[key] - E[key]) * k;
+    for (let i = 0; i < 3; i++) { E.col[i] += (TG.col[i] - E.col[i]) * k; E.ir[i] += (TG.ir[i] - E.ir[i]) * k; E.ec[i] += (TG.ec[i] - E.ec[i]) * k; }
+    E.gl += (TG.gl - E.gl) * k; E.bags += (TG.bags - E.bags) * k; E.fang += (TG.fang - E.fang) * k;
+    gestures(now);
+    /* where he looks: your finger or cursor when it is near, otherwise the bubble of the area that needs you */
+    const r = rect || box.getBoundingClientRect(); let tx = 0, ty = .2, hx = 0, hy = 0;
+    const near = ptr && now - ptrT < 5 && ptr.x > r.left - 140 && ptr.x < r.right + 140 && ptr.y > r.top - 140 && ptr.y < r.bottom + 140;
+    const pt = near ? ptr : look;
+    if (pt) { const nx = (pt.x - (r.left + r.width / 2)) / r.width, ny = (pt.y - (r.top + r.height * .26)) / r.height; tx = clamp(nx * 4, -1.8, 1.8); ty = clamp(ny * 2.4, -.8, 1.4); hx = clamp(nx * 1.7, -.8, .8); hy = clamp(ny * .9, -.35, .5); }
+    const wander = REDUCED ? 0 : .09 * Math.sin(time * .37) + .05 * Math.sin(time * .91);
+    turn.t = hx + wander + fx.turn;
+    roll.t = E.roll + (REDUCED ? 0 : .012 * Math.sin(time * .5)) - hx * .05;
+    pitch.t = E.pitch + hy + fx.pitch;
+    gx.t = tx + sacc[0]; gy.t = ty + sacc[1];
+    lean.t = fx.lean + (REDUCED ? 0 : .25 * Math.sin(time * .23));
+    if (!REDUCED) bph += dt * E.br; const b = Math.sin(bph);
+    shr.t = E.shr + b * .35 + fx.shr;
+    arm.t = REDUCED ? 0 : Math.sin(time * .8) * .6 + Math.sin(time * .37) * .4;
+    if (time > nextGust && !REDUCED) { nextGust = time + 5 + Math.random() * 7; const dir = Math.random() < .5 ? -1 : 1; hxs.forEach((s, i) => { s.v += dir * (1.3 + Math.random() * .9) * (.6 + i * .1); }); }
+    hxs.forEach((s, i) => { if (!REDUCED) s.v -= turn.v * dt * (14 + i * 1.6) + roll.v * dt * 26; s.t = REDUCED ? 0 : .16 * Math.sin(time * (.7 + .13 * i) + i * 1.7) + .05 * Math.sin(time * 2.1 + i * .9); });
+    hys.forEach((s, i) => { if (!REDUCED) s.v -= pitch.v * dt * (11 + i * 1.4); s.t = REDUCED ? 0 : .06 * Math.sin(time * (.9 + .11 * i) + i * 2.3); });
+    mO.t = Math.max(E.mO, talking ? talkOpen : 0);
+    embers(dt);
+    for (const s of [turn, roll, pitch, gx, gy, shr, lean, arm, mO, ...hxs, ...hys]) s.step(dt);
+    if (time > nextBlink) { blinkT = time; nextBlink = time + 2 + Math.random() * 4; if (Math.random() < .25) nextBlink = time + .3; }
+    const bt = time - blinkT; blinkK = bt < .14 ? (bt < .06 ? 1 - bt / .06 * .94 : .06 + (bt - .06) / .08 * .94) : 1;
+    if (time > nextSacc) { nextSacc = time + .5 + Math.random() * 1.6; sacc = REDUCED ? [0, 0] : [(Math.random() - .5) * .5, (Math.random() - .5) * .3]; }
+    if (time > nextIdle && !talking && !REDUCED) { nextIdle = time + 9 + Math.random() * 10; const r2 = Math.random();
+      if (r2 < .3) gesture('sigh'); else if (r2 < .5) gesture('stretch'); else if (r2 < .75) { ptr = null; } else gesture('nod'); }
+    P.turn = turn.x; P.roll = roll.x; P.pitch = pitch.x; for (let i = 0; i < 7; i++) { P.hx[i] = hxs[i].x; P.hy[i] = hys[i].x; }
+    P.breath = b * E.ba * .9 + fx.breath; P.shr = shr.x; P.lean = lean.x; P.arm = arm.x; P.slump = E.slump;
+  }
+  /* without WebGL the picture cannot bend, so the face stays where the painted face is */
+  const wp = (u, v) => { if (fallback || !gl) return [u, v]; const d = disp(u, v, P); return [u + d[0], v + d[1]]; };
+
+  /* ── 3. drawing: the bent picture (WebGL) and the living face on top ── */
+  let frames = 0;
+  function draw() {
+    if (!imgOK) return;
+    if (gl) {
+      for (let j = 0; j <= ROWS; j++) for (let i = 0; i <= COLS; i++) { const u = i / COLS, v = j / ROWS, d = disp(u, v, P), k = (j * (COLS + 1) + i) * 2; verts[k] = u + d[0]; verts[k + 1] = v + d[1]; }
+      gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.bindBuffer(gl.ARRAY_BUFFER, posBuf); gl.bufferSubData(gl.ARRAY_BUFFER, 0, verts);
+      gl.drawElements(gl.TRIANGLES, nIdx, gl.UNSIGNED_SHORT, 0);
+    }
+    face(); frames++;
+  }
+  const EYE = [[.457, .254, -1], [.544, .254, 1]], BROW = [[.455, .2385, 1], [.546, .2385, -1]];
+  const EM = []; let emAcc = 0;
+  function embers(dt) {
+    emAcc += dt * (1.5 + E.gl * 3.2);
+    while (emAcc > 1 && EM.length < 22) { emAcc -= 1; EM.push({ u: .5 + (Math.random() - .5) * .17, v: .17 + Math.random() * .07, vx: (Math.random() - .5) * .012, vy: -(.02 + Math.random() * .035), l: 0, m: 1.8 + Math.random() * 2.2, z: .7 + Math.random() * 1.3, ph: Math.random() * 6 }); }
+    if (emAcc > 1) emAcc = 1;
+    for (let i = EM.length - 1; i >= 0; i--) { const e = EM[i]; e.l += dt; e.u += (e.vx + Math.sin(e.l * 2 + e.ph) * .004 + P.hx[3] * .01) * dt; e.v += e.vy * dt; if (e.l > e.m) EM.splice(i, 1); }
+  }
+  function lightEye(cx, cy, sx, a) {
+    const r = .1 * sx, g = ctx.createRadialGradient(cx, cy, 0, cx, cy, r), c = E.col.map(Math.round).join(',');
+    g.addColorStop(0, 'rgba(' + c + ',' + a + ')'); g.addColorStop(1, 'rgba(' + c + ',0)'); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, r, 0, 7); ctx.fill();
+  }
+  function face() {
+    ctx.clearRect(0, 0, W, H); const sx = W, sy = H;
+    const col = 'rgb(' + E.col.map(Math.round).join(',') + ')', colA = a => 'rgba(' + E.col.map(Math.round).join(',') + ',' + a + ')', irc = E.ir.map(Math.round).join(',');
+    const flick = 1 + (REDUCED ? 0 : .07 * Math.sin(time * 23) + .05 * Math.sin(time * 9.1));
+    const open = clamp((E.open + fx.open) * blinkK, .03, 1.5);
+    const eyes = EYE.map(([u, v, s]) => { const [x, y] = wp(u, v); return [x * sx, y * sy, s]; });
+    ctx.globalCompositeOperation = 'lighter';
+    eyes.forEach(([cx, cy]) => lightEye(cx, cy, sx, .17 * E.gl * flick * Math.min(1, open + .2)));
+    const ec = E.ec.map(Math.round).join(',');
+    EM.forEach(e => { const k = e.l / e.m, al = Math.sin(Math.PI * k) * (.55 + .25 * Math.sin(e.l * 14 + e.ph)), x = e.u * sx, y = e.v * sy, r = e.z * DPR;
+      ctx.fillStyle = 'rgba(' + ec + ',' + (al * .14) + ')'; ctx.beginPath(); ctx.arc(x, y, r * 2.1, 0, 7); ctx.fill();
+      ctx.fillStyle = 'rgba(255,235,210,' + al + ')'; ctx.beginPath(); ctx.arc(x, y, r * .7, 0, 7); ctx.fill(); });
+    ctx.globalCompositeOperation = 'source-over';
+    eyes.forEach(([cx, cy, s]) => {
+      const hw = .029 * sx, hTop = .0102 * sy * open, hBot = .0058 * sy * Math.min(1, open + .12);
+      const rr = .052 * sx, g0 = ctx.createRadialGradient(cx, cy, 0, cx, cy, rr); g0.addColorStop(0, '#030303'); g0.addColorStop(.6, '#030303'); g0.addColorStop(1, 'rgba(3,3,3,0)');
+      ctx.save(); ctx.translate(cx, cy); ctx.scale(1, .62); ctx.translate(-cx, -cy); ctx.fillStyle = g0; ctx.beginPath(); ctx.arc(cx, cy, rr, 0, 7); ctx.fill(); ctx.restore();
+      ctx.save(); ctx.translate(cx + gx.x * .003 * sx, cy + gy.x * .0025 * sx); ctx.rotate((-s) * (5 + E.slant * .6) * Math.PI / 180 + P.roll);
+      const shape = () => { ctx.beginPath(); ctx.moveTo(-hw, 0); ctx.quadraticCurveTo(-hw * .1, -hTop * 2, hw, 0); ctx.quadraticCurveTo(0, hBot * 2, -hw, 0); ctx.closePath(); };
+      ctx.shadowColor = col; ctx.shadowBlur = .034 * sx * flick; ctx.fillStyle = col; shape(); ctx.fill();
+      ctx.shadowBlur = .012 * sx; ctx.fill(); ctx.shadowBlur = 0;
+      ctx.save(); shape(); ctx.clip();
+      const ir = Math.max(.0048 * sy, Math.min(hTop * 1.25, .0125 * sy)), ix = clamp(gx.x * .0085 * sx, -hw * .7, hw * .7), iy = clamp(gy.x * .005 * sx, -hTop * .35, hBot * .5);
+      const gi = ctx.createRadialGradient(ix, iy, ir * .2, ix, iy, ir); gi.addColorStop(0, 'rgba(' + irc + ',.5)'); gi.addColorStop(.75, 'rgba(' + irc + ',.95)'); gi.addColorStop(1, 'rgba(' + irc + ',.7)');
+      ctx.fillStyle = gi; ctx.beginPath(); ctx.arc(ix, iy, ir, 0, 7); ctx.fill();
+      ctx.lineWidth = Math.max(1.2, .0016 * sy); ctx.strokeStyle = 'rgba(14,12,18,.85)'; ctx.beginPath(); ctx.arc(ix, iy, ir, 0, 7); ctx.stroke();
+      ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.lineWidth = Math.max(1, .0011 * sy); ctx.beginPath(); ctx.arc(ix, iy, ir * .6, 0, 7); ctx.stroke();
+      ctx.fillStyle = 'rgba(10,8,14,.95)'; ctx.beginPath(); ctx.arc(ix, iy, ir * (mood === 'surprised' ? .14 : mood === 'pleased' ? .4 : .3), 0, 7); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,.95)'; ctx.beginPath(); ctx.arc(ix - ir * .38, iy - ir * .42, ir * .2, 0, 7); ctx.fill();
+      const gl2 = ctx.createLinearGradient(0, -hTop, 0, hBot * .4); gl2.addColorStop(0, 'rgba(0,0,0,.66)'); gl2.addColorStop(.45, 'rgba(0,0,0,0)'); ctx.fillStyle = gl2; ctx.fillRect(-hw, -hTop * 1.2, hw * 2, hTop * 1.8);
+      ctx.restore();
+      const lc = 'rgba(232,235,243,.94)'; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      ctx.strokeStyle = lc; ctx.lineWidth = Math.max(2, .0036 * sy); ctx.beginPath(); ctx.moveTo(-hw * 1.1, hBot * .25); ctx.quadraticCurveTo(-hw * .1, -hTop * 2.15, hw * 1.12, hBot * .1); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(s * hw, 0); ctx.lineTo(s * (hw + .009 * sx), -hTop * .5 - .0008 * sy); ctx.stroke();
+      if (open > .45) { ctx.strokeStyle = 'rgba(225,229,238,' + Math.min(.5, (open - .4) * .6) + ')'; ctx.lineWidth = Math.max(1.1, .0019 * sy); ctx.beginPath();
+        ctx.moveTo(-hw * .85, -hTop * .6 - .0045 * sy); ctx.quadraticCurveTo(-hw * .05, -hTop * 2.25 - .0085 * sy * open, hw * .95, -hTop * .5 - .003 * sy); ctx.stroke(); }
+      ctx.strokeStyle = 'rgba(222,226,236,.45)'; ctx.lineWidth = Math.max(1, .0015 * sy); ctx.beginPath(); ctx.moveTo(-hw * .8, hBot * .8); ctx.quadraticCurveTo(0, hBot * 2.05, hw * .85, hBot * .7); ctx.stroke();
+      const bg = clamp(E.bags, 0, 1); if (bg > .05) { ctx.strokeStyle = 'rgba(215,220,232,' + (.12 + bg * .4) + ')'; ctx.lineWidth = Math.max(1, .0014 * sy);
+        for (let q = 0; q < 3; q++) { const by = hBot * 2.1 + .0045 * sy * (q + 1), bx = -hw * .35 + q * hw * .28, L2 = hw * (.55 - q * .1); ctx.beginPath(); ctx.moveTo(bx - L2 * .5, by); ctx.quadraticCurveTo(bx, by + .0014 * sy, bx + L2 * .5, by - .0006 * sy); ctx.stroke(); } }
+      ctx.restore();
+      if (E.gl > .9) { const a = Math.min(.5, (E.gl - .8) * .4) * flick, L = .055 * sx, gs = ctx.createLinearGradient(cx - L, 0, cx + L, 0); gs.addColorStop(0, colA(0)); gs.addColorStop(.5, colA(a)); gs.addColorStop(1, colA(0));
+        ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = gs; ctx.fillRect(cx - L, cy - .6 * DPR, L * 2, 1.2 * DPR); ctx.globalCompositeOperation = 'source-over'; }
+      if (fx.open > .05) { ctx.strokeStyle = colA(Math.min(.7, fx.open * 2)); ctx.lineWidth = 1.5 * DPR; ctx.beginPath(); ctx.ellipse(cx, cy, hw * (1.3 + fx.open * 3), hw * (.55 + fx.open * 1.5), 0, 0, 7); ctx.stroke(); }
+    });
+    BROW.forEach(([u, v, s]) => {
+      const [x, y] = wp(u, v + E.bY * .0048), cx = x * sx, cy = y * sy, a = (E.bA * s) * Math.PI / 180 + P.roll, L = .034 * sx, th = Math.max(3, .0105 * sy), ins = s > 0 ? 1 : -1;
+      const arch = .0026 * sy * (1 + Math.max(0, E.mC) * .6 + Math.max(0, E.bY > 0 ? 0 : -E.bY) * .5);
+      ctx.save(); ctx.translate(cx, cy); ctx.rotate(a);
+      ctx.beginPath(); ctx.moveTo(-ins * L * 1.08, .0004 * sy); ctx.quadraticCurveTo(0, -arch * 2 - th * .15, ins * L, -th * .62); ctx.lineTo(ins * L * 1.02, th * .38); ctx.quadraticCurveTo(0, -arch * 1.2 + th * .3, -ins * L * 1.08, .0004 * sy); ctx.closePath();
+      const gb = ctx.createLinearGradient(-ins * L, 0, ins * L, 0); gb.addColorStop(0, 'rgba(215,219,230,.18)'); gb.addColorStop(.5, 'rgba(215,219,230,.7)'); gb.addColorStop(1, 'rgba(228,231,240,.92)');
+      ctx.fillStyle = gb; ctx.fill();
+      ctx.strokeStyle = 'rgba(225,229,238,.32)'; ctx.lineWidth = Math.max(1, .0014 * sy); ctx.beginPath(); ctx.moveTo(-ins * L * .2, -arch * 1.6 - th * 1.15); ctx.quadraticCurveTo(ins * L * .4, -arch * 2 - th * 1.45, ins * L * .95, -th * 1.5); ctx.stroke();
+      ctx.restore();
+    });
+    { const [mx, my] = wp(.498, .297), cx = mx * sx, cy = my * sy, c = E.mC, o = clamp(mO.x, 0, 1), w = .034 * sx * (1 + Math.max(0, c) * .3), fang = E.fang;
+      const lift = c * .0052 * sy, sk = clamp(c, 0, 1) * .0022 * sy;
+      ctx.save(); ctx.translate(cx, cy); ctx.rotate(P.roll); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      const hOpen = .0016 * sy + o * .019 * sy;
+      const ux = t => -w + 2 * w * t, uy = t => { const m = 1 - t; return m * m * (-lift) + 2 * m * t * (Math.max(0, c) * .0015 * sy + (c < 0 ? -c * .0004 * sy : 0)) + t * t * (-lift - sk); };
+      const upper = () => { ctx.moveTo(-w, -lift); ctx.quadraticCurveTo(0, Math.max(0, c) * .003 * sy - Math.min(0, c) * .0008 * sy, w, -lift - sk); };
+      if (o > .06) {
+        ctx.beginPath(); ctx.moveTo(-w, -lift); ctx.quadraticCurveTo(0, .0012 * sy * 2, w, -lift - sk); ctx.quadraticCurveTo(0, hOpen * 2 + .003 * sy * Math.max(0, c), -w, -lift); ctx.closePath();
+        ctx.fillStyle = 'rgba(2,2,4,.96)'; ctx.fill();
+        ctx.save(); ctx.clip();
+        if (o > .3) { ctx.fillStyle = 'rgba(125,40,52,.55)'; ctx.beginPath(); ctx.ellipse(0, hOpen * 1.15, w * .5, hOpen * .5, 0, 0, 7); ctx.fill(); }
+        const N = 9, tooth = (.0034 + .0075 * fang) * sy * clamp(o * 1.6, .3, 1);
+        ctx.fillStyle = 'rgba(232,235,242,.92)';
+        for (let i = 0; i < N; i++) { const t0 = (i + .1) / N, t1 = (i + .9) / N, tm = (i + .5) / N, can = (i === 1 || i === N - 2) ? 1.65 : 1, x0 = ux(t0), x1 = ux(t1), xm = ux(tm);
+          ctx.beginPath(); ctx.moveTo(x0, uy(t0) + .0012 * sy); ctx.lineTo(x1, uy(t1) + .0012 * sy); ctx.lineTo(xm, uy(tm) + .0012 * sy + tooth * can * (1 - Math.abs(tm - .5) * .5)); ctx.closePath(); ctx.fill(); }
+        if (fang > .6 && o > .15) { ctx.fillStyle = 'rgba(225,228,236,.9)'; [-.52, .52].forEach(f => { const px = w * f; ctx.beginPath(); ctx.moveTo(px - .0035 * sx, hOpen * 1.7); ctx.lineTo(px + .0035 * sx, hOpen * 1.7); ctx.lineTo(px, hOpen * 1.7 - tooth * .9); ctx.closePath(); ctx.fill(); }); }
+        ctx.restore();
+        ctx.strokeStyle = 'rgba(228,232,240,.82)'; ctx.lineWidth = Math.max(1.8, .0022 * sy); ctx.beginPath(); ctx.moveTo(-w, -lift); ctx.quadraticCurveTo(0, .0012 * sy * 2, w, -lift - sk); ctx.quadraticCurveTo(0, hOpen * 2 + .003 * sy * Math.max(0, c), -w, -lift); ctx.closePath(); ctx.stroke();
+      } else {
+        ctx.strokeStyle = 'rgba(228,232,240,.8)'; ctx.lineWidth = Math.max(1.8, .0023 * sy); ctx.beginPath(); upper(); ctx.stroke();
+        ctx.lineWidth = Math.max(1, .0012 * sy); ctx.beginPath(); ctx.moveTo(-w, -lift); ctx.lineTo(-w - .004 * sx, -lift - .0018 * sy * Math.sign(c || .001)); ctx.moveTo(w, -lift - sk); ctx.lineTo(w + .004 * sx, -lift - sk - .0018 * sy * Math.sign(c || .001)); ctx.stroke();
+        if (fang > .7) { ctx.fillStyle = 'rgba(235,238,245,.9)'; [-.4, .4].forEach(f => { const px = w * f, py = Math.max(0, c) * .0013 * sy + .0003 * sy; ctx.beginPath(); ctx.moveTo(px - .0036 * sx, py); ctx.lineTo(px + .0036 * sx, py); ctx.lineTo(px, py + .0058 * sy * fang); ctx.closePath(); ctx.fill(); }); }
+      }
+      ctx.restore(); }
+  }
+
+  /* ── 4. run only while he is on screen and the tab is visible. Off screen: no frames, no timers. ── */
+  let running = false, raf = 0, last = 0, onscreen = false, pending = [];
+  function loop(ts) { raf = requestAnimationFrame(loop); const dt = Math.min(.05, (ts - last) / 1000 || .016); last = ts; update(dt); draw(); }
+  const onPtr = e => { ptr = { x: e.clientX, y: e.clientY }; ptrT = perf(); };
+  function later(fn, ms) { const id = setTimeout(() => { pending = pending.filter(x => x !== id); fn(); }, ms); pending.push(id); }
+  function setRun() {
+    const want = enabled && onscreen && !document.hidden && curPage === 'pg-bubbles';
+    if (want && !running) {
+      if (!img) { load(); return; }
+      if (!imgOK) return;
+      running = true; last = performance.now(); resize(); document.addEventListener('pointermove', onPtr, { passive: true });
+      raf = requestAnimationFrame(loop);
+      refresh(true); later(() => speakNext(''), 900);
+    } else if (!want && running) {
+      running = false; cancelAnimationFrame(raf); raf = 0; document.removeEventListener('pointermove', onPtr);
+      pending.forEach(clearTimeout); pending = []; if (isTyping) endLine(); queue = []; prev = null;
+    }
+  }
+  function load() {
+    img = new Image();
+    img.onload = () => { imgOK = true; initGL(); ctx = ovc.getContext('2d'); if (gl) uploadTex(); pg.classList.toggle('gd-warp', !!gl); setRun(); };
+    img.onerror = () => { enabled = false; apply(); };
+    img.src = FIG_IMG;
+  }
+  document.addEventListener('visibilitychange', setRun);
+  if (window.IntersectionObserver) new IntersectionObserver(es => { onscreen = es[es.length - 1].isIntersecting; setRun(); }).observe(box);
+  const onRM = () => { REDUCED = RM.matches; };
+  if (RM.addEventListener) RM.addEventListener('change', onRM); else if (RM.addListener) RM.addListener(onRM);
+
+  /* ── 5. the brain: everything below is read from the save, never written to it ── */
+  const DUE_BONUS = 30, IMP_XP = 25;
+  const impOf = xp => clamp(Math.round((+xp || 0) / IMP_XP), 1, 4);           // 25 XP = 1 … 100 XP or more = 4
+  const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+  function lastDone() {                                                         // area id → last day a mission in it was completed
+    const out = {}, owner = {};
+    Object.keys(G.missions).forEach(a => (G.missions[a] || []).forEach(m => { owner[m.id] = a; }));
+    Object.keys(G.history).forEach(k => {
+      const h = G.history[k]; if (!h || !Array.isArray(h.completed)) return;
+      h.completed.forEach(id => {
+        const a = (h.got && h.got[id] && h.got[id].a) || owner[id] || ((G.dayTasks[k] || []).find(t => t.id === id) || {}).areaId;
+        if (a && (!out[a] || out[a] < k)) out[a] = k;
+      });
+    });
+    return out;
+  }
+  let S = null, skips = 0, cur = null, prev = null;
+  function read() {
+    const today = dk(), done = (G.history[today] || { completed: [] }).completed || [];
+    const plan = dayPlan(today), left = plan.filter(p => !done.includes(p.id)), ld = lastDone(), start = G.player.startDate || today;
+    const areas = Object.values(G.areas).map(a => {
+      const items = left.filter(p => p.areaId === a.id).sort((x, y) => (y.dayOnly - x.dayOnly) || (y.xp - x.xp));
+      const days = ld[a.id] ? Math.max(0, diffDays(ld[a.id], today)) : Math.max(0, diffDays(start, today)) + 1;
+      const imp = items.length ? Math.max(...items.map(p => impOf(p.xp))) : 0, bonus = items.some(p => p.dayOnly) ? DUE_BONUS : 0;
+      return { a, items, days, imp, bonus, need: items.length ? imp * days + bonus : 0 };
+    });
+    const ranked = areas.filter(x => x.items.length).sort((x, y) => (y.need - x.need) || (y.imp - x.imp));
+    return { today, plan, done, left, areas, ranked, dl: nextDeadline(), timer: T && T.running ? T.areaId : null };
+  }
+  function pick() { const r = S.ranked; if (!r.length) return null; const x = r[Math.min(skips, r.length - 1)]; return { x, m: x.items[0] }; }
+  function lookAt(areaId) {
+    const el = areaId && [...document.querySelectorAll('#bub-dyn .bb')].find(b => b.dataset.area === areaId);
+    if (!el) { look = null; return; }
+    const r = el.getBoundingClientRect(); look = { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+  }
+  function render() {
+    const mx = Math.max(1, ...S.areas.map(x => x.need));
+    const hud = $('gd-hud'); hud.textContent = '';
+    S.areas.forEach(x => {
+      const f = 1 - x.need / mx, row = document.createElement('div'), nm = document.createElement('span'), bar = document.createElement('i'), fill = document.createElement('b');
+      nm.textContent = x.a.name.toUpperCase(); bar.className = f < .45 ? 'low' : ''; fill.style.setProperty('--v', Math.round(clamp(f, .06, 1) * 100) + '%'); fill.style.setProperty('--c', x.a.color);
+      bar.appendChild(fill); row.append(nm, bar); hud.appendChild(row);
+    });
+    cur = pick();
+    const go = $('gd-go'), skip = $('gd-skip'), lab = $('gd-lab'), why = $('gd-why');
+    if (!cur) {
+      lab.textContent = S.plan.length ? 'ALL DONE TODAY' : 'NOTHING PLANNED TODAY';
+      why.textContent = S.plan.length ? `${S.done.filter(id => S.plan.some(p => p.id === id)).length} of ${S.plan.length} done today.` : 'Add missions or a today-only task to give him something to point at.';
+      go.disabled = true; go.textContent = 'START'; skip.disabled = true; look = null;
+    } else {
+      const { x, m } = cur, started = S.timer === x.a.id;
+      lab.textContent = `NEXT MOVE · ${x.a.name.toUpperCase()} · ${m.title.toUpperCase()} · +${m.xp} XP`;
+      why.textContent = `need = importance ${x.imp} × ${x.days} day${x.days === 1 ? '' : 's'} untouched${x.bonus ? ' + today-only ' + x.bonus : ''} = ${x.need}` + (S.dl === 0 ? ' · DEADLINE TODAY' : S.dl === 1 ? ' · DEADLINE TOMORROW' : '') + `  ·  importance: ${IMP_XP} XP = 1, 100 XP = 4`;
+      go.disabled = false; go.textContent = started ? 'DONE' : 'START'; skip.disabled = started || skips >= 2 || S.ranked.length < 2;
+      lookAt(x.a.id);
+    }
+    $('gd-meter').innerHTML = [0, 1].map(i => `<i class="${i >= skips ? 'on' : ''}"></i>`).join('');
+  }
+  function moodFor() {
+    if (!cur) return 'pleased';
+    if (cur.m.dayOnly || S.dl === 0 || S.dl === 1) return 'firm';
+    if (cur.x.need === 0) return 'pleased';
+    return cur.x.days >= 4 ? 'tired' : 'alert';
+  }
+  /* Lines are arrays of [text, bold]. Mission and area names only ever go in as text, never as markup. */
+  const B = s => [String(s), 1], N = s => [String(s), 0];
+  function speakNext(prefix) {
+    if (!running) return;
+    if (!cur) {
+      emo('pleased');
+      say(S.plan.length ? [[N((prefix || '') + 'Everything on today\'s list is done. '), B('You can stop.')]] : [[N((prefix || '') + 'Nothing is planned today. '), B('Rest, or add a mission.')]]);
+      return;
+    }
+    const { x, m } = cur; emo(moodFor());
+    const dueTxt = m.dayOnly ? [N('Due '), B('today'), N('. ')] : [];
+    const first = [N(prefix || ''), ...dueTxt, B(m.title), N(`, +${m.xp} XP.`)];
+    let second;
+    if (x.need === 0) second = [N('Every area has had a mission done today. '), B('This is extra.'), N(' Tap START when you begin.')];
+    else if (x.days >= 3) second = [N(`${x.a.name} has had no mission done for `), B(`${x.days} days`), N('. That is why it is first. Tap START when you begin.')];
+    else if (skips) second = [N(`You passed ${skips === 1 ? 'one' : 'two'}. This is next in line. Tap START when you begin.`)];
+    else second = [N('This is the most urgent thing on today\'s list. Tap START when you begin.')];
+    const lines = [first, second];
+    if (S.dl === 0) lines.push([N('Today is a '), B('deadline day'), N(' on your calendar.')]);
+    else if (S.dl === 1) lines.push([N('Your calendar has a '), B('deadline tomorrow'), N('.')]);
+    say(lines);
+  }
+
+  /* ── 6. the dialogue box: typewriter, tap to finish the line or go to the next one ── */
+  let typeT = 0, queue = [], segs = [], full = '', ci = 0, isTyping = false, boldAt = new Set();
+  function paint(n) {
+    const tx = $('gd-tx'); tx.textContent = ''; let left = n;
+    for (const [t, b] of segs) { if (left <= 0) break; const piece = t.slice(0, left); left -= t.length; if (b) { const e = document.createElement('b'); e.textContent = piece; tx.appendChild(e); } else tx.appendChild(document.createTextNode(piece)); }
+  }
+  function startLine(line) {
+    clearInterval(typeT); segs = line.filter(s => s[0]); full = segs.map(s => s[0]).join(''); ci = 0; isTyping = true; talking = true;
+    boldAt = new Set(); let pos = 0; segs.forEach(([t, b]) => { if (b) boldAt.add(pos); pos += t.length; });
+    $('gd-dlg').classList.remove('more'); $('gd-live').textContent = full; ovc.setAttribute('aria-label', 'Your guide says: ' + full);
+    if (!running) { endLine(); return; }
+    typeT = setInterval(() => {
+      ci++; paint(ci); const ch = full[ci - 1] || ' ';
+      talkOpen = /[\s.,:;!?]/.test(ch) ? .04 : (/[aeiouAEIOU]/.test(ch) ? .55 + Math.random() * .4 : .2 + Math.random() * .2);
+      if (boldAt.has(ci - 1) && !REDUCED) gesture('nod');
+      if (ci >= full.length) endLine();
+    }, REDUCED ? 8 : 30);
+  }
+  function endLine() { clearInterval(typeT); typeT = 0; paint(full.length); isTyping = false; talking = false; talkOpen = 0; $('gd-dlg').classList.toggle('more', queue.length > 0); }
+  function say(lines) { queue = lines.slice(); startLine(queue.shift()); }
+  function dlgNext() { if (isTyping) { ci = full.length; endLine(); } else if (queue.length) startLine(queue.shift()); }
+  $('gd-dlg').addEventListener('click', e => { e.stopPropagation(); dlgNext(); });
+  $('gd-dlg').addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); dlgNext(); } });
+
+  /* ── 7. reacting to the real save: called whenever the game saves, the timer changes or the page is drawn ── */
+  function snap() { return { ids: S.plan.map(p => p.id), done: S.done.length, timer: S.timer, top: cur ? cur.m.id : null }; }
+  function refresh(quiet) {
+    if (!enabled || !G) return;
+    S = read(); render();
+    const now = snap(), was = prev; prev = now;
+    if (!running || quiet || !was) { if (!talking && !queue.length) emo(moodFor()); return; }
+    if (now.done > was.done) {
+      skips = 0; S = read(); render(); prev = snap();
+      emo('surprised'); gesture('startle'); later(() => { emo('pleased'); gesture('nod'); speakNext('That is one. '); }, 900);
+    } else if (now.ids.some(id => !was.ids.includes(id))) {
+      const added = S.plan.find(p => !was.ids.includes(p.id));
+      skips = 0; S = read(); render(); prev = snap();
+      emo('surprised'); gesture('startle');
+      later(() => {
+        const hit = cur && added && cur.m.id === added.id;
+        emo(hit ? 'firm' : 'alert');
+        if (hit) say([[N('New one. '), ...(added.dayOnly ? [N('Due today. ')] : []), B('That jumps the line.')]]);
+        else if (added && cur) say([[N(`Got it. Added to ${(G.areas[added.areaId] || { name: '' }).name}. `), B('Not first'), N(`, so I keep my eyes on ${cur.x.a.name}.`)]]);
+        else speakNext('');
+      }, 600);
+    } else if (cur && now.timer === cur.x.a.id && was.timer !== now.timer) {
+      emo('firm'); gesture('lean'); say([[N('Good. '), B('Go.'), N(' I will wait.')]]);
+    } else if (!talking && !queue.length) emo(moodFor());
+  }
+  let rq = 0; const queueRefresh = () => { if (rq || !running) return; rq = setTimeout(() => { rq = 0; if (running) refresh(); }, 60); };
+
+  $('gd-go').addEventListener('click', () => {
+    if (!cur) return;
+    const a = cur.x.a.id, m = cur.m;
+    if (S.timer !== a) { startTimer(a); queueRefresh(); return; }
+    completeMission(a, m.id); refreshAll();                 // the app's own completion: XP, money, history, streak, rank-up
+  });
+  $('gd-skip').addEventListener('click', () => {
+    if (skips >= 2 || !cur) return;
+    skips++; emo('annoyed'); gesture('shake');
+    later(() => { S = read(); render(); prev = snap(); speakNext(skips === 1 ? 'Fine. It will not go away. ' : 'Last skip. '); }, 700);
+  });
+  const tapHim = () => { gesture('tap'); const r = rect || box.getBoundingClientRect(); ptr = ptr || { x: r.left + r.width / 2, y: r.top + r.height * .3 }; ptrT = perf(); later(() => speakNext('You came to me. '), 300); };
+  $('gd-hit').addEventListener('click', tapHim);
+  $('gd-hit').addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tapHim(); } });
+
+  function apply() {
+    pg.classList.toggle('gd-live', enabled);
+    if (!enabled) { setRun(); return; }
+    if (curPage === 'pg-bubbles') { S = read(); render(); }
+    setRun();
+  }
+  function setEnabled(on) { enabled = !!on; try { localStorage.setItem(GUIDE_KEY, on ? '1' : '0'); } catch (e) {} apply(); }
+  apply();
+  return { refresh: queueRefresh, apply, setEnabled, setRun, get enabled() { return enabled; },
+    debug: () => ({ P, E, mood, running, frames, webgl: !!gl && !fallback, fallback, line: full, typing: isTyping, queue: queue.length, skips, pick: cur && { area: cur.x.a.id, id: cur.m.id, title: cur.m.title, need: cur.x.need, days: cur.x.days, imp: cur.x.imp, bonus: cur.x.bonus }, look, rafPending: !!raf, timers: pending.length + (typeT ? 1 : 0) }) };
+})();
+/* the guide hears every save, every timer change and every redraw of the page */
+{ const _gdSave = saveState; saveState = function () { const r = _gdSave.apply(this, arguments); GUIDE.refresh(); return r; }; }
+{ const _gdTimer = refreshTimerUI; refreshTimerUI = function () { const r = _gdTimer.apply(this, arguments); GUIDE.refresh(); return r; }; }
+{ const _gdBub = renderBubbles; renderBubbles = function () { const r = _gdBub.apply(this, arguments); GUIDE.apply(); return r; }; }
+{ const _gdLook = lookPanelHTML; lookPanelHTML = function () {
+  const on = GUIDE.enabled;
+  return _gdLook.apply(this, arguments) + `<div class="dev-section"><label class="dl">GUIDE FIGURE</label>
+    <div class="dim sm">The figure on the Your life areas page can move, blink and talk about your next mission. Off shows the still picture, like before. It only animates while that page is open.</div>
+    <div class="fps-row"><button class="fps-b ${on ? 'on' : ''}" data-figanim="1"><b>ON</b><span>ALIVE</span></button><button class="fps-b ${on ? '' : 'on'}" data-figanim="0"><b>OFF</b><span>STILL PICTURE</span></button></div></div>`;
+}; }
+document.addEventListener('click', e => { const b = e.target.closest && e.target.closest('[data-figanim]'); if (!b) return; const on = b.dataset.figanim === '1'; GUIDE.setEnabled(on); document.querySelectorAll('[data-figanim]').forEach(x => x.classList.toggle('on', (x.dataset.figanim === '1') === on)); showToast(on ? 'GUIDE FIGURE ON' : 'GUIDE FIGURE OFF'); });
 
 /* ══════════════════════════════════════════════════════
    INIT
