@@ -7212,7 +7212,7 @@ function dvRender(keep) {
   const sec = DV_HOME.find(h => h[0] === DV.s), colr = sec ? sec[3] : DV.s === 'area' || DV.s === 'edit' ? ((G.areas[devArea] || {}).color || '#8a9bff') : '#8a9bff';
   ov.style.setProperty('--dvc', colr);
   $('dev-content').innerHTML = `<div class="dvf"><div class="dvf-head">${DV_HEAD}</div><div class="dvf-main"><div class="dv-wrap ${DV.s === 'home' ? 'home' : ''}" data-s="${DV.s}">${body}</div></div>${ed ? dvSaveBar() : ''}</div>${DV.dlg ? dvDialog() : ''}`;
-  if (keep && sc) sc.scrollTop = top;
+  if (keep && sc) { const ns = document.querySelector('#dev-overlay .dvf-main'); if (ns) ns.scrollTop = top; }   /* the old box is gone after a redraw: scroll the new one */
   if (typeof sndRefresh === 'function') sndRefresh();
 }
 const _rd92 = renderDevMode;
